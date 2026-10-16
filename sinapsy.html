@@ -1,4 +1,4 @@
-<!-- Синапсы v0.1-draft · 16.10.2026 · дом: demiurge-os/tools/sinapsy/sinapsy.html · артефакт claude.ai — проекция, не дом -->
+<!-- Синапсы v0.2-draft · 16.10.2026 (режим «Все контексты») · дом: demiurge-os/tools/sinapsy/sinapsy.html · артефакт claude.ai — проекция, не дом -->
 <title>Синапсы</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -151,12 +151,23 @@ const relF=(prop,url)=>({type:"property",property:prop,propertyType:"relation",o
 async function loadRoots(){
   roots=await q({mode:"rows",data_source_url:DS_PROJ,filter:{type:"group",operator:"and",filters:[{type:"property",property:"Подпроекты",propertyType:"relation",operator:"is_not_empty"}]},limit:100});
   const sel=$("cluster"), saved=store.get("sinapsy-root",null);
-  sel.innerHTML=roots.map(r=>`<option value="${esc(r.url)}">${esc(r["Проект"])}</option>`).join("");
-  const pick=roots.find(r=>r.url===saved)||roots.find(r=>/МАК/.test(r["Проект"]))||roots[0];
+  sel.innerHTML=`<option value="${ALL}">Все контексты · только открытое</option>`+roots.map(r=>`<option value="${esc(r.url)}">${esc(r["Проект"])}</option>`).join("");
+  const pick=saved===ALL?{url:ALL}:(roots.find(r=>r.url===saved)||roots.find(r=>/МАК/.test(r["Проект"]))||roots[0]);
   if(pick)sel.value=pick.url;
 }
+const ALL="__all__";
+const isAll=()=>$("cluster").value===ALL;
 async function loadCluster(){
-  const rootUrl=$("cluster").value; const root=roots.find(r=>r.url===rootUrl); if(!root)return;
+  const rootUrl=$("cluster").value;
+  if(rootUrl===ALL){
+    store.set("sinapsy-root",ALL);
+    const notDone=p=>({type:"group",operator:"and",filters:[{type:"property",property:"Статус",propertyType:"status",operator:"status_is_not",value:{type:"is_option",value:"Done"}}]});
+    projects=await q({mode:"rows",data_source_url:DS_PROJ,filter:notDone(),limit:100});
+    tasks=await q({mode:"rows",data_source_url:DS_TASKS,filter:notDone(),limit:100});
+    $("sub").textContent=`Все контексты · ${projects.length} живых проектов · ${tasks.length} открытых задач${tasks.length>=100?" (первые 100)":""} · обновлено ${new Date().toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"})}`;
+    return;
+  }
+  const root=roots.find(r=>r.url===rootUrl); if(!root)return;
   store.set("sinapsy-root",rootUrl);
   const subs=await q({mode:"rows",data_source_url:DS_PROJ,filter:{type:"group",operator:"and",filters:[relF("Надпроект",rootUrl)]},limit:100});
   projects=[root,...subs];
@@ -176,8 +187,8 @@ async function refresh(keep){
 function model(){
   const inCl=new Set(projects.map(p=>p.url));
   const N=[],L=[];
-  projects.forEach((p,i)=>{N.push({id:p.url,kind:"proj",title:p["Проект"],status:p["Статус"],raw:p,root:i===0})});
-  projects.slice(1).forEach(p=>L.push({source:p.url,target:projects[0].url,rich:false}));
+  projects.forEach(p=>{N.push({id:p.url,kind:"proj",title:p["Проект"],status:p["Статус"],raw:p,root:arr(p["Подпроекты"]).length>0})});
+  projects.forEach(p=>arr(p["Надпроект"]).filter(u=>inCl.has(u)).forEach(u=>L.push({source:p.url,target:u,rich:false})));
   tasks.forEach(t=>{
     const ps=arr(t["Проект"]); const done=t["Статус"]==="Done";
     if(hideDone&&done)return;
@@ -195,7 +206,10 @@ function stats(){
   return{done,run,late,rich,total:tasks.length,lost:lostProjects()};
 }
 function openTasksOf(url){return tasks.filter(t=>t["Статус"]!=="Done"&&arr(t["Проект"]).includes(url))}
-function lostProjects(){return projects.filter(p=>p["Статус"]!=="Done"&&openTasksOf(p.url).length===0)}
+function hasStep(p,seen=new Set()){if(seen.has(p.url))return false;seen.add(p.url);
+  if(openTasksOf(p.url).length)return true;
+  return arr(p["Подпроекты"]).some(u=>{const c=projects.find(x=>x.url===u);return c&&c["Статус"]!=="Done"&&hasStep(c,seen)})}
+function lostProjects(){return projects.filter(p=>p["Статус"]!=="Done"&&!hasStep(p))}
 function score(t){const d=t["date:Дедлайн:start"]||t["date:Плановая дата:start"];let s=0;
   if(d&&d<TODAY)s+=100; s+=arr(t["Проект"]).length*20; if(t["Статус"]==="In progress")s+=15;
   if(t["Приоритет"]==="Высокий")s+=10; if(d)s+=Math.max(0,10-Math.round((Date.parse(d)-Date.parse(TODAY))/864e5)); return s}
@@ -204,7 +218,7 @@ function nextUp(){return tasks.filter(t=>t["Статус"]!=="Done").sort((a,b)=
 /* --- поле --- */
 function build(){
   const s=stats();
-  $("sDone").textContent=s.total?`${s.done}/${s.total}`:"—"; $("sBar").style.width=s.total?(100*s.done/s.total)+"%":"0";
+  $("sDone").textContent=isAll()?"—":s.total?`${s.done}/${s.total}`:"—"; $("sBar").style.width=!isAll()&&s.total?(100*s.done/s.total)+"%":"0";
   $("sRun").textContent=s.run; $("sLate").textContent=s.late; $("sRich").textContent=s.rich; $("sLost").textContent=s.lost.length;
   const svg=d3.select("#svg"); svg.selectAll("*").remove(); if(sim)sim.stop();
   if(!projects.length)return;
