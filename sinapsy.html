@@ -1,119 +1,142 @@
-<!-- Синапсы v0.2-draft · 16.10.2026 (режим «Все контексты») · дом: demiurge-os/tools/sinapsy/sinapsy.html · артефакт claude.ai — проекция, не дом -->
+<!-- Синапсы v0.3-draft · 17.10.2026 (сферы как созвездия, задачи на орбитах проектов) · дом: Dem-i-urge/sinapsy (C:\Users\ivasi\dev\sinapsy) · артефакт claude.ai — проекция, не дом -->
 <title>Синапсы</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Yeseva+One&display=swap">
 <style>
-/* Раскладка: полоса-сводка сверху, поле синапсов слева, пульт узла справа (на телефоне — под полем). */
+/* Раскладка: карта-астролябия. Сферы — секторы на внешнем кольце, проекты — звёзды внутри своего сектора,
+   задачи — точки на орбитах проектов. Сверху тонкая строка сводки, справа пульт узла (на телефоне — под картой). */
 :root{
-  --bg:#f3f4f6; --surface:#ffffff; --ink:#1b2130; --muted:#5d6577; --line:#d7dbe3;
-  --impulse:#c26a0a; --impulse-soft:#f6e3c8; --done:#2f7d6b; --done-soft:#d8ece6;
-  --late:#b93a32; --late-soft:#f6dcd9; --node:#e8ebf1; --proj:#2c3a59; --on-impulse:#ffffff;
+  --bg:#eef0f3; --surface:#ffffff; --ink:#1a2030; --muted:#5b6476; --line:#d5dae3;
+  --field:#f8f6f1; --orbit:#e3ded2; --halo:#f8f6f1;
+  --impulse:#c4660a; --impulse-soft:#f7e2c6; --on-impulse:#ffffff;
+  --done:#2d7a68; --done-soft:#d6ebe4; --late:#b8372f; --late-soft:#f6dad7;
+  --dot:#3a4258; --star:#1f2a44;
+  --s1:#8a5a9e; --s2:#2f7f8c; --s3:#a8692b; --s4:#4f7a3a; --s5:#b2475e; --s6:#3f62a8; --s7:#7a6a2a; --s8:#6b5bb5; --s9:#2f8a62; --s10:#a04b2c;
   --f-display:"Yeseva One", Georgia, "Times New Roman", serif;
   --f-ui:"Golos Text", "Segoe UI", system-ui, sans-serif;
   --f-data:"JetBrains Mono", ui-monospace, Consolas, monospace;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#10141d; --surface:#171d29; --ink:#e7e9ef; --muted:#98a0b3; --line:#2a3242;
-  --impulse:#f0a33c; --impulse-soft:#3a2a14; --done:#5fbba4; --done-soft:#18322c;
-  --late:#ef7a6f; --late-soft:#3b1d1b; --node:#252d3d; --proj:#b9c6e6; --on-impulse:#10141d; color-scheme:dark}}
+  --bg:#0d1118; --surface:#151b26; --ink:#e6e8ee; --muted:#97a0b2; --line:#283041;
+  --field:#0f1622; --orbit:#1f2a3b; --halo:#0f1622;
+  --impulse:#f2a640; --impulse-soft:#3a2912; --on-impulse:#0d1118;
+  --done:#5cbca3; --done-soft:#16302a; --late:#f07a6e; --late-soft:#3a1c1a;
+  --dot:#aeb7cc; --star:#e9edf7;
+  --s1:#c79ad8; --s2:#6cc3cf; --s3:#e0a566; --s4:#93c67b; --s5:#e98aa0; --s6:#8fb0f0; --s7:#d4c27a; --s8:#a99cf0; --s9:#6fd0a4; --s10:#e8906c;
+  color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#10141d; --surface:#171d29; --ink:#e7e9ef; --muted:#98a0b3; --line:#2a3242;
-  --impulse:#f0a33c; --impulse-soft:#3a2a14; --done:#5fbba4; --done-soft:#18322c;
-  --late:#ef7a6f; --late-soft:#3b1d1b; --node:#252d3d; --proj:#b9c6e6; --on-impulse:#10141d; color-scheme:dark}
+  --bg:#0d1118; --surface:#151b26; --ink:#e6e8ee; --muted:#97a0b2; --line:#283041;
+  --field:#0f1622; --orbit:#1f2a3b; --halo:#0f1622;
+  --impulse:#f2a640; --impulse-soft:#3a2912; --on-impulse:#0d1118;
+  --done:#5cbca3; --done-soft:#16302a; --late:#f07a6e; --late-soft:#3a1c1a;
+  --dot:#aeb7cc; --star:#e9edf7;
+  --s1:#c79ad8; --s2:#6cc3cf; --s3:#e0a566; --s4:#93c67b; --s5:#e98aa0; --s6:#8fb0f0; --s7:#d4c27a; --s8:#a99cf0; --s9:#6fd0a4; --s10:#e8906c;
+  color-scheme:dark}
 *{box-sizing:border-box}
 html,body{height:100%}
 body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-ui);
-  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px 20px;
-  display:flex;flex-direction:column;gap:12px;min-height:100%}
-h1{font:400 26px/1.1 var(--f-display);margin:0;letter-spacing:.01em;text-wrap:balance}
-.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:10px 20px}
-.top .sub{color:var(--muted);font-size:13px}
-.ctrl{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-select,button,input[type=text]{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:6px 10px}
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:12px 16px;
+  display:flex;flex-direction:column;gap:10px;min-height:100%}
+.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 20px}
+.brand{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;min-width:0}
+h1{font:400 28px/1 var(--f-display);margin:0;letter-spacing:.01em}
+.sub{color:var(--muted);font-size:13px;min-width:0}
+.ctrl{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+select,button,input[type=text]{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:5px 10px}
 button{cursor:pointer}
 button:hover{border-color:var(--muted)}
 button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--impulse);outline-offset:2px}
 button.primary{background:var(--impulse);border-color:var(--impulse);color:var(--on-impulse);font-weight:500}
 button.quiet{background:transparent}
+button[aria-pressed="true"]{border-color:var(--impulse);color:var(--impulse)}
 button[disabled]{opacity:.5;cursor:default}
-.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
-.stat{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 12px;min-width:0}
-.stat b{display:block;font:500 22px/1.2 var(--f-data);font-variant-numeric:tabular-nums}
-.stat span{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
-.stat.alert b{color:var(--late)} .stat.rich b{color:var(--impulse)} .stat.ok b{color:var(--done)}
-.bar{height:4px;background:var(--node);border-radius:2px;margin-top:6px;overflow:hidden}
-.bar i{display:block;height:100%;background:var(--done)}
-.main{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:12px;flex:1;min-height:520px}
-@media (max-width:860px){.main{grid-template-columns:1fr}.field{min-height:440px}}
-.field{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;min-width:0}
-.field svg{display:block;width:100%;height:100%}
-.legend{position:absolute;left:10px;bottom:8px;display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;color:var(--muted);pointer-events:none}
-.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
-.side{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:12px;min-width:0;overflow:auto;max-height:80vh}
-.side h2{font:500 13px/1.3 var(--f-ui);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0}
+.strip{display:flex;flex-wrap:wrap;gap:4px 22px;align-items:baseline;font-size:13px;color:var(--muted)}
+.strip b{font:500 17px/1 var(--f-data);font-variant-numeric:tabular-nums;color:var(--ink);margin-right:5px}
+.strip .alert b{color:var(--late)} .strip .rich b{color:var(--impulse)} .strip .ok b{color:var(--done)}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:10px;flex:1;min-height:600px}
+@media (max-width:900px){.main{grid-template-columns:1fr}.field{min-height:520px}}
+.field{position:relative;background:var(--field);border:1px solid var(--line);border-radius:12px;overflow:hidden;min-width:0}
+.field svg{display:block;width:100%;height:100%;touch-action:none}
+.spheres{position:absolute;left:10px;right:10px;bottom:8px;display:flex;flex-wrap:wrap;gap:4px 6px;font-size:12px}
+.spheres button{font-size:12px;padding:2px 9px;border-radius:999px;background:var(--surface);display:inline-flex;align-items:center;gap:6px}
+.spheres button i{width:8px;height:8px;border-radius:50%;display:inline-block}
+.keys{position:absolute;top:8px;right:10px;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:2px 12px;font-size:11.5px;color:var(--muted);pointer-events:none;max-width:60%}
+.keys svg{width:12px;height:12px;vertical-align:-2px;margin-right:4px;display:inline-block}
+.side{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:12px;min-width:0;overflow:auto;max-height:82vh}
+.side h2{font:500 12px/1.3 var(--f-ui);text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin:0}
 .side h3{font:600 17px/1.3 var(--f-ui);margin:0;text-wrap:balance}
-.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:13px}
+.side h3.sph{font:400 22px/1.15 var(--f-display)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:13px;margin:0}
 .kv dt{color:var(--muted)} .kv dd{margin:0;min-width:0;overflow-wrap:anywhere}
-.chip{display:inline-block;font-size:12px;padding:1px 8px;border-radius:999px;background:var(--node);color:var(--ink)}
-.chip.done{background:var(--done-soft);color:var(--done)} .chip.late{background:var(--late-soft);color:var(--late)}
-.chip.run{background:var(--impulse-soft);color:var(--impulse)}
-.actions{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-block;font-size:12px;padding:1px 8px;border-radius:999px;background:var(--bg);color:var(--ink)}
+.chip.done{background:var(--done-soft);color:var(--done)} .chip.late{background:var(--late-soft);color:var(--late)} .chip.run{background:var(--impulse-soft);color:var(--impulse)}
+.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .confirm{border:1px dashed var(--impulse);border-radius:8px;padding:10px;display:flex;flex-direction:column;gap:8px;font-size:13px}
 .list{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none}
 .list li button{width:100%;text-align:left;display:flex;justify-content:space-between;gap:8px;align-items:center}
 .list li button span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.note{font-size:13px;color:var(--muted)}
-.msg{font-size:13px;padding:8px 10px;border-radius:6px;background:var(--node)}
+.note{font-size:13px;color:var(--muted);margin:0}
+.msg{font-size:13px;padding:8px 10px;border-radius:6px;background:var(--bg)}
 .msg.err{background:var(--late-soft);color:var(--late)} .msg.ok{background:var(--done-soft);color:var(--done)}
 .empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:24px;text-align:center;color:var(--muted)}
-.empty h3{font:400 22px/1.2 var(--f-display);color:var(--ink);margin:0}
+.empty[hidden]{display:none}
+.empty h3{font:400 24px/1.2 var(--f-display);color:var(--ink);margin:0}
 a{color:var(--impulse)}
-.n-label{font:500 11px var(--f-ui);fill:var(--muted);pointer-events:none}
-.n-label.proj{font-size:12.5px;fill:var(--proj);font-weight:600}
-.trail{stroke:var(--impulse);stroke-width:2.5;fill:none;stroke-dasharray:4 5;opacity:.85}
-.link{stroke:var(--line);stroke-width:1.2}
-.link.rich{stroke:var(--impulse);stroke-width:1.6;opacity:.8}
-@media (prefers-reduced-motion:no-preference){.pulse{animation:pulse 1.8s ease-in-out infinite}}
-@keyframes pulse{0%,100%{opacity:.25}50%{opacity:.75}}
+/* карта */
+.orbit{fill:none;stroke:var(--orbit);stroke-width:1}
+.sector{stroke:var(--orbit);stroke-width:1;stroke-dasharray:2 6}
+.sph-name{font:400 17px var(--f-display);pointer-events:auto;cursor:pointer;paint-order:stroke;stroke:var(--halo);stroke-width:4px}
+.p-label{font:600 12px var(--f-ui);fill:var(--ink);pointer-events:none;paint-order:stroke;stroke:var(--halo);stroke-width:3.5px}
+.t-label{font:500 11px var(--f-ui);fill:var(--muted);pointer-events:none;paint-order:stroke;stroke:var(--halo);stroke-width:3px}
+.tether{stroke:var(--orbit);stroke-width:1}
+.tether.rich{stroke:var(--impulse);stroke-width:1.4;opacity:.9}
+.kin{stroke:var(--muted);stroke-width:1;stroke-dasharray:3 4;opacity:.6}
+.trail{stroke:var(--impulse);stroke-width:2;fill:none;stroke-dasharray:4 5;opacity:.9}
+.dim{opacity:.13}
+@media (prefers-reduced-motion:no-preference){.pulse{animation:pulse 2s ease-in-out infinite}}
+@keyframes pulse{0%,100%{opacity:.15}50%{opacity:.55}}
 </style>
 
 <header class="top">
-  <div>
+  <div class="brand">
     <h1>Синапсы</h1>
-    <div class="sub" id="sub">Задачи и проекты из Notion — точками и связями</div>
+    <div class="sub" id="sub">Задачи и проекты из Notion: сферы, проекты, задачи</div>
   </div>
   <div class="ctrl">
-    <label for="cluster" class="note">Кластер</label>
-    <select id="cluster" aria-label="Кластер"><option>Загрузка…</option></select>
+    <label for="cluster" class="note">Карта</label>
+    <select id="cluster"><option>Загрузка…</option></select>
+    <button id="labels" class="quiet" aria-pressed="false">Подписи задач</button>
     <button id="hideDone" class="quiet" aria-pressed="false">Скрыть сделанное</button>
     <button id="reload">Обновить</button>
   </div>
 </header>
 
-<section class="strip" id="strip" aria-label="Сводка кластера">
-  <div class="stat ok"><b id="sDone">—</b><span>сделано</span><div class="bar"><i id="sBar" style="width:0"></i></div></div>
-  <div class="stat"><b id="sRun">—</b><span>в работе</span></div>
-  <div class="stat alert"><b id="sLate">—</b><span>просрочено</span></div>
-  <div class="stat rich"><b id="sRich">—</b><span>богатых узлов</span></div>
-  <div class="stat alert"><b id="sLost">—</b><span>путь потерян</span></div>
+<section class="strip" aria-label="Сводка">
+  <span class="ok"><b id="sDone">—</b>сделано</span>
+  <span><b id="sRun">—</b>в работе</span>
+  <span class="alert"><b id="sLate">—</b>просрочено</span>
+  <span class="rich"><b id="sRich">—</b>богатых узлов</span>
+  <span class="alert"><b id="sLost">—</b>путь потерян</span>
 </section>
 
 <main class="main">
   <div class="field" id="field">
-    <svg id="svg" role="img" aria-label="Граф задач кластера"></svg>
+    <svg id="svg" role="img" aria-label="Карта сфер, проектов и задач"></svg>
     <div class="empty" id="empty">
-      <h3>Поле ждёт данных</h3>
-      <p>Синапсы читают базы «Проекты» и «Задачи» из Notion. Когда страница попросит доступ к Notion — разрешите его, и здесь появится кластер.</p>
+      <h3>Карта ждёт данных</h3>
+      <p class="note">Синапсы читают базы «Проекты» и «Задачи» из Notion. Когда страница попросит доступ к Notion, разрешите его — и здесь появятся сферы.</p>
     </div>
-    <div class="legend" aria-hidden="true">
-      <span><i style="background:var(--proj)"></i>проект</span>
-      <span><i style="background:var(--impulse)"></i>в работе</span>
-      <span><i style="background:var(--done)"></i>сделано</span>
-      <span><i style="border:2px solid var(--late)"></i>просрочено</span>
-      <span><i style="border:2px solid var(--impulse);background:transparent"></i>богатый узел</span>
+    <div class="keys" aria-hidden="true">
+      <span><svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="5" fill="var(--star)"/></svg>проект</span>
+      <span><svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="3.5" fill="var(--dot)"/></svg>не начата</span>
+      <span><svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="3.5" fill="var(--impulse)"/></svg>в работе</span>
+      <span><svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="3" fill="none" stroke="var(--done)" stroke-width="1.6"/></svg>сделано</span>
+      <span><svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="3.5" fill="var(--dot)" stroke="var(--late)" stroke-width="2"/></svg>просрочено</span>
+      <span><svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="4.5" fill="none" stroke="var(--impulse)" stroke-width="1.6"/></svg>богатый узел</span>
     </div>
+    <div class="spheres" id="spheres" aria-label="Сферы"></div>
   </div>
   <aside class="side" id="side" aria-live="polite"></aside>
 </main>
@@ -124,8 +147,9 @@ const SRV="Notion";
 const DS_TASKS="collection://48247e84-e546-47cb-b82c-63fd836f0518";
 const DS_PROJ="collection://37bec455-c4dc-807d-9551-000bf287afd8";
 const TASKS_ID="48247e84-e546-47cb-b82c-63fd836f0518";
+const ALL="__all__";
 const today=new Date(); const TODAY=today.getFullYear()+"-"+String(today.getMonth()+1).padStart(2,"0")+"-"+String(today.getDate()).padStart(2,"0");
-let mcp=null, roots=[], projects=[], tasks=[], allActive=null, selected=null, hideDone=false, sim=null, busy=false, flash=null;
+let mcp=null, roots=[], projects=[], tasks=[], allActive=null, selected=null, focusSph=null, hideDone=false, showLabels=false, sim=null, busy=false, flash=null;
 const $=id=>document.getElementById(id);
 const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 let trail=store.get("sinapsy-trail",[]);
@@ -133,6 +157,12 @@ const arr=v=>{if(!v)return[];if(Array.isArray(v))return v;try{const a=JSON.parse
 const pid=u=>(String(u).match(/[0-9a-f]{32}/i)||[""])[0];
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const fmt=d=>d?d.split("-").reverse().join("."):"—";
+const short=(s,n)=>{s=String(s||"").replace(/^МАК\s*·\s*/,"");return s.length>n?s.slice(0,n-1)+"…":s};
+const isAll=()=>$("cluster").value===ALL;
+const NOSPH="Без сферы";
+/* Сферы задач и проектов в Notion называются почти одинаково; единственное расхождение — «Личное/Быт». Задача берёт сферу своего проекта, собственную — только если проекта нет. */
+const SPH_ALIAS={"Личное/Быт":"Личное"};
+const sphName=s=>SPH_ALIAS[s]||s;
 
 function rowsOf(res){let p=res&&res.payload;if(typeof p==="string"){try{p=JSON.parse(p)}catch(e){p=null}}
   if(!p&&res&&res.content){const t=res.content.find(c=>c.type==="text");if(t)try{p=JSON.parse(t.text)}catch(e){}}
@@ -147,33 +177,29 @@ function errText(e){const c=e&&e.code;
   return"Не получилось: "+(e&&e.message||c||"неизвестная ошибка")}
 async function q(data){const r=await mcp.callTool(SRV,"notion-query-data-sources",{data},{cache:false});return rowsOf(r)}
 const relF=(prop,url)=>({type:"property",property:prop,propertyType:"relation",operator:"relation_contains",value:{type:"exact",value:url}});
+const notDone=()=>({type:"group",operator:"and",filters:[{type:"property",property:"Статус",propertyType:"status",operator:"status_is_not",value:{type:"is_option",value:"Done"}}]});
 
 async function loadRoots(){
   roots=await q({mode:"rows",data_source_url:DS_PROJ,filter:{type:"group",operator:"and",filters:[{type:"property",property:"Подпроекты",propertyType:"relation",operator:"is_not_empty"}]},limit:100});
-  const sel=$("cluster"), saved=store.get("sinapsy-root",null);
-  sel.innerHTML=`<option value="${ALL}">Все контексты · только открытое</option>`+roots.map(r=>`<option value="${esc(r.url)}">${esc(r["Проект"])}</option>`).join("");
-  const pick=saved===ALL?{url:ALL}:(roots.find(r=>r.url===saved)||roots.find(r=>/МАК/.test(r["Проект"]))||roots[0]);
-  if(pick)sel.value=pick.url;
+  const sel=$("cluster"), saved=store.get("sinapsy-root",ALL);
+  sel.innerHTML=`<option value="${ALL}">Все сферы · только открытое</option>`+roots.map(r=>`<option value="${esc(r.url)}">${esc(r["Проект"])}</option>`).join("");
+  sel.value=saved===ALL||!roots.find(r=>r.url===saved)?ALL:saved;
 }
-const ALL="__all__";
-const isAll=()=>$("cluster").value===ALL;
 async function loadCluster(){
-  const rootUrl=$("cluster").value;
-  if(rootUrl===ALL){
-    store.set("sinapsy-root",ALL);
-    const notDone=p=>({type:"group",operator:"and",filters:[{type:"property",property:"Статус",propertyType:"status",operator:"status_is_not",value:{type:"is_option",value:"Done"}}]});
+  const v=$("cluster").value; store.set("sinapsy-root",v);
+  const stamp=new Date().toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"});
+  if(v===ALL){
     projects=await q({mode:"rows",data_source_url:DS_PROJ,filter:notDone(),limit:100});
     tasks=await q({mode:"rows",data_source_url:DS_TASKS,filter:notDone(),limit:100});
-    $("sub").textContent=`Все контексты · ${projects.length} живых проектов · ${tasks.length} открытых задач${tasks.length>=100?" (первые 100)":""} · обновлено ${new Date().toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"})}`;
+    $("sub").textContent=`все сферы · ${projects.length} живых проектов · ${tasks.length} открытых задач${tasks.length>=100?" (первые 100)":""} · ${stamp}`;
     return;
   }
-  const root=roots.find(r=>r.url===rootUrl); if(!root)return;
-  store.set("sinapsy-root",rootUrl);
-  const subs=await q({mode:"rows",data_source_url:DS_PROJ,filter:{type:"group",operator:"and",filters:[relF("Надпроект",rootUrl)]},limit:100});
+  const root=roots.find(r=>r.url===v); if(!root)return;
+  const subs=await q({mode:"rows",data_source_url:DS_PROJ,filter:{type:"group",operator:"and",filters:[relF("Надпроект",v)]},limit:100});
   projects=[root,...subs];
   const fl=projects.map(p=>relF("Проект",p.url));
-  tasks=fl.length?await q({mode:"rows",data_source_url:DS_TASKS,filter:{type:"group",operator:"or",filters:fl},limit:100}):[];
-  $("sub").textContent=`${root["Проект"]} · ${projects.length} проектов · ${tasks.length} задач · обновлено ${new Date().toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"})}`;
+  tasks=await q({mode:"rows",data_source_url:DS_TASKS,filter:{type:"group",operator:"or",filters:fl},limit:100});
+  $("sub").textContent=`${root["Проект"]} · ${projects.length} проектов · ${tasks.length} задач · ${stamp}`;
 }
 async function refresh(keep){
   if(!mcp){renderSide();return}
@@ -183,69 +209,101 @@ async function refresh(keep){
   $("reload").disabled=false; build(); renderSide();
 }
 
-/* --- модель графа --- */
-function model(){
-  const inCl=new Set(projects.map(p=>p.url));
-  const N=[],L=[];
-  projects.forEach(p=>{N.push({id:p.url,kind:"proj",title:p["Проект"],status:p["Статус"],raw:p,root:arr(p["Подпроекты"]).length>0})});
-  projects.forEach(p=>arr(p["Надпроект"]).filter(u=>inCl.has(u)).forEach(u=>L.push({source:p.url,target:u,rich:false})));
-  tasks.forEach(t=>{
-    const ps=arr(t["Проект"]); const done=t["Статус"]==="Done";
-    if(hideDone&&done)return;
-    const due=t["date:Дедлайн:start"]||t["date:Плановая дата:start"]||null;
-    const late=!done&&due&&due<TODAY;
-    N.push({id:t.url,kind:"task",title:t["Задача"],status:t["Статус"],raw:t,projects:ps,rich:ps.length>=2,late,due});
-    ps.filter(u=>inCl.has(u)).forEach(u=>L.push({source:t.url,target:u,rich:ps.length>=2}));
-  });
-  return{N,L};
-}
-function stats(){
-  const done=tasks.filter(t=>t["Статус"]==="Done").length, run=tasks.filter(t=>t["Статус"]==="In progress").length;
-  const late=tasks.filter(t=>{const d=t["date:Дедлайн:start"]||t["date:Плановая дата:start"];return t["Статус"]!=="Done"&&d&&d<TODAY}).length;
-  const rich=tasks.filter(t=>t["Статус"]!=="Done"&&arr(t["Проект"]).length>=2).length;
-  return{done,run,late,rich,total:tasks.length,lost:lostProjects()};
-}
+/* --- данные --- */
+const projByUrl=()=>new Map(projects.map(p=>[p.url,p]));
+function projSpheres(p){const s=arr(p["Сфера"]).map(sphName);return s.length?[...new Set(s)]:[NOSPH]}
+function taskSpheres(t){const pm=projByUrl();const fromP=arr(t["Проект"]).map(u=>pm.get(u)).filter(Boolean).flatMap(projSpheres);
+  const own=arr(t["Сфера"]).map(sphName); const s=fromP.length?fromP:own; return s.length?[...new Set(s)]:[NOSPH]}
 function openTasksOf(url){return tasks.filter(t=>t["Статус"]!=="Done"&&arr(t["Проект"]).includes(url))}
 function hasStep(p,seen=new Set()){if(seen.has(p.url))return false;seen.add(p.url);
   if(openTasksOf(p.url).length)return true;
   return arr(p["Подпроекты"]).some(u=>{const c=projects.find(x=>x.url===u);return c&&c["Статус"]!=="Done"&&hasStep(c,seen)})}
 function lostProjects(){return projects.filter(p=>p["Статус"]!=="Done"&&!hasStep(p))}
-function score(t){const d=t["date:Дедлайн:start"]||t["date:Плановая дата:start"];let s=0;
+const dueOf=t=>t["date:Дедлайн:start"]||t["date:Плановая дата:start"]||null;
+const isLate=t=>t["Статус"]!=="Done"&&dueOf(t)&&dueOf(t)<TODAY;
+function score(t){const d=dueOf(t);let s=0;
   if(d&&d<TODAY)s+=100; s+=arr(t["Проект"]).length*20; if(t["Статус"]==="In progress")s+=15;
   if(t["Приоритет"]==="Высокий")s+=10; if(d)s+=Math.max(0,10-Math.round((Date.parse(d)-Date.parse(TODAY))/864e5)); return s}
-function nextUp(){return tasks.filter(t=>t["Статус"]!=="Done").sort((a,b)=>score(b)-score(a)).slice(0,3)}
+function nextUp(list){return (list||tasks).filter(t=>t["Статус"]!=="Done").sort((a,b)=>score(b)-score(a)).slice(0,3)}
+function sphereList(){const c=new Map();
+  projects.forEach(p=>projSpheres(p).forEach(s=>c.set(s,(c.get(s)||0)+1)));
+  tasks.forEach(t=>{if(!arr(t["Проект"]).some(u=>projByUrl().has(u)))taskSpheres(t).forEach(s=>c.set(s,(c.get(s)||0)+0.5))});
+  return [...c.entries()].sort((a,b)=>b[1]-a[1]).map(e=>e[0]).sort((a,b)=>(a===NOSPH)-(b===NOSPH))}
+function sphColor(i){return `var(--s${(i%10)+1})`}
 
-/* --- поле --- */
+/* --- карта --- */
 function build(){
-  const s=stats();
-  $("sDone").textContent=isAll()?"—":s.total?`${s.done}/${s.total}`:"—"; $("sBar").style.width=!isAll()&&s.total?(100*s.done/s.total)+"%":"0";
-  $("sRun").textContent=s.run; $("sLate").textContent=s.late; $("sRich").textContent=s.rich; $("sLost").textContent=s.lost.length;
+  const sDone=tasks.filter(t=>t["Статус"]==="Done").length;
+  $("sDone").textContent=isAll()?"—":`${sDone}/${tasks.length}`;
+  $("sRun").textContent=tasks.filter(t=>t["Статус"]==="In progress").length;
+  $("sLate").textContent=tasks.filter(isLate).length;
+  $("sRich").textContent=tasks.filter(t=>t["Статус"]!=="Done"&&arr(t["Проект"]).length>=2).length;
+  $("sLost").textContent=lostProjects().length;
   const svg=d3.select("#svg"); svg.selectAll("*").remove(); if(sim)sim.stop();
+  const SPH=sphereList(); const col=new Map(SPH.map((s,i)=>[s,sphColor(i)]));
+  $("spheres").innerHTML=SPH.map(s=>`<button data-sph="${esc(s)}" aria-pressed="${focusSph===s}"><i style="background:${col.get(s)}"></i>${esc(s)}</button>`).join("");
+  document.querySelectorAll("[data-sph]").forEach(b=>b.onclick=()=>{focusSph=focusSph===b.dataset.sph?null:b.dataset.sph;selected=null;build();renderSide()});
   if(!projects.length)return;
-  const box=$("field").getBoundingClientRect(), W=Math.max(320,box.width), H=Math.max(420,box.height);
+  const box=$("field").getBoundingClientRect(), W=Math.max(340,box.width), H=Math.max(480,box.height);
+  const cx=W/2, cy=H/2-14, R=Math.min(W,H)*0.40;
   svg.attr("viewBox",`0 0 ${W} ${H}`);
-  const {N,L}=model(); const byId=new Map(N.map(n=>[n.id,n]));
   const g=svg.append("g");
-  svg.call(d3.zoom().scaleExtent([.4,3]).on("zoom",e=>g.attr("transform",e.transform)));
-  const link=g.append("g").selectAll("line").data(L).join("line").attr("class",d=>"link"+(d.rich?" rich":""));
+  svg.call(d3.zoom().scaleExtent([.5,4]).on("zoom",e=>g.attr("transform",e.transform)));
+  /* кольца астролябии и границы секторов */
+  [R*0.35,R*0.7,R*1.02].forEach(r=>g.append("circle").attr("class","orbit").attr("cx",cx).attr("cy",cy).attr("r",r));
+  const n=SPH.length, ang=i=>-Math.PI/2+i*2*Math.PI/n;
+  const anchor=new Map(SPH.map((s,i)=>[s,{x:cx+Math.cos(ang(i))*R*0.74,y:cy+Math.sin(ang(i))*R*0.74,a:ang(i)}]));
+  if(n>1)SPH.forEach((s,i)=>{const a=ang(i)+Math.PI/n;g.append("line").attr("class","sector").attr("x1",cx+Math.cos(a)*R*0.2).attr("y1",cy+Math.sin(a)*R*0.2).attr("x2",cx+Math.cos(a)*R*1.08).attr("y2",cy+Math.sin(a)*R*1.08)});
+  const sphG=g.append("g");
+  SPH.forEach(s=>{const A=anchor.get(s), lx=cx+Math.cos(A.a)*R*1.04, ly=cy+Math.sin(A.a)*R*1.04;
+    const anchorTxt=Math.abs(Math.cos(A.a))<.25?"middle":(Math.cos(A.a)>0?"start":"end");
+    sphG.append("text").attr("class","sph-name"+(focusSph&&focusSph!==s?" dim":"")).attr("x",lx).attr("y",ly+(Math.sin(A.a)>.5?18:Math.sin(A.a)<-.5?-8:5))
+      .attr("text-anchor",anchorTxt).attr("fill",col.get(s)).text(s).on("click",()=>{focusSph=focusSph===s?null:s;selected=null;build();renderSide()});});
+  /* узлы */
+  const pm=projByUrl(); const N=[], L=[];
+  const mean=list=>{const pts=list.map(s=>anchor.get(s)).filter(Boolean);if(!pts.length)return{x:cx,y:cy};return{x:d3.mean(pts,p=>p.x),y:d3.mean(pts,p=>p.y)}};
+  projects.forEach(p=>{const sp=projSpheres(p),t=mean(sp);
+    N.push({id:p.url,kind:"proj",title:p["Проект"],status:p["Статус"],sph:sp,tx:t.x,ty:t.y,umb:arr(p["Подпроекты"]).length>0,lost:p["Статус"]!=="Done"&&!hasStep(p)})});
+  projects.forEach(p=>arr(p["Надпроект"]).filter(u=>pm.has(u)).forEach(u=>L.push({source:p.url,target:u,kind:"kin"})));
+  tasks.forEach(t=>{const done=t["Статус"]==="Done"; if(hideDone&&done)return;
+    const ps=arr(t["Проект"]).filter(u=>pm.has(u)), sp=taskSpheres(t), tg=mean(sp);
+    N.push({id:t.url,kind:"task",title:t["Задача"],status:t["Статус"],sph:sp,tx:tg.x,ty:tg.y,rich:arr(t["Проект"]).length>=2,late:isLate(t),done});
+    ps.forEach(u=>L.push({source:t.url,target:u,kind:"tether",rich:arr(t["Проект"]).length>=2}));});
+  const byId=new Map(N.map(d=>[d.id,d]));
+  N.forEach(d=>{d.x=d.tx+(Math.random()-.5)*40;d.y=d.ty+(Math.random()-.5)*40});
+  const inFocus=d=>!focusSph||d.sph.includes(focusSph);
+  const link=g.append("g").selectAll("line").data(L).join("line")
+    .attr("class",d=>d.kind==="kin"?"kin":"tether"+(d.rich?" rich":""));
   const trailPath=g.append("path").attr("class","trail");
   const node=g.append("g").selectAll("g").data(N).join("g").style("cursor","pointer")
+    .attr("class",d=>inFocus(d)?null:"dim")
     .attr("tabindex",0).attr("role","button").attr("aria-label",d=>d.title)
     .on("click",(e,d)=>select(d.id)).on("keydown",(e,d)=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();select(d.id)}});
-  node.filter(d=>d.rich&&d.status!=="Done").append("circle").attr("r",17).attr("fill","var(--impulse)").attr("class","pulse");
-  node.append("circle")
-    .attr("r",d=>d.kind==="proj"?(d.root?20:13):(d.rich?10:7))
-    .attr("fill",d=>d.kind==="proj"?(d.status==="Done"?"var(--done)":"var(--proj)"):d.status==="Done"?"var(--done)":d.status==="In progress"?"var(--impulse)":"var(--node)")
-    .attr("stroke",d=>d.late?"var(--late)":d.rich?"var(--impulse)":d.kind==="proj"?"var(--surface)":"var(--muted)")
-    .attr("stroke-width",d=>d.late?3:d.rich?2.5:1.2)
-    .attr("stroke-dasharray",d=>d.kind==="proj"&&d.status!=="Done"&&openTasksOf(d.id).length===0?"3 3":null);
-  node.filter(d=>d.id===selected).append("circle").attr("r",d=>(d.kind==="proj"?(d.root?20:13):(d.rich?10:7))+6).attr("fill","none").attr("stroke","var(--impulse)").attr("stroke-width",2);
-  node.append("text").attr("class",d=>"n-label"+(d.kind==="proj"?" proj":"")).attr("x",d=>d.kind==="proj"?(d.root?24:17):11).attr("y",4)
-    .text(d=>{const t=d.title.replace(/^МАК\s*·\s*/,"");const lim=d.kind==="proj"?34:(d.id===selected||d.rich?40:22);return t.length>lim?t.slice(0,lim-1)+"…":t});
-  sim=d3.forceSimulation(N).force("link",d3.forceLink(L).id(d=>d.id).distance(d=>d.target.root?110:60).strength(.7))
-    .force("charge",d3.forceManyBody().strength(d=>d.kind==="proj"?-420:-110)).force("center",d3.forceCenter(W/2,H/2))
-    .force("collide",d3.forceCollide(d=>d.kind==="proj"?36:16));
-  if(matchMedia("(prefers-reduced-motion: reduce)").matches){sim.stop();for(let i=0;i<250;i++)sim.tick();tick()} else sim.on("tick",tick);
+  node.append("title").text(d=>d.title);
+  node.filter(d=>d.kind==="task"&&d.rich&&!d.done).append("circle").attr("r",11).attr("fill","var(--impulse)").attr("class","pulse");
+  /* проекты — звёзды с кольцом цвета сферы */
+  const P=node.filter(d=>d.kind==="proj");
+  P.append("circle").attr("r",d=>d.umb?13:9).attr("fill","none").attr("stroke",d=>col.get(d.sph[0])).attr("stroke-width",2)
+    .attr("stroke-dasharray",d=>d.lost?"3 3":null);
+  P.append("circle").attr("r",d=>d.umb?8:5.5).attr("fill",d=>d.status==="Done"?"var(--done)":"var(--star)");
+  /* задачи — точки */
+  const T=node.filter(d=>d.kind==="task");
+  T.append("circle").attr("r",d=>d.rich?5:3.6)
+    .attr("fill",d=>d.done?"none":d.status==="In progress"?"var(--impulse)":"var(--dot)")
+    .attr("stroke",d=>d.done?"var(--done)":d.late?"var(--late)":d.rich?"var(--impulse)":"none")
+    .attr("stroke-width",d=>d.done?1.6:d.late?2.2:d.rich?1.8:0);
+  node.filter(d=>d.id===selected).append("circle").attr("r",d=>d.kind==="proj"?(d.umb?19:15):10).attr("fill","none").attr("stroke","var(--impulse)").attr("stroke-width",2);
+  P.append("text").attr("class","p-label").attr("x",d=>d.umb?17:13).attr("y",4).text(d=>short(d.title,d.id===selected?60:28));
+  T.filter(d=>d.id===selected||showLabels).append("text").attr("class","t-label").attr("x",8).attr("y",4)
+    .text(d=>short(d.title,d.id===selected?70:30));
+  sim=d3.forceSimulation(N)
+    .force("link",d3.forceLink(L).id(d=>d.id).distance(d=>d.kind==="kin"?90:22).strength(d=>d.kind==="kin"?.03:.9))
+    .force("x",d3.forceX(d=>d.tx).strength(d=>d.kind==="proj"?.5:.03))
+    .force("y",d3.forceY(d=>d.ty).strength(d=>d.kind==="proj"?.5:.03))
+    .force("charge",d3.forceManyBody().strength(d=>d.kind==="proj"?-160:-14).distanceMax(220))
+    .force("collide",d3.forceCollide(d=>d.kind==="proj"?(d.umb?28:22):6.5).iterations(2));
+  const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(reduce){sim.stop();for(let i=0;i<300;i++)sim.tick();tick()} else {sim.alphaDecay(.04).on("tick",tick)}
   function tick(){
     link.attr("x1",d=>d.source.x).attr("y1",d=>d.source.y).attr("x2",d=>d.target.x).attr("y2",d=>d.target.y);
     node.attr("transform",d=>`translate(${d.x},${d.y})`);
@@ -256,17 +314,16 @@ function build(){
 function select(id){selected=id;flash=null;trail=[...trail.filter(x=>x!==id),id].slice(-6);store.set("sinapsy-trail",trail);build();renderSide()}
 
 /* --- пульт --- */
+function statusChip(st,proj){return `<span class="chip ${st==="Done"?"done":st==="In progress"?"run":""}">${st==="Done"?(proj?"завершён":"сделано"):st==="In progress"?"в работе":(proj?"не начат":"не начата")}</span>`}
 function taskCard(t){
-  const ps=arr(t["Проект"]); const st=t["Статус"]; const due=t["date:Дедлайн:start"]||t["date:Плановая дата:start"];
-  const late=st!=="Done"&&due&&due<TODAY;
-  const pn=ps.map(u=>{const p=projects.find(x=>x.url===u)||(allActive||[]).find(x=>x.url===u);return p?p["Проект"].replace(/^МАК\s*·\s*/,""):"проект вне кластера"});
-  return `<h2>Задача</h2><h3>${esc(t["Задача"])}</h3>
-  <div><span class="chip ${st==="Done"?"done":st==="In progress"?"run":""}">${st==="Done"?"сделано":st==="In progress"?"в работе":"не начата"}</span>
-   ${late?'<span class="chip late">просрочено</span>':""} ${ps.length>=2?`<span class="chip run">богатый узел · ${ps.length} проекта</span>`:""}</div>
-  <dl class="kv"><dt>Проекты</dt><dd>${pn.map(esc).join("<br>")||"—"}</dd>
+  const ps=arr(t["Проект"]); const st=t["Статус"];
+  const pn=ps.map(u=>{const p=projects.find(x=>x.url===u)||(allActive||[]).find(x=>x.url===u);return p?short(p["Проект"],80):"проект вне карты"});
+  return `<h2>Задача · ${esc(taskSpheres(t).join(" + "))}</h2><h3>${esc(t["Задача"])}</h3>
+  <div>${statusChip(st)} ${isLate(t)?'<span class="chip late">просрочено</span>':""} ${ps.length>=2?`<span class="chip run">богатый узел · ${ps.length} проекта</span>`:""}</div>
+  <dl class="kv"><dt>Проекты</dt><dd>${pn.map(esc).join("<br>")||"нет — задаче нужен дом"}</dd>
    <dt>План</dt><dd>${fmt(t["date:Плановая дата:start"])}</dd><dt>Дедлайн</dt><dd>${fmt(t["date:Дедлайн:start"])}</dd>
-   ${st==="Done"?`<dt>Сделано</dt><dd>${fmt(t["date:Дата выполнения:start"])}</dd>`:""}<dt>Сфера</dt><dd>${esc(arr(t["Сфера"]).join(", ")||"—")}</dd></dl>
-  <div class="actions" id="acts">
+   ${st==="Done"?`<dt>Сделано</dt><dd>${fmt(t["date:Дата выполнения:start"])}</dd>`:""}</dl>
+  <div class="actions">
    ${st!=="Done"?`<button class="primary" id="bDone">Готово</button>`:""}
    ${st==="Not started"?`<button id="bRun">В работу</button>`:""}
    ${st!=="Done"?`<button id="bLink">Связать ещё с проектом</button>`:""}
@@ -275,55 +332,65 @@ function taskCard(t){
 }
 function projCard(p){
   const open=openTasksOf(p.url), all=tasks.filter(t=>arr(t["Проект"]).includes(p.url));
-  const nx=open.sort((a,b)=>score(b)-score(a))[0];
-  return `<h2>Проект</h2><h3>${esc(p["Проект"])}</h3>
-  <div><span class="chip ${p["Статус"]==="Done"?"done":p["Статус"]==="In progress"?"run":""}">${p["Статус"]==="Done"?"завершён":p["Статус"]==="In progress"?"в работе":"не начат"}</span></div>
-  <dl class="kv"><dt>Задачи</dt><dd>${all.length-open.length} из ${all.length} сделано</dd>
-   <dt>Следующий шаг</dt><dd>${nx?`<button class="quiet" data-go="${esc(nx.url)}">${esc(nx["Задача"])}</button>`:(p["Статус"]==="Done"?"—":'<span class="chip late">путь потерян — шага нет</span>')}</dd></dl>
-  ${p["Цель / результат"]?`<p class="note">${esc(p["Цель / результат"])}</p>`:'<p class="note">Цель не записана: у узла нет результата, к которому он ведёт.</p>'}
+  const nx=open.slice().sort((a,b)=>score(b)-score(a))[0];
+  return `<h2>Проект · ${esc(projSpheres(p).join(" + "))}</h2><h3>${esc(p["Проект"])}</h3>
+  <div>${statusChip(p["Статус"],true)}</div>
+  <dl class="kv"><dt>Задачи</dt><dd>${isAll()?`${open.length} открытых`:`${all.length-open.length} из ${all.length} сделано`}</dd>
+   <dt>Следующий шаг</dt><dd>${nx?`<button class="quiet" data-go="${esc(nx.url)}">${esc(nx["Задача"])}</button>`:(p["Статус"]==="Done"?"—":hasStep(p)?"в подпроектах":'<span class="chip late">путь потерян — шага нет</span>')}</dd></dl>
+  ${p["Цель / результат"]?`<p class="note">${esc(p["Цель / результат"])}</p>`:'<p class="note">Цель не записана: узлу не к чему вести.</p>'}
   <div class="actions">${p["Статус"]!=="Done"?`<button class="primary" id="bAdd">Добавить задачу</button>`:""}<a href="${esc(p.url)}" target="_blank" rel="noopener">Открыть в Notion</a></div>
   <div id="slot"></div>`;
 }
+function sphereCard(s){
+  const ps=projects.filter(p=>projSpheres(p).includes(s)), ts=tasks.filter(t=>taskSpheres(t).includes(s));
+  const open=ts.filter(t=>t["Статус"]!=="Done"), nx=nextUp(ts), lost=lostProjects().filter(p=>projSpheres(p).includes(s));
+  return `<h2>Сфера</h2><h3 class="sph">${esc(s)}</h3>
+  <dl class="kv"><dt>Проекты</dt><dd>${ps.length}</dd><dt>Открытых задач</dt><dd>${open.length}</dd><dt>Просрочено</dt><dd>${open.filter(isLate).length}</dd></dl>
+  <h2>Следующий шаг в сфере</h2>${list(nx)}
+  ${lost.length?`<h2>Где потерян путь</h2>${listP(lost)}`:""}
+  <button class="quiet" id="bUnfocus">Показать все сферы</button>`;
+}
+const list=ts=>ts.length?`<ul class="list">${ts.map(t=>`<li><button data-go="${esc(t.url)}"><span>${esc(t["Задача"])}</span>${arr(t["Проект"]).length>=2?'<span class="chip run">богатый</span>':isLate(t)?'<span class="chip late">срок</span>':""}</button></li>`).join("")}</ul>`:'<p class="note">Открытых задач нет.</p>';
+const listP=ps=>`<ul class="list">${ps.map(p=>`<li><button data-go="${esc(p.url)}"><span>${esc(short(p["Проект"],60))}</span><span class="chip late">нет шага</span></button></li>`).join("")}</ul>`;
 function overview(){
-  const nx=nextUp(), lost=lostProjects();
-  return `<h2>Куда дальше</h2>
-  ${nx.length?`<ul class="list">${nx.map(t=>`<li><button data-go="${esc(t.url)}"><span>${esc(t["Задача"])}</span>${arr(t["Проект"]).length>=2?'<span class="chip run">богатый</span>':""}</button></li>`).join("")}</ul>
-   <p class="note">Порядок: просроченное, затем то, что двигает больше проектов, затем то, что уже в работе.</p>`:'<p class="note">Открытых задач в кластере нет.</p>'}
-  <h2>Где потерян путь</h2>
-  ${lost.length?`<ul class="list">${lost.map(p=>`<li><button data-go="${esc(p.url)}"><span>${esc(p["Проект"].replace(/^МАК\s*·\s*/,""))}</span><span class="chip late">нет шага</span></button></li>`).join("")}</ul>`:'<p class="note">У каждого живого проекта есть следующий шаг.</p>'}
-  <p class="note">Богатый узел — задача, привязанная к двум и более проектам: одно действие двигает несколько линий. Сделать узел богатым — кнопка «Связать ещё с проектом».</p>`;
+  const lost=lostProjects();
+  return `<h2>Куда дальше</h2>${list(nextUp())}
+  <p class="note">Порядок: просроченное, затем то, что двигает больше проектов, затем то, что уже в работе.</p>
+  <h2>Где потерян путь</h2>${lost.length?listP(lost):'<p class="note">У каждого живого проекта есть следующий шаг.</p>'}
+  <p class="note">Сфера — сектор карты. Проект стоит в своей сфере, задача — на его орбите. Задача, привязанная к проектам из разных сфер, висит между ними: это богатый узел.</p>`;
 }
 function renderSide(){
-  const side=$("side"); let h="";
-  if(flash)h+=`<div class="msg ${flash.err?"err":"ok"}">${esc(flash.err||flash.ok)}</div>`;
+  let h=flash?`<div class="msg ${flash.err?"err":"ok"}">${esc(flash.err||flash.ok)}</div>`:"";
   if(!mcp){h+=`<h2>Нет связи с Notion</h2><p class="note">Эта копия страницы не может обращаться к Notion. Откройте артефакт в claude.ai — там страница попросит доступ к вашему Notion.</p>`}
   else{const t=tasks.find(x=>x.url===selected), p=projects.find(x=>x.url===selected);
-    h+= t?taskCard(t): p?projCard(p): overview();
+    h+= t?taskCard(t): p?projCard(p): focusSph?sphereCard(focusSph): overview();
     if(selected)h+=`<button class="quiet" id="bBack">← К обзору</button>`;}
-  side.innerHTML=h; wire();
+  $("side").innerHTML=h; wire();
 }
 function wire(){
-  document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>select(b.dataset.go));
-  const bb=$("bBack"); if(bb)bb.onclick=()=>{selected=null;flash=null;build();renderSide()};
+  document.querySelectorAll("#side [data-go]").forEach(b=>b.onclick=()=>select(b.dataset.go));
+  const on=(id,f)=>{const el=$(id);if(el)el.onclick=f};
+  on("bBack",()=>{selected=null;flash=null;build();renderSide()});
+  on("bUnfocus",()=>{focusSph=null;build();renderSide()});
   const t=tasks.find(x=>x.url===selected), p=projects.find(x=>x.url===selected);
-  if($("bDone"))$("bDone").onclick=()=>{$("slot").innerHTML=`<div class="confirm"><b>Мост сожжён?</b><span>Готово — это когда назад не отыграть: отправлено, показано, сдано, опубликовано.</span>
+  on("bDone",()=>{$("slot").innerHTML=`<div class="confirm"><b>Мост сожжён?</b><span>Готово — когда назад не отыграть: отправлено, показано, сдано, опубликовано.</span>
      <div class="actions"><button class="primary" id="bDoneYes">Да, готово</button><button class="quiet" id="bDoneNo">Ещё нет</button></div></div>`;
-     $("bDoneNo").onclick=()=>{$("slot").innerHTML=""}; $("bDoneYes").onclick=()=>write(()=>upd(t.url,{"Статус":"Done","date:Дата выполнения:start":TODAY,"date:Дата выполнения:is_datetime":0}),"Мост сожжён. Следующий узел — в обзоре.",true)};
-  if($("bRun"))$("bRun").onclick=()=>write(()=>upd(t.url,{"Статус":"In progress"}),"Задача в работе.");
-  if($("bLink"))$("bLink").onclick=async()=>{
+     on("bDoneNo",()=>{$("slot").innerHTML=""}); on("bDoneYes",()=>write(()=>upd(t.url,{"Статус":"Done","date:Дата выполнения:start":TODAY,"date:Дата выполнения:is_datetime":0}),"Мост сожжён. Следующий узел — в обзоре.",true))});
+  on("bRun",()=>write(()=>upd(t.url,{"Статус":"In progress"}),"Задача в работе."));
+  on("bLink",async()=>{
     $("slot").innerHTML='<p class="note">Загружаю живые проекты…</p>';
-    try{ if(!allActive)allActive=await q({mode:"rows",data_source_url:DS_PROJ,filter:{type:"group",operator:"and",filters:[{type:"property",property:"Статус",propertyType:"status",operator:"status_is_not",value:{type:"is_option",value:"Done"}}]},limit:100});
+    try{ if(!allActive)allActive=await q({mode:"rows",data_source_url:DS_PROJ,filter:notDone(),limit:100});
       const have=new Set(arr(t["Проект"])); const opts=allActive.filter(x=>!have.has(x.url)).sort((a,b)=>a["Проект"].localeCompare(b["Проект"],"ru"));
-      $("slot").innerHTML=`<div class="confirm"><label for="linkSel">Какой ещё проект двигает эта задача?</label><select id="linkSel">${opts.map(o=>`<option value="${esc(o.url)}">${esc(o["Проект"])}</option>`).join("")}</select>
+      $("slot").innerHTML=`<div class="confirm"><label for="linkSel">Какой ещё проект двигает эта задача?</label><select id="linkSel">${opts.map(o=>`<option value="${esc(o.url)}">${esc(o["Проект"])} · ${esc(projSpheres(o).join(", "))}</option>`).join("")}</select>
        <div class="actions"><button class="primary" id="bLinkYes">Связать</button><button class="quiet" id="bLinkNo">Отмена</button></div></div>`;
-      $("bLinkNo").onclick=()=>{$("slot").innerHTML=""};
-      $("bLinkYes").onclick=()=>{const u=$("linkSel").value;write(()=>upd(t.url,{"Проект":[...arr(t["Проект"]),u]}),"Связь добавлена: узел стал богаче.")};
-    }catch(e){$("slot").innerHTML=`<div class="msg err">${esc(errText(e))}</div>`}};
-  if($("bAdd"))$("bAdd").onclick=()=>{$("slot").innerHTML=`<form class="confirm" id="addForm"><label for="newTitle">Одна задача — одно действие</label><input type="text" id="newTitle" maxlength="200" placeholder="Например: отправить макет в типографию" required>
+      on("bLinkNo",()=>{$("slot").innerHTML=""});
+      on("bLinkYes",()=>{const u=$("linkSel").value;write(()=>upd(t.url,{"Проект":[...arr(t["Проект"]),u]}),"Связь добавлена: узел стал богаче.")});
+    }catch(e){$("slot").innerHTML=`<div class="msg err">${esc(errText(e))}</div>`}});
+  on("bAdd",()=>{$("slot").innerHTML=`<form class="confirm" id="addForm"><label for="newTitle">Одна задача — одно действие</label><input type="text" id="newTitle" maxlength="200" placeholder="Например: отправить макет в типографию">
      <div class="actions"><button class="primary" type="submit">Добавить</button><button class="quiet" type="button" id="bAddNo">Отмена</button></div><span class="note" id="addErr"></span></form>`;
-     $("bAddNo").onclick=()=>{$("slot").innerHTML=""};
+     on("bAddNo",()=>{$("slot").innerHTML=""});
      $("addForm").onsubmit=e=>{e.preventDefault();const v=$("newTitle").value.trim();if(!v){$("addErr").textContent="Напишите, что именно сделать.";return}
-       write(()=>mcp.callTool(SRV,"notion-create-pages",{parent:{type:"data_source_id",data_source_id:TASKS_ID},pages:[{properties:{"Задача":v,"Статус":"Not started","Проект":[p.url]}}]}),"Задача добавлена в Notion.")}};
+       write(()=>mcp.callTool(SRV,"notion-create-pages",{parent:{type:"data_source_id",data_source_id:TASKS_ID},pages:[{properties:{"Задача":v,"Статус":"Not started","Проект":[p.url]}}]}),"Задача добавлена в Notion.")}});
 }
 function upd(url,props){return mcp.callTool(SRV,"notion-update-page",{page_id:pid(url),command:"update_properties",properties:props})}
 async function write(fn,okText,afterDone){
@@ -333,8 +400,9 @@ async function write(fn,okText,afterDone){
   busy=false;
 }
 $("reload").onclick=()=>refresh();
-$("cluster").onchange=()=>{selected=null;trail=[];store.set("sinapsy-trail",trail);refresh()};
-$("hideDone").onclick=e=>{hideDone=!hideDone;e.currentTarget.setAttribute("aria-pressed",hideDone);e.currentTarget.textContent=hideDone?"Показать сделанное":"Скрыть сделанное";build()};
+$("cluster").onchange=()=>{selected=null;focusSph=null;trail=[];store.set("sinapsy-trail",trail);refresh()};
+$("hideDone").onclick=e=>{hideDone=!hideDone;e.currentTarget.setAttribute("aria-pressed",hideDone);build()};
+$("labels").onclick=e=>{showLabels=!showLabels;e.currentTarget.setAttribute("aria-pressed",showLabels);build()};
 let rs;addEventListener("resize",()=>{clearTimeout(rs);rs=setTimeout(build,200)});
 renderSide();
 (async()=>{try{mcp=window.claude?await window.claude.use("mcp"):null}catch(e){mcp=null}
