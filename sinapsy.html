@@ -1,18 +1,18 @@
-<!-- Синапсы v0.3-draft · 17.10.2026 (сферы как созвездия, задачи на орбитах проектов) · дом: Dem-i-urge/sinapsy (C:\Users\ivasi\dev\sinapsy) · артефакт claude.ai — проекция, не дом -->
+<!-- Синапсы v0.4-draft · 17.10.2026 (своя карта владельца; Notion сверяет Архитектор) · дом: Dem-i-urge/sinapsy (C:\Users\ivasi\dev\sinapsy) · артефакт claude.ai — проекция, не дом -->
 <title>Синапсы</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Yeseva+One&display=swap">
 <style>
-/* Раскладка: карта-астролябия. Сферы — секторы на внешнем кольце, проекты — звёзды внутри своего сектора,
-   задачи — точки на орбитах проектов. Сверху тонкая строка сводки, справа пульт узла (на телефоне — под картой). */
+/* Раскладка: карта-астролябия владельца. Сферы — секторы кольца, точки ставит и двигает он сам,
+   связи рисует он сам. Справа пульт; Notion здесь не читается — сверку делает Архитектор. */
 :root{
   --bg:#eef0f3; --surface:#ffffff; --ink:#1a2030; --muted:#5b6476; --line:#d5dae3;
   --field:#f8f6f1; --orbit:#e3ded2; --halo:#f8f6f1;
   --impulse:#c4660a; --impulse-soft:#f7e2c6; --on-impulse:#ffffff;
   --done:#2d7a68; --done-soft:#d6ebe4; --late:#b8372f; --late-soft:#f6dad7;
-  --dot:#3a4258; --star:#1f2a44;
+  --star:#1f2a44;
   --s1:#8a5a9e; --s2:#2f7f8c; --s3:#a8692b; --s4:#4f7a3a; --s5:#b2475e; --s6:#3f62a8; --s7:#7a6a2a; --s8:#6b5bb5; --s9:#2f8a62; --s10:#a04b2c;
   --f-display:"Yeseva One", Georgia, "Times New Roman", serif;
   --f-ui:"Golos Text", "Segoe UI", system-ui, sans-serif;
@@ -23,7 +23,7 @@
   --field:#0f1622; --orbit:#1f2a3b; --halo:#0f1622;
   --impulse:#f2a640; --impulse-soft:#3a2912; --on-impulse:#0d1118;
   --done:#5cbca3; --done-soft:#16302a; --late:#f07a6e; --late-soft:#3a1c1a;
-  --dot:#aeb7cc; --star:#e9edf7;
+  --star:#e9edf7;
   --s1:#c79ad8; --s2:#6cc3cf; --s3:#e0a566; --s4:#93c67b; --s5:#e98aa0; --s6:#8fb0f0; --s7:#d4c27a; --s8:#a99cf0; --s9:#6fd0a4; --s10:#e8906c;
   color-scheme:dark}}
 :root[data-theme="dark"]{
@@ -31,7 +31,7 @@
   --field:#0f1622; --orbit:#1f2a3b; --halo:#0f1622;
   --impulse:#f2a640; --impulse-soft:#3a2912; --on-impulse:#0d1118;
   --done:#5cbca3; --done-soft:#16302a; --late:#f07a6e; --late-soft:#3a1c1a;
-  --dot:#aeb7cc; --star:#e9edf7;
+  --star:#e9edf7;
   --s1:#c79ad8; --s2:#6cc3cf; --s3:#e0a566; --s4:#93c67b; --s5:#e98aa0; --s6:#8fb0f0; --s7:#d4c27a; --s8:#a99cf0; --s9:#6fd0a4; --s10:#e8906c;
   color-scheme:dark}
 *{box-sizing:border-box}
@@ -44,368 +44,303 @@ body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-ui);
 h1{font:400 28px/1 var(--f-display);margin:0;letter-spacing:.01em}
 .sub{color:var(--muted);font-size:13px;min-width:0}
 .ctrl{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-select,button,input[type=text]{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:5px 10px}
+select,button,input[type=text],input[type=url],textarea{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:5px 10px}
+textarea{resize:vertical;min-height:56px;width:100%}
+input[type=text],input[type=url]{width:100%}
 button{cursor:pointer}
 button:hover{border-color:var(--muted)}
-button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--impulse);outline-offset:2px}
+button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--impulse);outline-offset:2px}
 button.primary{background:var(--impulse);border-color:var(--impulse);color:var(--on-impulse);font-weight:500}
 button.quiet{background:transparent}
+button.danger{color:var(--late);border-color:var(--late)}
 button[aria-pressed="true"]{border-color:var(--impulse);color:var(--impulse)}
 button[disabled]{opacity:.5;cursor:default}
 .strip{display:flex;flex-wrap:wrap;gap:4px 22px;align-items:baseline;font-size:13px;color:var(--muted)}
 .strip b{font:500 17px/1 var(--f-data);font-variant-numeric:tabular-nums;color:var(--ink);margin-right:5px}
-.strip .alert b{color:var(--late)} .strip .rich b{color:var(--impulse)} .strip .ok b{color:var(--done)}
-.main{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:10px;flex:1;min-height:600px}
+.strip .rich b{color:var(--impulse)} .strip .ok b{color:var(--done)}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:10px;flex:1;min-height:600px}
 @media (max-width:900px){.main{grid-template-columns:1fr}.field{min-height:520px}}
 .field{position:relative;background:var(--field);border:1px solid var(--line);border-radius:12px;overflow:hidden;min-width:0}
 .field svg{display:block;width:100%;height:100%;touch-action:none}
-.spheres{position:absolute;left:10px;right:10px;bottom:8px;display:flex;flex-wrap:wrap;gap:4px 6px;font-size:12px}
-.spheres button{font-size:12px;padding:2px 9px;border-radius:999px;background:var(--surface);display:inline-flex;align-items:center;gap:6px}
-.spheres button i{width:8px;height:8px;border-radius:50%;display:inline-block}
-.keys{position:absolute;top:8px;right:10px;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:2px 12px;font-size:11.5px;color:var(--muted);pointer-events:none;max-width:60%}
+.banner{position:absolute;left:50%;top:10px;transform:translateX(-50%);background:var(--impulse);color:var(--on-impulse);font-size:13px;padding:5px 12px;border-radius:999px;display:flex;gap:10px;align-items:center;max-width:calc(100% - 20px)}
+.banner[hidden]{display:none}
+.banner button{font-size:12px;padding:1px 8px;background:transparent;color:inherit;border-color:currentColor}
+.keys{position:absolute;left:10px;bottom:8px;display:flex;flex-wrap:wrap;gap:2px 12px;font-size:11.5px;color:var(--muted);pointer-events:none;max-width:calc(100% - 20px)}
 .keys svg{width:12px;height:12px;vertical-align:-2px;margin-right:4px;display:inline-block}
-.side{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:12px;min-width:0;overflow:auto;max-height:82vh}
+.side{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:12px;min-width:0;overflow:auto;max-height:84vh}
 .side h2{font:500 12px/1.3 var(--f-ui);text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin:0}
-.side h3{font:600 17px/1.3 var(--f-ui);margin:0;text-wrap:balance}
-.side h3.sph{font:400 22px/1.15 var(--f-display)}
+.side h3{font:600 18px/1.3 var(--f-ui);margin:0;text-wrap:balance}
 .kv{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:13px;margin:0}
 .kv dt{color:var(--muted)} .kv dd{margin:0;min-width:0;overflow-wrap:anywhere}
-.chip{display:inline-block;font-size:12px;padding:1px 8px;border-radius:999px;background:var(--bg);color:var(--ink)}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;padding:1px 8px;border-radius:999px;background:var(--bg);color:var(--ink)}
+.chip i{width:8px;height:8px;border-radius:50%;display:inline-block}
 .chip.done{background:var(--done-soft);color:var(--done)} .chip.late{background:var(--late-soft);color:var(--late)} .chip.run{background:var(--impulse-soft);color:var(--impulse)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips label{display:inline-flex;align-items:center;gap:6px;font-size:13px;border:1px solid var(--line);border-radius:999px;padding:2px 10px;cursor:pointer}
+.chips input{margin:0}
 .actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .confirm{border:1px dashed var(--impulse);border-radius:8px;padding:10px;display:flex;flex-direction:column;gap:8px;font-size:13px}
+.form{display:flex;flex-direction:column;gap:8px;font-size:13px}
+.form label.t{color:var(--muted);font-size:12px}
 .list{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none}
-.list li button{width:100%;text-align:left;display:flex;justify-content:space-between;gap:8px;align-items:center}
-.list li button span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.list li{display:flex;gap:6px;align-items:center}
+.list li button.go{flex:1;min-width:0;text-align:left;display:flex;justify-content:space-between;gap:8px;align-items:center}
+.list li button.go span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .note{font-size:13px;color:var(--muted);margin:0}
 .msg{font-size:13px;padding:8px 10px;border-radius:6px;background:var(--bg)}
 .msg.err{background:var(--late-soft);color:var(--late)} .msg.ok{background:var(--done-soft);color:var(--done)}
-.empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:24px;text-align:center;color:var(--muted)}
-.empty[hidden]{display:none}
-.empty h3{font:400 24px/1.2 var(--f-display);color:var(--ink);margin:0}
+.err-inline{color:var(--late);font-size:13px}
 a{color:var(--impulse)}
 /* карта */
 .orbit{fill:none;stroke:var(--orbit);stroke-width:1}
 .sector{stroke:var(--orbit);stroke-width:1;stroke-dasharray:2 6}
-.sph-name{font:400 17px var(--f-display);pointer-events:auto;cursor:pointer;paint-order:stroke;stroke:var(--halo);stroke-width:4px}
-.p-label{font:600 12px var(--f-ui);fill:var(--ink);pointer-events:none;paint-order:stroke;stroke:var(--halo);stroke-width:3.5px}
-.t-label{font:500 11px var(--f-ui);fill:var(--muted);pointer-events:none;paint-order:stroke;stroke:var(--halo);stroke-width:3px}
-.tether{stroke:var(--orbit);stroke-width:1}
-.tether.rich{stroke:var(--impulse);stroke-width:1.4;opacity:.9}
-.kin{stroke:var(--muted);stroke-width:1;stroke-dasharray:3 4;opacity:.6}
-.trail{stroke:var(--impulse);stroke-width:2;fill:none;stroke-dasharray:4 5;opacity:.9}
-.dim{opacity:.13}
+.sph-name{font:400 17px var(--f-display);paint-order:stroke;stroke:var(--halo);stroke-width:4px}
+.n-label{font:600 12.5px var(--f-ui);fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-width:3.5px}
+.n-label.done{fill:var(--muted);font-weight:500}
+.edge{stroke:var(--muted);stroke-width:1.2;opacity:.55}
+.edge.rich{stroke:var(--impulse);stroke-width:1.8;opacity:.9}
+.center-hint{font:400 20px var(--f-display);fill:var(--muted)}
 @media (prefers-reduced-motion:no-preference){.pulse{animation:pulse 2s ease-in-out infinite}}
-@keyframes pulse{0%,100%{opacity:.15}50%{opacity:.55}}
+@keyframes pulse{0%,100%{opacity:.12}50%{opacity:.45}}
 </style>
 
 <header class="top">
   <div class="brand">
     <h1>Синапсы</h1>
-    <div class="sub" id="sub">Задачи и проекты из Notion: сферы, проекты, задачи</div>
+    <div class="sub" id="sub">Своя карта: крупные точки по сферам. Отметки сверяются с Notion.</div>
   </div>
   <div class="ctrl">
-    <label for="cluster" class="note">Карта</label>
-    <select id="cluster"><option>Загрузка…</option></select>
-    <button id="labels" class="quiet" aria-pressed="false">Подписи задач</button>
+    <button class="primary" id="bNew">+ Точка</button>
+    <button id="bSpheres">Сферы</button>
     <button id="hideDone" class="quiet" aria-pressed="false">Скрыть сделанное</button>
-    <button id="reload">Обновить</button>
   </div>
 </header>
 
 <section class="strip" aria-label="Сводка">
+  <span><b id="sOpen">—</b>в пути</span>
   <span class="ok"><b id="sDone">—</b>сделано</span>
-  <span><b id="sRun">—</b>в работе</span>
-  <span class="alert"><b id="sLate">—</b>просрочено</span>
-  <span class="rich"><b id="sRich">—</b>богатых узлов</span>
-  <span class="alert"><b id="sLost">—</b>путь потерян</span>
+  <span class="rich"><b id="sRich">—</b>богатых точек</span>
+  <span><b id="sPend">—</b>ждут сверки с Notion</span>
 </section>
 
 <main class="main">
   <div class="field" id="field">
-    <svg id="svg" role="img" aria-label="Карта сфер, проектов и задач"></svg>
-    <div class="empty" id="empty">
-      <h3>Карта ждёт данных</h3>
-      <p class="note">Синапсы читают базы «Проекты» и «Задачи» из Notion. Когда страница попросит доступ к Notion, разрешите его — и здесь появятся сферы.</p>
-    </div>
+    <svg id="svg" role="img" aria-label="Карта сфер и точек"></svg>
+    <div class="banner" id="banner" hidden></div>
     <div class="keys" aria-hidden="true">
-      <span><svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="5" fill="var(--star)"/></svg>проект</span>
-      <span><svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="3.5" fill="var(--dot)"/></svg>не начата</span>
-      <span><svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="3.5" fill="var(--impulse)"/></svg>в работе</span>
-      <span><svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="3" fill="none" stroke="var(--done)" stroke-width="1.6"/></svg>сделано</span>
-      <span><svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="3.5" fill="var(--dot)" stroke="var(--late)" stroke-width="2"/></svg>просрочено</span>
-      <span><svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="4.5" fill="none" stroke="var(--impulse)" stroke-width="1.6"/></svg>богатый узел</span>
+      <span><svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="4.5" fill="var(--star)"/></svg>в пути</span>
+      <span><svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="4.5" fill="var(--done)"/></svg>сделано</span>
+      <span><svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="3" fill="var(--impulse)"/></svg>ждёт сверки</span>
+      <span><svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="5" fill="none" stroke="var(--impulse)" stroke-width="1.6"/></svg>богатая точка</span>
+      <span>тяните точку — она остаётся там, где вы её оставили</span>
     </div>
-    <div class="spheres" id="spheres" aria-label="Сферы"></div>
   </div>
   <aside class="side" id="side" aria-live="polite"></aside>
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 <script>
-const SRV="Notion";
-const DS_TASKS="collection://48247e84-e546-47cb-b82c-63fd836f0518";
-const DS_PROJ="collection://37bec455-c4dc-807d-9551-000bf287afd8";
-const TASKS_ID="48247e84-e546-47cb-b82c-63fd836f0518";
-const ALL="__all__";
+const DEFAULT_SPHERES=["Психопрактика","Призма","Меркор-ПРУФ","Творчество","ИИ и технологии","Обучение","Контент","Финансы","Личное","Хобби"];
 const today=new Date(); const TODAY=today.getFullYear()+"-"+String(today.getMonth()+1).padStart(2,"0")+"-"+String(today.getDate()).padStart(2,"0");
-let mcp=null, roots=[], projects=[], tasks=[], allActive=null, selected=null, focusSph=null, hideDone=false, showLabels=false, sim=null, busy=false, flash=null;
+let db=null, nodes=[], spheres=DEFAULT_SPHERES.slice(), selected=null, mode=null, linkFrom=null, hideDone=false, flash=null, ready=false, readOnly=false;
 const $=id=>document.getElementById(id);
-const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
-let trail=store.get("sinapsy-trail",[]);
-const arr=v=>{if(!v)return[];if(Array.isArray(v))return v;try{const a=JSON.parse(v);return Array.isArray(a)?a:[]}catch(e){return[]}};
-const pid=u=>(String(u).match(/[0-9a-f]{32}/i)||[""])[0];
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const fmt=d=>d?d.split("-").reverse().join("."):"—";
-const short=(s,n)=>{s=String(s||"").replace(/^МАК\s*·\s*/,"");return s.length>n?s.slice(0,n-1)+"…":s};
-const isAll=()=>$("cluster").value===ALL;
-const NOSPH="Без сферы";
-/* Сферы задач и проектов в Notion называются почти одинаково; единственное расхождение — «Личное/Быт». Задача берёт сферу своего проекта, собственную — только если проекта нет. */
-const SPH_ALIAS={"Личное/Быт":"Личное"};
-const sphName=s=>SPH_ALIAS[s]||s;
+const short=(s,n)=>{s=String(s||"");return s.length>n?s.slice(0,n-1)+"…":s};
+const sphColor=s=>{const i=spheres.indexOf(s);return i<0?"var(--muted)":`var(--s${(i%10)+1})`};
+const byId=id=>nodes.find(n=>n.id===id);
+const linksOf=n=>{const out=new Set(n.links||[]);nodes.forEach(m=>{if((m.links||[]).includes(n.id))out.add(m.id)});out.delete(n.id);return [...out].filter(byId)};
+const isRich=n=>(n.spheres||[]).length>=2||linksOf(n).some(id=>{const m=byId(id);return m&&!(m.spheres||[]).some(s=>(n.spheres||[]).includes(s))});
+const hash=s=>{let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return (h>>>0)/4294967295};
 
-function rowsOf(res){let p=res&&res.payload;if(typeof p==="string"){try{p=JSON.parse(p)}catch(e){p=null}}
-  if(!p&&res&&res.content){const t=res.content.find(c=>c.type==="text");if(t)try{p=JSON.parse(t.text)}catch(e){}}
-  return (p&&p.results)||[]}
-function errText(e){const c=e&&e.code;
-  if(c==="needs_reauth")return"Доступ к Notion истёк. Переподключите Notion в настройках claude.ai → Connectors.";
-  if(c==="server_not_connected")return"Notion не подключён. Добавьте его в настройках claude.ai → Connectors.";
-  if(c==="not_in_manifest"||c==="approval_required")return"Странице не разрешён доступ к Notion. Разрешите его и нажмите «Обновить».";
-  if(c==="selection_required")return"Подключено несколько Notion — выберите один в запросе claude.ai.";
-  if(c==="server_unavailable")return"Notion сейчас не отвечает. Попробуйте «Обновить» через минуту.";
-  if(c==="tool_error")return"Notion отказал: "+(e.message||"ошибка инструмента");
-  return"Не получилось: "+(e&&e.message||c||"неизвестная ошибка")}
-async function q(data){const r=await mcp.callTool(SRV,"notion-query-data-sources",{data},{cache:false});return rowsOf(r)}
-const relF=(prop,url)=>({type:"property",property:prop,propertyType:"relation",operator:"relation_contains",value:{type:"exact",value:url}});
-const notDone=()=>({type:"group",operator:"and",filters:[{type:"property",property:"Статус",propertyType:"status",operator:"status_is_not",value:{type:"is_option",value:"Done"}}]});
-
-async function loadRoots(){
-  roots=await q({mode:"rows",data_source_url:DS_PROJ,filter:{type:"group",operator:"and",filters:[{type:"property",property:"Подпроекты",propertyType:"relation",operator:"is_not_empty"}]},limit:100});
-  const sel=$("cluster"), saved=store.get("sinapsy-root",ALL);
-  sel.innerHTML=`<option value="${ALL}">Все сферы · только открытое</option>`+roots.map(r=>`<option value="${esc(r.url)}">${esc(r["Проект"])}</option>`).join("");
-  sel.value=saved===ALL||!roots.find(r=>r.url===saved)?ALL:saved;
+/* --- хранилище --- */
+async function writeNode(id,data){ if(readOnly)return;
+  const go=()=>db.collection("nodes").doc(id).update({...data,updatedAt:new Date().toISOString()});
+  try{ await go(); }
+  catch(e){ if(e&&e.code==="unavailable"){try{await new Promise(r=>setTimeout(r,400+Math.random()*600));await go();return}catch(e2){e=e2}}
+    flash={err:dbErr(e)}; renderSide(); }
 }
-async function loadCluster(){
-  const v=$("cluster").value; store.set("sinapsy-root",v);
-  const stamp=new Date().toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"});
-  if(v===ALL){
-    projects=await q({mode:"rows",data_source_url:DS_PROJ,filter:notDone(),limit:100});
-    tasks=await q({mode:"rows",data_source_url:DS_TASKS,filter:notDone(),limit:100});
-    $("sub").textContent=`все сферы · ${projects.length} живых проектов · ${tasks.length} открытых задач${tasks.length>=100?" (первые 100)":""} · ${stamp}`;
-    return;
-  }
-  const root=roots.find(r=>r.url===v); if(!root)return;
-  const subs=await q({mode:"rows",data_source_url:DS_PROJ,filter:{type:"group",operator:"and",filters:[relF("Надпроект",v)]},limit:100});
-  projects=[root,...subs];
-  const fl=projects.map(p=>relF("Проект",p.url));
-  tasks=await q({mode:"rows",data_source_url:DS_TASKS,filter:{type:"group",operator:"or",filters:fl},limit:100});
-  $("sub").textContent=`${root["Проект"]} · ${projects.length} проектов · ${tasks.length} задач · ${stamp}`;
-}
-async function refresh(keep){
-  if(!mcp){renderSide();return}
-  $("reload").disabled=true;
-  try{ if(!roots.length)await loadRoots(); await loadCluster(); $("empty").hidden=true; if(!keep)flash=null; }
-  catch(e){flash={err:errText(e)}; if(!projects.length)$("empty").hidden=false;}
-  $("reload").disabled=false; build(); renderSide();
-}
-
-/* --- данные --- */
-const projByUrl=()=>new Map(projects.map(p=>[p.url,p]));
-function projSpheres(p){const s=arr(p["Сфера"]).map(sphName);return s.length?[...new Set(s)]:[NOSPH]}
-function taskSpheres(t){const pm=projByUrl();const fromP=arr(t["Проект"]).map(u=>pm.get(u)).filter(Boolean).flatMap(projSpheres);
-  const own=arr(t["Сфера"]).map(sphName); const s=fromP.length?fromP:own; return s.length?[...new Set(s)]:[NOSPH]}
-function openTasksOf(url){return tasks.filter(t=>t["Статус"]!=="Done"&&arr(t["Проект"]).includes(url))}
-function hasStep(p,seen=new Set()){if(seen.has(p.url))return false;seen.add(p.url);
-  if(openTasksOf(p.url).length)return true;
-  return arr(p["Подпроекты"]).some(u=>{const c=projects.find(x=>x.url===u);return c&&c["Статус"]!=="Done"&&hasStep(c,seen)})}
-function lostProjects(){return projects.filter(p=>p["Статус"]!=="Done"&&!hasStep(p))}
-const dueOf=t=>t["date:Дедлайн:start"]||t["date:Плановая дата:start"]||null;
-const isLate=t=>t["Статус"]!=="Done"&&dueOf(t)&&dueOf(t)<TODAY;
-function score(t){const d=dueOf(t);let s=0;
-  if(d&&d<TODAY)s+=100; s+=arr(t["Проект"]).length*20; if(t["Статус"]==="In progress")s+=15;
-  if(t["Приоритет"]==="Высокий")s+=10; if(d)s+=Math.max(0,10-Math.round((Date.parse(d)-Date.parse(TODAY))/864e5)); return s}
-function nextUp(list){return (list||tasks).filter(t=>t["Статус"]!=="Done").sort((a,b)=>score(b)-score(a)).slice(0,3)}
-function sphereList(){const c=new Map();
-  projects.forEach(p=>projSpheres(p).forEach(s=>c.set(s,(c.get(s)||0)+1)));
-  tasks.forEach(t=>{if(!arr(t["Проект"]).some(u=>projByUrl().has(u)))taskSpheres(t).forEach(s=>c.set(s,(c.get(s)||0)+0.5))});
-  return [...c.entries()].sort((a,b)=>b[1]-a[1]).map(e=>e[0]).sort((a,b)=>(a===NOSPH)-(b===NOSPH))}
-function sphColor(i){return `var(--s${(i%10)+1})`}
+function dbErr(e){const c=e&&e.code;
+  if(c==="quota_exceeded")return"Хранилище карты заполнено: удалите лишние точки.";
+  if(c==="invalid_argument")return"Точка не найдена или запись слишком велика — обновите страницу.";
+  if(c==="resource_exhausted")return"Слишком часто — подождите пару секунд.";
+  if(c==="revoked")return"Доступ к карте отозван — обновите страницу.";
+  return"Не сохранилось ("+(c||"ошибка")+"). Попробуйте ещё раз.";}
 
 /* --- карта --- */
-function build(){
-  const sDone=tasks.filter(t=>t["Статус"]==="Done").length;
-  $("sDone").textContent=isAll()?"—":`${sDone}/${tasks.length}`;
-  $("sRun").textContent=tasks.filter(t=>t["Статус"]==="In progress").length;
-  $("sLate").textContent=tasks.filter(isLate).length;
-  $("sRich").textContent=tasks.filter(t=>t["Статус"]!=="Done"&&arr(t["Проект"]).length>=2).length;
-  $("sLost").textContent=lostProjects().length;
-  const svg=d3.select("#svg"); svg.selectAll("*").remove(); if(sim)sim.stop();
-  const SPH=sphereList(); const col=new Map(SPH.map((s,i)=>[s,sphColor(i)]));
-  $("spheres").innerHTML=SPH.map(s=>`<button data-sph="${esc(s)}" aria-pressed="${focusSph===s}"><i style="background:${col.get(s)}"></i>${esc(s)}</button>`).join("");
-  document.querySelectorAll("[data-sph]").forEach(b=>b.onclick=()=>{focusSph=focusSph===b.dataset.sph?null:b.dataset.sph;selected=null;build();renderSide()});
-  if(!projects.length)return;
+let geo=null;
+function render(){
+  const open=nodes.filter(n=>n.status!=="done");
+  $("sOpen").textContent=ready?open.length:"—"; $("sDone").textContent=ready?nodes.length-open.length:"—";
+  $("sRich").textContent=ready?open.filter(isRich).length:"—"; $("sPend").textContent=ready?nodes.filter(n=>n.sync==="pending").length:"—";
+  const svg=d3.select("#svg"); svg.selectAll("*").remove();
   const box=$("field").getBoundingClientRect(), W=Math.max(340,box.width), H=Math.max(480,box.height);
-  const cx=W/2, cy=H/2-14, R=Math.min(W,H)*0.40;
+  const cx=W/2, cy=H/2-10, R=Math.min(W,H)*0.40; geo={cx,cy,R};
   svg.attr("viewBox",`0 0 ${W} ${H}`);
   const g=svg.append("g");
-  svg.call(d3.zoom().scaleExtent([.5,4]).on("zoom",e=>g.attr("transform",e.transform)));
-  /* кольца астролябии и границы секторов */
+  const zoom=d3.zoom().scaleExtent([.5,3]).filter(e=>!e.target.closest||!e.target.closest(".node")).on("zoom",e=>g.attr("transform",e.transform));
+  svg.call(zoom).on("dblclick.zoom",null);
+  svg.on("click",e=>{if(e.target===svg.node()&&mode!=="link"){selected=null;render();renderSide()}});
   [R*0.35,R*0.7,R*1.02].forEach(r=>g.append("circle").attr("class","orbit").attr("cx",cx).attr("cy",cy).attr("r",r));
-  const n=SPH.length, ang=i=>-Math.PI/2+i*2*Math.PI/n;
-  const anchor=new Map(SPH.map((s,i)=>[s,{x:cx+Math.cos(ang(i))*R*0.74,y:cy+Math.sin(ang(i))*R*0.74,a:ang(i)}]));
-  if(n>1)SPH.forEach((s,i)=>{const a=ang(i)+Math.PI/n;g.append("line").attr("class","sector").attr("x1",cx+Math.cos(a)*R*0.2).attr("y1",cy+Math.sin(a)*R*0.2).attr("x2",cx+Math.cos(a)*R*1.08).attr("y2",cy+Math.sin(a)*R*1.08)});
-  const sphG=g.append("g");
-  SPH.forEach(s=>{const A=anchor.get(s), lx=cx+Math.cos(A.a)*R*1.04, ly=cy+Math.sin(A.a)*R*1.04;
-    const anchorTxt=Math.abs(Math.cos(A.a))<.25?"middle":(Math.cos(A.a)>0?"start":"end");
-    sphG.append("text").attr("class","sph-name"+(focusSph&&focusSph!==s?" dim":"")).attr("x",lx).attr("y",ly+(Math.sin(A.a)>.5?18:Math.sin(A.a)<-.5?-8:5))
-      .attr("text-anchor",anchorTxt).attr("fill",col.get(s)).text(s).on("click",()=>{focusSph=focusSph===s?null:s;selected=null;build();renderSide()});});
-  /* узлы */
-  const pm=projByUrl(); const N=[], L=[];
-  const mean=list=>{const pts=list.map(s=>anchor.get(s)).filter(Boolean);if(!pts.length)return{x:cx,y:cy};return{x:d3.mean(pts,p=>p.x),y:d3.mean(pts,p=>p.y)}};
-  projects.forEach(p=>{const sp=projSpheres(p),t=mean(sp);
-    N.push({id:p.url,kind:"proj",title:p["Проект"],status:p["Статус"],sph:sp,tx:t.x,ty:t.y,umb:arr(p["Подпроекты"]).length>0,lost:p["Статус"]!=="Done"&&!hasStep(p)})});
-  projects.forEach(p=>arr(p["Надпроект"]).filter(u=>pm.has(u)).forEach(u=>L.push({source:p.url,target:u,kind:"kin"})));
-  tasks.forEach(t=>{const done=t["Статус"]==="Done"; if(hideDone&&done)return;
-    const ps=arr(t["Проект"]).filter(u=>pm.has(u)), sp=taskSpheres(t), tg=mean(sp);
-    N.push({id:t.url,kind:"task",title:t["Задача"],status:t["Статус"],sph:sp,tx:tg.x,ty:tg.y,rich:arr(t["Проект"]).length>=2,late:isLate(t),done});
-    ps.forEach(u=>L.push({source:t.url,target:u,kind:"tether",rich:arr(t["Проект"]).length>=2}));});
-  const byId=new Map(N.map(d=>[d.id,d]));
-  N.forEach(d=>{d.x=d.tx+(Math.random()-.5)*40;d.y=d.ty+(Math.random()-.5)*40});
-  const inFocus=d=>!focusSph||d.sph.includes(focusSph);
-  const link=g.append("g").selectAll("line").data(L).join("line")
-    .attr("class",d=>d.kind==="kin"?"kin":"tether"+(d.rich?" rich":""));
-  const trailPath=g.append("path").attr("class","trail");
-  const node=g.append("g").selectAll("g").data(N).join("g").style("cursor","pointer")
-    .attr("class",d=>inFocus(d)?null:"dim")
-    .attr("tabindex",0).attr("role","button").attr("aria-label",d=>d.title)
-    .on("click",(e,d)=>select(d.id)).on("keydown",(e,d)=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();select(d.id)}});
-  node.append("title").text(d=>d.title);
-  node.filter(d=>d.kind==="task"&&d.rich&&!d.done).append("circle").attr("r",11).attr("fill","var(--impulse)").attr("class","pulse");
-  /* проекты — звёзды с кольцом цвета сферы */
-  const P=node.filter(d=>d.kind==="proj");
-  P.append("circle").attr("r",d=>d.umb?13:9).attr("fill","none").attr("stroke",d=>col.get(d.sph[0])).attr("stroke-width",2)
-    .attr("stroke-dasharray",d=>d.lost?"3 3":null);
-  P.append("circle").attr("r",d=>d.umb?8:5.5).attr("fill",d=>d.status==="Done"?"var(--done)":"var(--star)");
-  /* задачи — точки */
-  const T=node.filter(d=>d.kind==="task");
-  T.append("circle").attr("r",d=>d.rich?5:3.6)
-    .attr("fill",d=>d.done?"none":d.status==="In progress"?"var(--impulse)":"var(--dot)")
-    .attr("stroke",d=>d.done?"var(--done)":d.late?"var(--late)":d.rich?"var(--impulse)":"none")
-    .attr("stroke-width",d=>d.done?1.6:d.late?2.2:d.rich?1.8:0);
-  node.filter(d=>d.id===selected).append("circle").attr("r",d=>d.kind==="proj"?(d.umb?19:15):10).attr("fill","none").attr("stroke","var(--impulse)").attr("stroke-width",2);
-  P.append("text").attr("class","p-label").attr("x",d=>d.umb?17:13).attr("y",4).text(d=>short(d.title,d.id===selected?60:28));
-  T.filter(d=>d.id===selected||showLabels).append("text").attr("class","t-label").attr("x",8).attr("y",4)
-    .text(d=>short(d.title,d.id===selected?70:30));
-  sim=d3.forceSimulation(N)
-    .force("link",d3.forceLink(L).id(d=>d.id).distance(d=>d.kind==="kin"?90:22).strength(d=>d.kind==="kin"?.03:.9))
-    .force("x",d3.forceX(d=>d.tx).strength(d=>d.kind==="proj"?.5:.03))
-    .force("y",d3.forceY(d=>d.ty).strength(d=>d.kind==="proj"?.5:.03))
-    .force("charge",d3.forceManyBody().strength(d=>d.kind==="proj"?-160:-14).distanceMax(220))
-    .force("collide",d3.forceCollide(d=>d.kind==="proj"?(d.umb?28:22):6.5).iterations(2));
-  const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if(reduce){sim.stop();for(let i=0;i<300;i++)sim.tick();tick()} else {sim.alphaDecay(.04).on("tick",tick)}
-  function tick(){
-    link.attr("x1",d=>d.source.x).attr("y1",d=>d.source.y).attr("x2",d=>d.target.x).attr("y2",d=>d.target.y);
-    node.attr("transform",d=>`translate(${d.x},${d.y})`);
-    const pts=trail.map(id=>byId.get(id)).filter(Boolean);
-    trailPath.attr("d",pts.length>1?d3.line().curve(d3.curveCatmullRom)(pts.map(p=>[p.x,p.y])):null);
-  }
+  const used=spheres.filter(s=>true), n=Math.max(1,used.length), ang=i=>-Math.PI/2+i*2*Math.PI/n;
+  if(n>1)used.forEach((s,i)=>{const a=ang(i)+Math.PI/n;g.append("line").attr("class","sector").attr("x1",cx+Math.cos(a)*R*0.18).attr("y1",cy+Math.sin(a)*R*0.18).attr("x2",cx+Math.cos(a)*R*1.08).attr("y2",cy+Math.sin(a)*R*1.08)});
+  used.forEach((s,i)=>{const a=ang(i), lx=cx+Math.cos(a)*R*1.05, ly=cy+Math.sin(a)*R*1.05;
+    g.append("text").attr("class","sph-name").attr("x",lx).attr("y",ly+(Math.sin(a)>.5?18:Math.sin(a)<-.5?-8:5))
+      .attr("text-anchor",Math.abs(Math.cos(a))<.25?"middle":(Math.cos(a)>0?"start":"end")).attr("fill",sphColor(s)).text(s)});
+  const visible=nodes.filter(m=>!(hideDone&&m.status==="done"));
+  if(ready&&!nodes.length)g.append("text").attr("class","center-hint").attr("x",cx).attr("y",cy).attr("text-anchor","middle").text("Нажмите «+ Точка»");
+  /* позиции: сохранённые — как есть, новые — в своём секторе */
+  const anchor=s=>{const i=used.indexOf(s);if(i<0)return{x:cx,y:cy};return{x:cx+Math.cos(ang(i))*R*0.62,y:cy+Math.sin(ang(i))*R*0.62}};
+  const P=visible.map(m=>{const sp=(m.spheres||[]).filter(s=>used.includes(s));
+    const a=sp.length?{x:d3.mean(sp,s=>anchor(s).x),y:d3.mean(sp,s=>anchor(s).y)}:{x:cx,y:cy};
+    if(typeof m.x==="number"&&typeof m.y==="number")return{m,x:cx+m.x*R,y:cy+m.y*R,fx:cx+m.x*R,fy:cy+m.y*R};
+    const h=hash(m.id);return{m,x:a.x+(h-.5)*60,y:a.y+(hash(m.id+"y")-.5)*60,ax:a.x,ay:a.y}});
+  const free=P.filter(p=>p.fx===undefined);
+  if(free.length){const s=d3.forceSimulation(P).force("x",d3.forceX(d=>d.ax??d.x).strength(.12)).force("y",d3.forceY(d=>d.ay??d.y).strength(.12))
+      .force("c",d3.forceCollide(34)).stop();for(let i=0;i<160;i++)s.tick();}
+  const pos=new Map(P.map(p=>[p.m.id,p]));
+  /* связи */
+  const E=[];visible.forEach(m=>(m.links||[]).forEach(t=>{if(pos.has(t))E.push({a:pos.get(m.id),b:pos.get(t),rich:!(m.spheres||[]).some(s=>(byId(t).spheres||[]).includes(s))})}));
+  g.append("g").selectAll("line").data(E).join("line").attr("class",d=>"edge"+(d.rich?" rich":""))
+    .attr("x1",d=>d.a.x).attr("y1",d=>d.a.y).attr("x2",d=>d.b.x).attr("y2",d=>d.b.y);
+  /* точки */
+  const node=g.append("g").selectAll("g").data(P).join("g").attr("class","node").attr("transform",d=>`translate(${d.x},${d.y})`)
+    .style("cursor",mode==="link"?"crosshair":"grab").attr("tabindex",0).attr("role","button").attr("aria-label",d=>d.m.title)
+    .on("keydown",(e,d)=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();tap(d.m.id)}});
+  node.append("title").text(d=>d.m.title);
+  node.filter(d=>d.m.status!=="done"&&isRich(d.m)).append("circle").attr("r",19).attr("fill","var(--impulse)").attr("class","pulse");
+  node.append("circle").attr("r",13).attr("fill","none").attr("stroke",d=>sphColor((d.m.spheres||[])[0])).attr("stroke-width",2.2);
+  node.filter(d=>(d.m.spheres||[]).length>1).append("circle").attr("r",16.5).attr("fill","none").attr("stroke",d=>sphColor(d.m.spheres[1])).attr("stroke-width",1.4).attr("stroke-dasharray","3 3");
+  node.append("circle").attr("r",8).attr("fill",d=>d.m.status==="done"?"var(--done)":"var(--star)");
+  node.filter(d=>d.m.sync==="pending").append("circle").attr("cx",10).attr("cy",-10).attr("r",4).attr("fill","var(--impulse)");
+  node.filter(d=>d.m.sync==="synced").append("text").attr("x",7).attr("y",-6).attr("font-size",11).attr("fill","var(--done)").text("✓");
+  node.filter(d=>d.m.sync==="not_found").append("text").attr("x",7).attr("y",-6).attr("font-size",11).attr("fill","var(--late)").text("?");
+  node.filter(d=>d.m.id===selected||d.m.id===linkFrom).append("circle").attr("r",22).attr("fill","none").attr("stroke","var(--impulse)").attr("stroke-width",2);
+  node.append("text").attr("class",d=>"n-label"+(d.m.status==="done"?" done":"")).attr("x",d=>d.m.id===selected||d.m.id===linkFrom?28:22).attr("y",4).text(d=>short(d.m.title,d.m.id===selected?60:30));
+  /* перетаскивание: короткий жест — выбор, длинный — перенос */
+  let moved=false;
+  node.call(d3.drag().on("start",()=>{moved=false})
+    .on("drag",function(e,d){moved=true;d.x=e.x;d.y=e.y;d3.select(this).attr("transform",`translate(${d.x},${d.y})`)})
+    .on("end",function(e,d){ if(!moved){tap(d.m.id);return}
+      if(readOnly){render();return}
+      const nx=(d.x-cx)/R, ny=(d.y-cy)/R; writeNode(d.m.id,{x:+nx.toFixed(4),y:+ny.toFixed(4)}); }));
+  $("banner").hidden=mode!=="link";
+  if(mode==="link")$("banner").innerHTML=`Кликните точку, которую связать с «${esc(short(byId(linkFrom)?.title,30))}» <button id="bLinkCancel">Отмена</button>`;
+  const bc=$("bLinkCancel"); if(bc)bc.onclick=()=>{mode=null;linkFrom=null;render();renderSide()};
 }
-function select(id){selected=id;flash=null;trail=[...trail.filter(x=>x!==id),id].slice(-6);store.set("sinapsy-trail",trail);build();renderSide()}
+function tap(id){
+  if(mode==="link"&&linkFrom){
+    if(id!==linkFrom){const a=byId(linkFrom), b=byId(id);
+      const linked=linksOf(a).includes(id);
+      if(linked){ writeNode(a.id,{links:(a.links||[]).filter(x=>x!==id)}); writeNode(b.id,{links:(b.links||[]).filter(x=>x!==a.id)}); flash={ok:"Связь снята."}; }
+      else{ writeNode(a.id,{links:[...(a.links||[]),id]}); flash={ok:"Связь проведена."}; }
+    }
+    mode=null; selected=linkFrom; linkFrom=null; render(); renderSide(); return;
+  }
+  selected=id; flash=null; render(); renderSide();
+}
 
 /* --- пульт --- */
-function statusChip(st,proj){return `<span class="chip ${st==="Done"?"done":st==="In progress"?"run":""}">${st==="Done"?(proj?"завершён":"сделано"):st==="In progress"?"в работе":(proj?"не начат":"не начата")}</span>`}
-function taskCard(t){
-  const ps=arr(t["Проект"]); const st=t["Статус"];
-  const pn=ps.map(u=>{const p=projects.find(x=>x.url===u)||(allActive||[]).find(x=>x.url===u);return p?short(p["Проект"],80):"проект вне карты"});
-  return `<h2>Задача · ${esc(taskSpheres(t).join(" + "))}</h2><h3>${esc(t["Задача"])}</h3>
-  <div>${statusChip(st)} ${isLate(t)?'<span class="chip late">просрочено</span>':""} ${ps.length>=2?`<span class="chip run">богатый узел · ${ps.length} проекта</span>`:""}</div>
-  <dl class="kv"><dt>Проекты</dt><dd>${pn.map(esc).join("<br>")||"нет — задаче нужен дом"}</dd>
-   <dt>План</dt><dd>${fmt(t["date:Плановая дата:start"])}</dd><dt>Дедлайн</dt><dd>${fmt(t["date:Дедлайн:start"])}</dd>
-   ${st==="Done"?`<dt>Сделано</dt><dd>${fmt(t["date:Дата выполнения:start"])}</dd>`:""}</dl>
+function sphChips(list){return `<div class="chips">${(list||[]).map(s=>`<span class="chip"><i style="background:${sphColor(s)}"></i>${esc(s)}</span>`).join("")}</div>`}
+function syncLine(n){
+  if(n.sync==="pending")return'<span class="chip run">ждёт сверки с Notion</span>';
+  if(n.sync==="synced")return`<span class="chip done">сверено с Notion</span>${n.syncNote?` <span class="note">${esc(n.syncNote)}</span>`:""}`;
+  if(n.sync==="not_found")return`<span class="chip late">в Notion не найдено</span>${n.syncNote?` <span class="note">${esc(n.syncNote)}</span>`:""}`;
+  return"";
+}
+function nodeCard(n){
+  const ls=linksOf(n).map(byId);
+  return `<h2>Точка</h2><h3>${esc(n.title)}</h3>${sphChips(n.spheres)}
+  <div>${n.status==="done"?`<span class="chip done">сделано ${fmt(n.doneAt)}</span>`:'<span class="chip">в пути</span>'} ${isRich(n)&&n.status!=="done"?'<span class="chip run">богатая</span>':""}</div>
+  <div>${syncLine(n)}</div>
+  ${n.note?`<p class="note">${esc(n.note)}</p>`:""}
+  ${n.notion?`<a href="${esc(n.notion)}" target="_blank" rel="noopener">Открыть в Notion</a>`:""}
+  <h2>Связи</h2>${ls.length?`<ul class="list">${ls.map(m=>`<li><button class="go" data-go="${esc(m.id)}"><span>${esc(m.title)}</span>${m.status==="done"?'<span class="chip done">✓</span>':""}</button></li>`).join("")}</ul>`:'<p class="note">Пока одна. Связь с точкой из другой сферы делает её богатой.</p>'}
   <div class="actions">
-   ${st!=="Done"?`<button class="primary" id="bDone">Готово</button>`:""}
-   ${st==="Not started"?`<button id="bRun">В работу</button>`:""}
-   ${st!=="Done"?`<button id="bLink">Связать ещё с проектом</button>`:""}
-   <a href="${esc(t.url)}" target="_blank" rel="noopener">Открыть в Notion</a></div>
-  <div id="slot"></div>`;
+    ${n.status!=="done"?'<button class="primary" id="bDone">Готово</button>':'<button id="bUndo">Вернуть в путь</button>'}
+    <button id="bLink">Связать</button><button id="bEdit">Изменить</button><button class="quiet danger" id="bDel">Удалить</button>
+  </div><div id="slot"></div>
+  <button class="quiet" id="bBack">← К обзору</button>`;
 }
-function projCard(p){
-  const open=openTasksOf(p.url), all=tasks.filter(t=>arr(t["Проект"]).includes(p.url));
-  const nx=open.slice().sort((a,b)=>score(b)-score(a))[0];
-  return `<h2>Проект · ${esc(projSpheres(p).join(" + "))}</h2><h3>${esc(p["Проект"])}</h3>
-  <div>${statusChip(p["Статус"],true)}</div>
-  <dl class="kv"><dt>Задачи</dt><dd>${isAll()?`${open.length} открытых`:`${all.length-open.length} из ${all.length} сделано`}</dd>
-   <dt>Следующий шаг</dt><dd>${nx?`<button class="quiet" data-go="${esc(nx.url)}">${esc(nx["Задача"])}</button>`:(p["Статус"]==="Done"?"—":hasStep(p)?"в подпроектах":'<span class="chip late">путь потерян — шага нет</span>')}</dd></dl>
-  ${p["Цель / результат"]?`<p class="note">${esc(p["Цель / результат"])}</p>`:'<p class="note">Цель не записана: узлу не к чему вести.</p>'}
-  <div class="actions">${p["Статус"]!=="Done"?`<button class="primary" id="bAdd">Добавить задачу</button>`:""}<a href="${esc(p.url)}" target="_blank" rel="noopener">Открыть в Notion</a></div>
-  <div id="slot"></div>`;
-}
-function sphereCard(s){
-  const ps=projects.filter(p=>projSpheres(p).includes(s)), ts=tasks.filter(t=>taskSpheres(t).includes(s));
-  const open=ts.filter(t=>t["Статус"]!=="Done"), nx=nextUp(ts), lost=lostProjects().filter(p=>projSpheres(p).includes(s));
-  return `<h2>Сфера</h2><h3 class="sph">${esc(s)}</h3>
-  <dl class="kv"><dt>Проекты</dt><dd>${ps.length}</dd><dt>Открытых задач</dt><dd>${open.length}</dd><dt>Просрочено</dt><dd>${open.filter(isLate).length}</dd></dl>
-  <h2>Следующий шаг в сфере</h2>${list(nx)}
-  ${lost.length?`<h2>Где потерян путь</h2>${listP(lost)}`:""}
-  <button class="quiet" id="bUnfocus">Показать все сферы</button>`;
-}
-const list=ts=>ts.length?`<ul class="list">${ts.map(t=>`<li><button data-go="${esc(t.url)}"><span>${esc(t["Задача"])}</span>${arr(t["Проект"]).length>=2?'<span class="chip run">богатый</span>':isLate(t)?'<span class="chip late">срок</span>':""}</button></li>`).join("")}</ul>`:'<p class="note">Открытых задач нет.</p>';
-const listP=ps=>`<ul class="list">${ps.map(p=>`<li><button data-go="${esc(p.url)}"><span>${esc(short(p["Проект"],60))}</span><span class="chip late">нет шага</span></button></li>`).join("")}</ul>`;
 function overview(){
-  const lost=lostProjects();
-  return `<h2>Куда дальше</h2>${list(nextUp())}
-  <p class="note">Порядок: просроченное, затем то, что двигает больше проектов, затем то, что уже в работе.</p>
-  <h2>Где потерян путь</h2>${lost.length?listP(lost):'<p class="note">У каждого живого проекта есть следующий шаг.</p>'}
-  <p class="note">Сфера — сектор карты. Проект стоит в своей сфере, задача — на его орбите. Задача, привязанная к проектам из разных сфер, висит между ними: это богатый узел.</p>`;
+  const open=nodes.filter(n=>n.status!=="done").sort((a,b)=>(isRich(b)-isRich(a))||linksOf(b).length-linksOf(a).length);
+  const pend=nodes.filter(n=>n.sync==="pending"), nf=nodes.filter(n=>n.sync==="not_found");
+  if(ready&&!nodes.length)return `<h2>Начало</h2><p class="note">Это ваша карта, а не выгрузка из Notion. Ставьте только крупное: цели, узлы, проекты, ради которых вы садитесь работать.</p>
+    <ol class="note" style="margin:0;padding-left:18px"><li>«+ Точка» — название и сфера.</li><li>Тяните точку куда удобно — место запомнится.</li><li>«Связать» — от точки к точке; связь через сферы = богатый узел.</li><li>«Готово» — когда мост сожжён. Архитектор сверит с Notion и закроет там.</li></ol>`;
+  return `<h2>Куда дальше</h2>${open.length?`<ul class="list">${open.slice(0,5).map(m=>`<li><button class="go" data-go="${esc(m.id)}"><span>${esc(m.title)}</span>${isRich(m)?'<span class="chip run">богатая</span>':""}</button></li>`).join("")}</ul>`:'<p class="note">Всё отмечено. Самое время поставить новую точку.</p>'}
+  <h2>Ждут сверки с Notion</h2>${pend.length?`<ul class="list">${pend.map(m=>`<li><button class="go" data-go="${esc(m.id)}"><span>${esc(m.title)}</span><span class="chip run">${fmt(m.doneAt)}</span></button></li>`).join("")}</ul>
+    <p class="note">Скажите Архитектору: «сверь карту». Он найдёт эти точки в Notion, закроет, что не закрыто, и поставит ✓.</p>`:'<p class="note">Расхождений нет.</p>'}
+  ${nf.length?`<h2>Не нашлось в Notion</h2><ul class="list">${nf.map(m=>`<li><button class="go" data-go="${esc(m.id)}"><span>${esc(m.title)}</span><span class="chip late">?</span></button></li>`).join("")}</ul>`:""}`;
 }
+function nodeForm(n){
+  const sel=new Set(n?n.spheres||[]:[]);
+  return `<form class="form" id="nodeForm"><h2>${n?"Изменить точку":"Новая точка"}</h2>
+   <label class="t" for="fTitle">Что это</label><input type="text" id="fTitle" maxlength="140" value="${esc(n?n.title:"")}" placeholder="Например: колода Felt Sense в печать">
+   <span class="t">Сферы (одна или несколько)</span>
+   <div class="chips">${spheres.map((s,i)=>`<label><input type="checkbox" name="sph" value="${esc(s)}" ${sel.has(s)?"checked":""}><i style="width:8px;height:8px;border-radius:50%;background:${sphColor(s)}"></i>${esc(s)}</label>`).join("")}</div>
+   <label class="t" for="fNotion">Ссылка на Notion — необязательно, без неё Архитектор найдёт по названию</label><input type="url" id="fNotion" value="${esc(n?n.notion||"":"")}" placeholder="https://app.notion.com/p/…">
+   <label class="t" for="fNote">Заметка</label><textarea id="fNote" maxlength="600">${esc(n?n.note||"":"")}</textarea>
+   <span class="err-inline" id="fErr"></span>
+   <div class="actions"><button class="primary" type="submit">${n?"Сохранить":"Поставить на карту"}</button><button class="quiet" type="button" id="fCancel">Отмена</button></div></form>`;
+}
+function spheresForm(){
+  return `<form class="form" id="sphForm"><h2>Сферы карты</h2><p class="note">По одной в строке. Порядок — порядок секторов по часовой стрелке. Точки сферы, которую вы уберёте, встанут в центр.</p>
+   <textarea id="sphList" rows="10">${esc(spheres.join("\n"))}</textarea><span class="err-inline" id="sErr"></span>
+   <div class="actions"><button class="primary" type="submit">Сохранить</button><button class="quiet" type="button" id="sCancel">Отмена</button></div></form>`;
+}
+let panel=null;
 function renderSide(){
   let h=flash?`<div class="msg ${flash.err?"err":"ok"}">${esc(flash.err||flash.ok)}</div>`:"";
-  if(!mcp){h+=`<h2>Нет связи с Notion</h2><p class="note">Эта копия страницы не может обращаться к Notion. Откройте артефакт в claude.ai — там страница попросит доступ к вашему Notion.</p>`}
-  else{const t=tasks.find(x=>x.url===selected), p=projects.find(x=>x.url===selected);
-    h+= t?taskCard(t): p?projCard(p): focusSph?sphereCard(focusSph): overview();
-    if(selected)h+=`<button class="quiet" id="bBack">← К обзору</button>`;}
+  if(!db&&ready){h+=`<h2>Карта недоступна</h2><p class="note">Эта копия страницы не может хранить точки. Откройте артефакт «Синапсы» в claude.ai.</p>`;$("side").innerHTML=h;return}
+  if(!ready){h+='<p class="note">Загружаю карту…</p>';$("side").innerHTML=h;return}
+  if(panel==="new")h+=nodeForm(null); else if(panel==="edit"&&byId(selected))h+=nodeForm(byId(selected)); else if(panel==="spheres")h+=spheresForm();
+  else{const n=byId(selected); h+= n?nodeCard(n):overview();}
   $("side").innerHTML=h; wire();
 }
 function wire(){
-  document.querySelectorAll("#side [data-go]").forEach(b=>b.onclick=()=>select(b.dataset.go));
   const on=(id,f)=>{const el=$(id);if(el)el.onclick=f};
-  on("bBack",()=>{selected=null;flash=null;build();renderSide()});
-  on("bUnfocus",()=>{focusSph=null;build();renderSide()});
-  const t=tasks.find(x=>x.url===selected), p=projects.find(x=>x.url===selected);
+  document.querySelectorAll("#side [data-go]").forEach(b=>b.onclick=()=>{selected=b.dataset.go;panel=null;flash=null;render();renderSide()});
+  on("bBack",()=>{selected=null;flash=null;render();renderSide()});
+  const n=byId(selected);
   on("bDone",()=>{$("slot").innerHTML=`<div class="confirm"><b>Мост сожжён?</b><span>Готово — когда назад не отыграть: отправлено, показано, сдано, опубликовано.</span>
-     <div class="actions"><button class="primary" id="bDoneYes">Да, готово</button><button class="quiet" id="bDoneNo">Ещё нет</button></div></div>`;
-     on("bDoneNo",()=>{$("slot").innerHTML=""}); on("bDoneYes",()=>write(()=>upd(t.url,{"Статус":"Done","date:Дата выполнения:start":TODAY,"date:Дата выполнения:is_datetime":0}),"Мост сожжён. Следующий узел — в обзоре.",true))});
-  on("bRun",()=>write(()=>upd(t.url,{"Статус":"In progress"}),"Задача в работе."));
-  on("bLink",async()=>{
-    $("slot").innerHTML='<p class="note">Загружаю живые проекты…</p>';
-    try{ if(!allActive)allActive=await q({mode:"rows",data_source_url:DS_PROJ,filter:notDone(),limit:100});
-      const have=new Set(arr(t["Проект"])); const opts=allActive.filter(x=>!have.has(x.url)).sort((a,b)=>a["Проект"].localeCompare(b["Проект"],"ru"));
-      $("slot").innerHTML=`<div class="confirm"><label for="linkSel">Какой ещё проект двигает эта задача?</label><select id="linkSel">${opts.map(o=>`<option value="${esc(o.url)}">${esc(o["Проект"])} · ${esc(projSpheres(o).join(", "))}</option>`).join("")}</select>
-       <div class="actions"><button class="primary" id="bLinkYes">Связать</button><button class="quiet" id="bLinkNo">Отмена</button></div></div>`;
-      on("bLinkNo",()=>{$("slot").innerHTML=""});
-      on("bLinkYes",()=>{const u=$("linkSel").value;write(()=>upd(t.url,{"Проект":[...arr(t["Проект"]),u]}),"Связь добавлена: узел стал богаче.")});
-    }catch(e){$("slot").innerHTML=`<div class="msg err">${esc(errText(e))}</div>`}});
-  on("bAdd",()=>{$("slot").innerHTML=`<form class="confirm" id="addForm"><label for="newTitle">Одна задача — одно действие</label><input type="text" id="newTitle" maxlength="200" placeholder="Например: отправить макет в типографию">
-     <div class="actions"><button class="primary" type="submit">Добавить</button><button class="quiet" type="button" id="bAddNo">Отмена</button></div><span class="note" id="addErr"></span></form>`;
-     on("bAddNo",()=>{$("slot").innerHTML=""});
-     $("addForm").onsubmit=e=>{e.preventDefault();const v=$("newTitle").value.trim();if(!v){$("addErr").textContent="Напишите, что именно сделать.";return}
-       write(()=>mcp.callTool(SRV,"notion-create-pages",{parent:{type:"data_source_id",data_source_id:TASKS_ID},pages:[{properties:{"Задача":v,"Статус":"Not started","Проект":[p.url]}}]}),"Задача добавлена в Notion.")}});
+    <div class="actions"><button class="primary" id="bYes">Да, готово</button><button class="quiet" id="bNo">Ещё нет</button></div></div>`;
+    on("bNo",()=>{$("slot").innerHTML=""});
+    on("bYes",async()=>{await writeNode(n.id,{status:"done",doneAt:TODAY,sync:"pending",syncNote:""});flash={ok:"Мост сожжён. Точка ждёт сверки с Notion."};selected=null;renderSide()});});
+  on("bUndo",()=>writeNode(n.id,{status:"open",doneAt:"",sync:n.sync==="synced"?"synced":"none"}));
+  on("bLink",()=>{mode="link";linkFrom=n.id;render()});
+  on("bEdit",()=>{panel="edit";renderSide()});
+  on("bDel",()=>{$("slot").innerHTML=`<div class="confirm"><b>Удалить точку «${esc(short(n.title,40))}»?</b><span>Связи с ней тоже исчезнут. В Notion ничего не изменится.</span>
+    <div class="actions"><button class="danger" id="bDelYes">Удалить</button><button class="quiet" id="bDelNo">Оставить</button></div></div>`;
+    on("bDelNo",()=>{$("slot").innerHTML=""});
+    on("bDelYes",async()=>{try{for(const m of nodes)if((m.links||[]).includes(n.id))await writeNode(m.id,{links:m.links.filter(x=>x!==n.id)});
+      await db.collection("nodes").doc(n.id).delete();selected=null;flash={ok:"Точка удалена."}}catch(e){flash={err:dbErr(e)}}renderSide()});});
+  const f=$("nodeForm");
+  if(f){on("fCancel",()=>{panel=null;renderSide()});
+    f.onsubmit=async e=>{e.preventDefault();const title=$("fTitle").value.trim();const sp=[...f.querySelectorAll("input[name=sph]:checked")].map(x=>x.value);
+      const notion=$("fNotion").value.trim(), note=$("fNote").value.trim();
+      if(!title){$("fErr").textContent="Назовите точку.";return} if(!sp.length){$("fErr").textContent="Выберите хотя бы одну сферу.";return}
+      if(notion&&!/^https:\/\/(app\.notion\.com|www\.notion\.so|notion\.so)\//.test(notion)){$("fErr").textContent="Ссылка должна вести в Notion.";return}
+      try{ if(panel==="edit"){await writeNode(selected,{title,spheres:sp,notion,note});flash={ok:"Сохранено."}}
+        else{const ref=await db.collection("nodes").add({title,spheres:sp,notion,note,status:"open",doneAt:"",links:[],sync:"none",syncNote:"",createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()});selected=ref.id;flash={ok:"Точка на карте. Тяните её, куда удобно."}}
+        panel=null;renderSide();}catch(err){$("fErr").textContent=dbErr(err)}};
+    ["fTitle","fNotion"].forEach(id=>$(id).oninput=()=>{$("fErr").textContent=""});}
+  const sf=$("sphForm");
+  if(sf){on("sCancel",()=>{panel=null;renderSide()});
+    sf.onsubmit=async e=>{e.preventDefault();const list=[...new Set($("sphList").value.split("\n").map(s=>s.trim()).filter(Boolean))];
+      if(!list.length){$("sErr").textContent="Нужна хотя бы одна сфера.";return} if(list.length>16){$("sErr").textContent="Не больше 16 сфер — иначе круг не читается.";return}
+      try{await db.doc("meta/spheres").set({list,updatedAt:new Date().toISOString()});panel=null;flash={ok:"Сферы сохранены."};renderSide()}catch(err){$("sErr").textContent=dbErr(err)}};}
 }
-function upd(url,props){return mcp.callTool(SRV,"notion-update-page",{page_id:pid(url),command:"update_properties",properties:props})}
-async function write(fn,okText,afterDone){
-  if(busy)return; busy=true; document.querySelectorAll("#side button").forEach(b=>b.disabled=true);
-  try{await fn(); flash={ok:okText}; if(afterDone)selected=null; await refresh(true);}
-  catch(e){flash={err:errText(e)+(e&&(e.code==="server_unavailable"||e.code==="upstream_error")?" Изменение могло уже записаться — сначала нажмите «Обновить».":"")}; renderSide();}
-  busy=false;
-}
-$("reload").onclick=()=>refresh();
-$("cluster").onchange=()=>{selected=null;focusSph=null;trail=[];store.set("sinapsy-trail",trail);refresh()};
-$("hideDone").onclick=e=>{hideDone=!hideDone;e.currentTarget.setAttribute("aria-pressed",hideDone);build()};
-$("labels").onclick=e=>{showLabels=!showLabels;e.currentTarget.setAttribute("aria-pressed",showLabels);build()};
-let rs;addEventListener("resize",()=>{clearTimeout(rs);rs=setTimeout(build,200)});
-renderSide();
-(async()=>{try{mcp=window.claude?await window.claude.use("mcp"):null}catch(e){mcp=null}
-  if(!mcp){$("cluster").innerHTML="<option>нет связи</option>";renderSide();return}
-  refresh();})();
+$("bNew").onclick=()=>{if(!db)return;panel="new";selected=null;renderSide();setTimeout(()=>{const t=$("fTitle");if(t)t.focus()},0)};
+$("bSpheres").onclick=()=>{if(!db)return;panel="spheres";renderSide()};
+$("hideDone").onclick=e=>{hideDone=!hideDone;e.currentTarget.setAttribute("aria-pressed",hideDone);render()};
+let rs;addEventListener("resize",()=>{clearTimeout(rs);rs=setTimeout(render,200)});
+render(); renderSide();
+(async()=>{
+  try{db=window.claude?await window.claude.use("db"):null}catch(e){db=null}
+  if(!db){ready=true;render();renderSide();["bNew","bSpheres"].forEach(id=>$(id).disabled=true);return}
+  db.doc("meta/spheres").onSnapshot(s=>{const l=s.exists&&s.data().list;spheres=Array.isArray(l)&&l.length?l.slice():DEFAULT_SPHERES.slice();render();if(panel!=="spheres")renderSide()},e=>{flash={err:dbErr(e)};renderSide()});
+  db.collection("nodes").onSnapshot(s=>{nodes=s.docs.map(d=>({id:d.id,...d.data()}));ready=true;
+      if(selected&&!byId(selected))selected=null; render(); if(!panel)renderSide();},
+    e=>{ready=true;flash={err:dbErr(e)};render();renderSide()});
+})();
 </script>
