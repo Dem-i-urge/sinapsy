@@ -1,4 +1,4 @@
-<!-- Синапсы v0.5-draft · 25.10.2026 (своя карта владельца; Notion сверяет Архитектор; зависимости и путь сигнала; охват и связность; оформление «нейронная ночь») · дом: Dem-i-urge/sinapsy (C:\Users\ivasi\dev\sinapsy) · артефакт claude.ai — проекция, не дом -->
+<!-- Синапсы v0.6-draft · 25.10.2026 (своя карта владельца; Notion сверяет Архитектор; зависимости и путь сигнала; заколдованные круги и их разрезание; крепнущие связи; охват и связность; оформление «нейронная ночь») · дом: Dem-i-urge/sinapsy (C:\Users\ivasi\dev\sinapsy) · артефакт claude.ai — проекция, не дом -->
 <title>Синапсы</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -115,6 +115,12 @@ a:hover{color:#fff;text-decoration-color:#fff}
 .edge.flow{stroke-width:2.4;opacity:1;stroke-dasharray:2 7}
 .arrow path{fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .reach.off{opacity:.35}
+.edge.assoc.strong{opacity:.8}
+.edge.loop{stroke:var(--err);stroke-width:1.8;stroke-dasharray:4 5;opacity:.9}
+.arrow.loop path{stroke:var(--err)}
+.loopring{fill:none;stroke:var(--err);stroke-width:1.2;stroke-dasharray:2 3}
+.strip .loopc b,.strip .loopc{color:var(--err)}
+.loopbox{border-left-color:var(--err)}
 .node.dim{opacity:.2!important}
 .edge.dim{opacity:.06!important;animation:none}
 .arrow.dim{opacity:.08!important}
@@ -122,6 +128,7 @@ a:hover{color:#fff;text-decoration-color:#fff}
 @media (max-width:640px){.center-hint{font-size:15px}}
 @media (prefers-reduced-motion:no-preference){
   .edge.flow{animation:flow .9s linear infinite}
+  .edge.loop{animation:flow 1.8s linear infinite}
   .reach.pulse{animation:pulse 2.6s ease-in-out infinite}
   .glow{animation:breathe 4s ease-in-out infinite}
 }
@@ -146,6 +153,7 @@ a:hover{color:#fff;text-decoration-color:#fff}
   <span><b id="sOpen">—</b>в пути</span>
   <span class="lit"><b id="sAvail">—</b>доступно сейчас</span>
   <span class="dimmed"><b id="sWait">—</b>ждут сигнала</span>
+  <span class="loopc" id="sLoopW" hidden><b id="sLoop">0</b>заколдованных кругов</span>
   <span><b id="sRich">—</b>богатых</span>
   <span class="dimmed"><b id="sDone">—</b>сделано</span>
   <span><b id="sPend">—</b>ждут сверки с Notion</span>
@@ -162,6 +170,8 @@ a:hover{color:#fff;text-decoration-color:#fff}
       <span><svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="3" fill="var(--done)"/></svg>сделано</span>
       <span><svg viewBox="0 0 14 14"><path d="M7 1.5a5.5 5.5 0 0 1 5.2 3.7" fill="none" stroke="#ffd36b" stroke-width="2"/><path d="M12.4 8.3A5.5 5.5 0 0 1 3 11.2" fill="none" stroke="#6bd7ff" stroke-width="2"/><path d="M2 9.2A5.5 5.5 0 0 1 4.6 2.1" fill="none" stroke="#ff7ad9" stroke-width="2"/></svg>охват: сколько сфер</span>
       <span><svg viewBox="0 0 14 14"><line x1="0" y1="7" x2="14" y2="7" stroke="var(--muted)" stroke-width="1.5"/><path d="M5 3.5 L9 7 L5 10.5" fill="none" stroke="var(--ink)" stroke-width="1.5"/></svg>зависимость</span>
+      <span><svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="5" fill="none" stroke="var(--err)" stroke-width="1.5" stroke-dasharray="3 2.5"/></svg>заколдованный круг</span>
+      <span><svg viewBox="0 0 14 14"><line x1="0" y1="7" x2="14" y2="7" stroke="var(--muted)" stroke-width="3.5"/></svg>окрепшая связь</span>
       <span><svg viewBox="0 0 14 14"><path d="M7 3 L11 7 L7 11 L3 7Z" fill="var(--ink)"/></svg>ждёт сверки</span>
       <span>клик по точке — её путь · приближение раздвигает точки</span>
     </div>
@@ -201,6 +211,21 @@ const reachOf=n=>{const s=new Set((n.spheres||[]).filter(x=>sphIdx(x)>=0));
 const isRich=n=>reachOf(n).length>=2;
 const unlockCount=n=>[...downstream(n)].filter(id=>isOpen(byId(id))).length;
 const degree=n=>linksOf(n).length+prereqsOf(n).length+dependentsOf(n).length;
+/* заколдованный круг — точки в пути, которые ждут друг друга (сильная компонента графа зависимостей, Тарьян).
+   Сделанная точка круг разрывает: считаются только точки в пути. */
+let LOOPS=[];
+function findLoops(){ const idx=new Map(), low=new Map(), on=new Set(), st=[], out=[]; let i=0;
+  const succ=v=>dependentsOf(v).map(byId).filter(isOpen);
+  const sc=v=>{ idx.set(v.id,i); low.set(v.id,i); i++; st.push(v); on.add(v.id);
+    for(const w of succ(v)){ if(!idx.has(w.id)){sc(w);low.set(v.id,Math.min(low.get(v.id),low.get(w.id)))}
+      else if(on.has(w.id))low.set(v.id,Math.min(low.get(v.id),idx.get(w.id))) }
+    if(low.get(v.id)===idx.get(v.id)){const comp=[];let w;do{w=st.pop();on.delete(w.id);comp.push(w.id)}while(w.id!==v.id);if(comp.length>1)out.push(comp)} };
+  nodes.filter(isOpen).forEach(v=>{if(!idx.has(v.id))sc(v)}); LOOPS=out; return out; }
+const loopOf=id=>LOOPS.find(c=>c.includes(id))||null;
+/* крепнущая связь: смысловая связь крепнет, когда обе точки закрыты одна за другой */
+const HEBB_DAYS=7;
+const hebb=(a,b)=>{ if(!a||!b||isOpen(a)||isOpen(b)||!a.doneAt||!b.doneAt)return 0;
+  const d=Math.abs(new Date(a.doneAt)-new Date(b.doneAt))/864e5; return d<=1?3:d<=3?2:d<=HEBB_DAYS?1:0; };
 
 /* --- хранилище --- */
 async function writeNode(id,data){ if(readOnly)return;
@@ -229,7 +254,9 @@ const MODE_MSG={link:t=>`Кликните точку, которую связа�
   dep:t=>`Кликните точку, без которой «${t}» не сдвинется.`, unlock:t=>`Кликните точку, которую откроет «${t}».`};
 
 function render(){
+  findLoops();
   const open=nodes.filter(isOpen), avail=open.filter(n=>!isBlocked(n));
+  $("sLoopW").hidden=!LOOPS.length; $("sLoop").textContent=LOOPS.length;
   const st=(id,v)=>{$(id).textContent=ready?v:"—"};
   st("sOpen",open.length); st("sAvail",avail.length); st("sWait",open.length-avail.length);
   st("sRich",open.filter(isRich).length); st("sDone",nodes.length-open.length); st("sPend",nodes.filter(n=>n.sync==="pending").length);
@@ -298,12 +325,12 @@ function render(){
   const sel=byId(selected), pos=new Map(P.map(p=>[p.m.id,p]));
   let route=null, upS=new Set(), downS=new Set();
   if(sel&&pos.has(sel.id)){upS=upstream(sel);downS=downstream(sel);route=new Set([sel.id,...upS,...downS,...linksOf(sel)]);}
-  P.forEach(p=>{p.pri=p.m.id===selected||p.m.id===linkFrom?0:route&&route.has(p.m.id)?.5:!p.open?3:p.blocked?2.5:p.reach.length>=2?1:2});
+  P.forEach(p=>{p.loop=loopOf(p.m.id); p.pri=p.m.id===selected||p.m.id===linkFrom?0:route&&route.has(p.m.id)?.5:!p.open?3:p.loop?1:p.blocked?2.5:p.reach.length>=2?1:2});
   /* рёбра */
   const E=[], seenA=new Set();
   visible.forEach(m=>{
-    (m.links||[]).forEach(t=>{if(!pos.has(t)||t===m.id)return;const k=[m.id,t].sort().join("|");if(seenA.has(k))return;seenA.add(k);E.push({isEdge:1,kind:"assoc",a:pos.get(m.id),b:pos.get(t)})});
-    prereqsOf(m).forEach(t=>{if(pos.has(t))E.push({isEdge:1,kind:"dep",a:pos.get(t),b:pos.get(m.id),live:!isOpen(byId(t))})});
+    (m.links||[]).forEach(t=>{if(!pos.has(t)||t===m.id)return;const k=[m.id,t].sort().join("|");if(seenA.has(k))return;seenA.add(k);E.push({isEdge:1,kind:"assoc",a:pos.get(m.id),b:pos.get(t),w:hebb(m,byId(t))})});
+    prereqsOf(m).forEach(t=>{if(!pos.has(t))return;const lp=loopOf(t);E.push({isEdge:1,kind:"dep",a:pos.get(t),b:pos.get(m.id),live:!isOpen(byId(t)),loop:!!lp&&lp===loopOf(m.id)})});
   });
   const inUp=id=>id===selected||upS.has(id), inDown=id=>id===selected||downS.has(id);
   E.forEach((e,i)=>{e.id="eg"+i; const ia=e.a.m.id, ib=e.b.m.id;
@@ -316,9 +343,9 @@ function render(){
   defs.selectAll("radialGradient").data(cols).join("radialGradient").attr("id",(c,i)=>"gl"+i)
     .call(r=>{r.append("stop").attr("offset","0").attr("stop-color",c=>c).attr("stop-opacity",.6);r.append("stop").attr("offset","1").attr("stop-color",c=>c).attr("stop-opacity",0)});
   const edges=g.append("g").selectAll("line").data(E).join("line")
-    .attr("class",d=>"edge "+d.kind+(d.kind==="dep"&&!d.live&&!d.flow?" wait":"")+(d.flow?" flow":"")+(route&&!d.on?" dim":""))
-    .attr("stroke",d=>`url(#${d.id})`);
-  const arrows=g.append("g").selectAll("g").data(E.filter(e=>e.kind==="dep")).join("g").attr("class",d=>"pin arrow"+(route&&!d.on?" dim":""));
+    .attr("class",d=>"edge "+d.kind+(d.loop?" loop":(d.kind==="dep"&&!d.live&&!d.flow?" wait":"")+(d.flow?" flow":""))+(d.w?" strong":"")+(route&&!d.on?" dim":""))
+    .attr("stroke",d=>`url(#${d.id})`).style("stroke-width",d=>d.w?(1+d.w*.9)+"px":null);
+  const arrows=g.append("g").selectAll("g").data(E.filter(e=>e.kind==="dep")).join("g").attr("class",d=>"pin arrow"+(d.loop?" loop":"")+(route&&!d.on?" dim":""));
   arrows.append("path").attr("d","M-3.5,-4.5 L2.5,0 L-3.5,4.5").attr("stroke",d=>d.b.col);
   const updEdges=()=>{edges.attr("x1",d=>d.a.x).attr("y1",d=>d.a.y).attr("x2",d=>d.b.x).attr("y2",d=>d.b.y);
     grad.attr("x1",d=>d.a.x).attr("y1",d=>d.a.y).attr("x2",d=>d.b.x).attr("y2",d=>d.b.y); arrows.attr("transform",pinT);};
@@ -327,7 +354,7 @@ function render(){
   node=g.append("g").selectAll("g").data(P).join("g").attr("class",d=>"node pin"+(route&&!route.has(d.m.id)?" dim":"")).attr("transform",pinT)
     .style("cursor",mode?"crosshair":"grab").attr("tabindex",0).attr("role","button").attr("aria-label",d=>d.m.title)
     .on("keydown",(e,d)=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();tap(d.m.id)}});
-  node.append("title").text(d=>d.m.title+(!d.open?" — сделано":d.blocked?" — ждёт сигнала":" — доступна"));
+  node.append("title").text(d=>d.m.title+(!d.open?" — сделано":d.loop?" — заколдованный круг":d.blocked?" — ждёт сигнала":" — доступна"));
   node.filter(d=>d.open&&!d.blocked).append("circle").attr("class","glow").attr("r",d=>d.cr*3.3).attr("fill",d=>`url(#${glId(d.col)})`);
   node.append("circle").attr("r",d=>d.vr+2).attr("fill","transparent");
   const arc=d3.arc();
@@ -339,6 +366,7 @@ function render(){
   node.append("circle").attr("class","core").attr("r",d=>d.cr)
     .attr("fill",d=>!d.open?"var(--done)":d.blocked?"var(--field)":d3.interpolateRgb(d.col,"#ffffff")(.6))
     .attr("stroke",d=>d.open&&d.blocked?d.col:"none").attr("stroke-width",1.6);
+  node.filter(d=>d.loop).append("circle").attr("class","loopring").attr("r",d=>d.vr+3);
   node.filter(d=>d.m.sync==="pending").append("path").attr("transform",d=>`translate(${d.cr+3},${-d.cr-3})`).attr("d","M0,-3.5 L3.5,0 L0,3.5 L-3.5,0Z").attr("fill","var(--ink)").attr("stroke","var(--field)");
   node.filter(d=>d.m.sync==="synced").append("text").attr("x",d=>d.cr+1).attr("y",d=>-d.cr+1).attr("font-size",10).attr("fill","var(--muted)").text("✓");
   node.filter(d=>d.m.sync==="not_found").append("text").attr("x",d=>d.cr+1).attr("y",d=>-d.cr+1).attr("font-size",11).attr("fill","var(--err)").text("?");
@@ -366,8 +394,8 @@ function tap(id){
         else{ writeNode(a.id,{links:[...(a.links||[]),id]}); flash={ok:"Связь проведена."}; }
       }else{ const pre=mode==="dep"?b:a, dep=mode==="dep"?a:b; /* сигнал идёт pre → dep */
         if((dep.deps||[]).includes(pre.id)){ writeNode(dep.id,{deps:dep.deps.filter(x=>x!==pre.id)}); flash={ok:"Зависимость снята."}; }
-        else if(downstream(dep).has(pre.id)){ flash={err:`Получится круг: «${short(pre.title,30)}» сама ждёт «${short(dep.title,30)}».`}; }
-        else{ writeNode(dep.id,{deps:[...(dep.deps||[]),pre.id]}); flash={ok:`«${short(dep.title,30)}» теперь ждёт «${short(pre.title,30)}».`}; }
+        else{ const circle=downstream(dep).has(pre.id); writeNode(dep.id,{deps:[...(dep.deps||[]),pre.id]});
+          flash={ok:circle?`Заколдованный круг: «${short(dep.title,30)}» и «${short(pre.title,30)}» теперь ждут друг друга. Разрежьте его, когда найдёте первый шаг.`:`«${short(dep.title,30)}» теперь ждёт «${short(pre.title,30)}».`}; }
       }
     }
     mode=null; selected=linkFrom; linkFrom=null; render(); renderSide(); return;
@@ -379,6 +407,7 @@ function tap(id){
 function sphChips(list){return `<div class="chips">${(list||[]).map(s=>`<span class="chip"><span class="dot" style="--c:${sphColor(s)}"></span>${esc(s)}</span>`).join("")}</div>`}
 function stateChip(m,long){
   if(!isOpen(m))return long?`<span class="chip done">сделано ${fmt(m.doneAt)}</span>`:'<span class="chip done">✓</span>';
+  if(loopOf(m.id))return '<span class="chip late">в кругу</span>';
   if(isBlocked(m))return '<span class="chip wait">ждёт сигнала</span>';
   return long?'<span class="chip lit">доступна</span>':"";
 }
@@ -393,16 +422,21 @@ function nodeCard(n){
   const pre=prereqsOf(n).map(byId), nxt=dependentsOf(n).map(byId), ls=linksOf(n).map(byId);
   const reach=reachOf(n), unl=unlockCount(n);
   const up=[...upstream(n)].map(byId).filter(isOpen).sort((a,b)=>upstream(a).size-upstream(b).size);
-  const deep=up.some(m=>!pre.includes(m));
+  const lp=loopOf(n.id), inLoop=lp?pre.filter(m=>lp.includes(m.id)):[];
+  const deep=!lp&&up.some(m=>!pre.includes(m));
   return `<h2>Точка</h2><h3>${esc(n.title)}</h3>${sphChips(n.spheres)}
   <div class="chips">${stateChip(n,true)}${reach.length>=2?`<span class="chip rich">охват ${reach.length}</span>`:""}${unl?`<span class="chip">откроет ${unl}</span>`:""}</div>
   <div>${syncLine(n)}</div>
+  ${lp?`<h2>Заколдованный круг</h2><div class="confirm loopbox"><span>«${esc(short(n.title,40))}» ждёт ${inLoop.map(m=>`«${esc(short(m.title,30))}»`).join(", ")}, а сигнал по цепочке возвращается к ней же. В круге точек: ${lp.length}.</span>
+    <b>Какую часть «${esc(short(n.title,40))}» можно сделать без ${inLoop.length>1?"них":`«${esc(short(inLoop[0].title,30))}»`}?</b>
+    <span class="warn">Поставьте эту часть отдельной точкой. Она встанет первой: всё в круге, что ждало «${esc(short(n.title,30))}», будет ждать её.</span>
+    <div class="actions"><button class="primary" id="bCut">Разрезать круг</button></div></div>`:""}
   ${n.note?`<p class="note">${esc(n.note)}</p>`:""}
   ${n.notion?`<a href="${esc(n.notion)}" target="_blank" rel="noopener">Открыть в Notion</a>`:""}
   ${isOpen(n)&&deep?`<h2>Путь сигнала сюда — по порядку</h2><ol class="path">${up.map(m=>liNode(m,"")).join("")}</ol>`:""}
   <h2>Нужна сначала</h2>${pre.length?`<ul class="list">${pre.map(m=>liNode(m,"pre")).join("")}</ul>`:'<p class="note">Ни от чего не зависит.</p>'}
   <h2>Открывает</h2>${nxt.length?`<ul class="list">${nxt.map(m=>liNode(m,"next")).join("")}</ul>`:'<p class="note">Пока ничто не ждёт эту точку.</p>'}
-  <h2>Связи</h2>${ls.length?`<ul class="list">${ls.map(m=>liNode(m,"link")).join("")}</ul>`:'<p class="note">Связь с точкой из другой сферы расширяет охват.</p>'}
+  <h2>Связи</h2>${ls.length?`<ul class="list">${ls.map(m=>liNode(m,"link",stateChip(m)+(hebb(n,m)?'<span class="chip rich">окрепла</span>':""))).join("")}</ul>`:'<p class="note">Связь с точкой из другой сферы расширяет охват.</p>'}
   <div class="actions">
     ${isOpen(n)?'<button class="primary" id="bDone">Готово</button>':'<button id="bUndo">Вернуть в путь</button>'}
     <button id="bDep">Нужна сначала…</button><button id="bUnlock">Открывает…</button>
@@ -417,23 +451,26 @@ function overview(){
   const wait=nodes.filter(isBlocked), pend=nodes.filter(n=>n.sync==="pending"), nf=nodes.filter(n=>n.sync==="not_found");
   const tag=x=>[x.u?`<span class="chip">откроет ${x.u}</span>`:"",x.r>=2?`<span class="chip rich">охват ${x.r}</span>`:""].join("");
   const firstWait=m=>{const p=prereqsOf(m).map(byId).find(isOpen);return p?`<span class="sub2">ждёт: ${esc(short(p.title,22))}</span>`:""};
-  return `<h2>Куда дальше</h2>${av.length?`<ul class="list">${av.slice(0,6).map(x=>liNode(x.n,"",tag(x))).join("")}</ul>
+  const loops=LOOPS.length?`<h2>Заколдованные круги · ${LOOPS.length}</h2>${LOOPS.map(c=>`<ul class="list">${c.map(id=>liNode(byId(id),"")).join("")}</ul>`).join("")}
+    <p class="note">Эти точки ждут друг друга, сигнал ходит по кругу и не выходит. Откройте любую и разрежьте круг первым шагом.</p>`:"";
+  return `${loops}<h2>Куда дальше</h2>${av.length?`<ul class="list">${av.slice(0,6).map(x=>liNode(x.n,"",tag(x))).join("")}</ul>
     <p class="note">Наверху — доступные точки, которые откроют больше всего других.</p>`:'<p class="note">Доступных точек нет. Самое время поставить новую.</p>'}
   ${wait.length?`<h2>Ждут сигнала · ${wait.length}</h2><ul class="list">${wait.slice(0,6).map(m=>liNode(m,"",firstWait(m))).join("")}</ul>`:""}
   <h2>Ждут сверки с Notion</h2>${pend.length?`<ul class="list">${pend.map(m=>liNode(m,"",`<span class="sub2">${fmt(m.doneAt)}</span>`)).join("")}</ul>
     <p class="note">Скажите Архитектору: «сверь карту». Он найдёт эти точки в Notion, закроет, что не закрыто, и поставит ✓.</p>`:'<p class="note">Расхождений нет.</p>'}
   ${nf.length?`<h2>Не нашлось в Notion</h2><ul class="list">${nf.map(m=>liNode(m,"",'<span class="chip late">?</span>')).join("")}</ul>`:""}`;
 }
-function nodeForm(n){
-  const sel=new Set(n?n.spheres||[]:[]);
-  return `<form class="form" id="nodeForm"><h2>${n?"Изменить точку":"Новая точка"}</h2>
-   <label class="t" for="fTitle">Что это</label><input type="text" id="fTitle" maxlength="140" value="${esc(n?n.title:"")}" placeholder="Например: колода Felt Sense в печать">
+function nodeForm(n,cut){
+  const sel=new Set(n?n.spheres||[]:cut?cut.spheres||[]:[]);
+  return `<form class="form" id="nodeForm"><h2>${n?"Изменить точку":cut?"Разрезать круг":"Новая точка"}</h2>
+   ${cut?`<p class="note">Часть «${esc(short(cut.title,40))}», которую можно сделать уже сейчас. Она встанет первой и разорвёт круг.</p>`:""}
+   <label class="t" for="fTitle">Что это</label><input type="text" id="fTitle" maxlength="140" value="${esc(n?n.title:"")}" placeholder="${cut?"Первый шаг: …":"Например: колода Felt Sense в печать"}">
    <span class="t">Сферы (одна или несколько)</span>
    <div class="chips">${spheres.map((s,i)=>`<label><input type="checkbox" id="fSph${i}" name="sph" value="${esc(s)}" ${sel.has(s)?"checked":""}><span class="dot" style="--c:${sphColor(s)}"></span>${esc(s)}</label>`).join("")}</div>
    <label class="t" for="fNotion">Ссылка на Notion — необязательно, без неё Архитектор найдёт по названию</label><input type="url" id="fNotion" value="${esc(n?n.notion||"":"")}" placeholder="https://app.notion.com/p/…">
    <label class="t" for="fNote">Заметка</label><textarea id="fNote" maxlength="600">${esc(n?n.note||"":"")}</textarea>
    <span class="err-inline" id="fErr"></span>
-   <div class="actions"><button class="primary" type="submit">${n?"Сохранить":"Поставить на карту"}</button><button class="quiet" type="button" id="fCancel">Отмена</button></div></form>`;
+   <div class="actions"><button class="primary" type="submit">${n?"Сохранить":cut?"Разрезать":"Поставить на карту"}</button><button class="quiet" type="button" id="fCancel">Отмена</button></div></form>`;
 }
 function spheresForm(){
   return `<form class="form" id="sphForm"><h2>Сферы карты</h2><p class="note">По одной в строке. Порядок — порядок секторов по часовой стрелке. Цвет сферы следует из её места на круге: поменяете порядок — сменятся и цвета. Точки сферы, которую вы уберёте, встанут в центр.</p>
@@ -441,10 +478,12 @@ function spheresForm(){
    <div class="actions"><button class="primary" type="submit">Сохранить</button><button class="quiet" type="button" id="sCancel">Отмена</button></div></form>`;
 }
 function renderSide(){
+  findLoops();
   let h=flash?`<div class="msg ${flash.err?"err":"ok"}">${esc(flash.err||flash.ok)}</div>`:"";
   if(!db&&ready){h+=`<h2>Карта недоступна</h2><p class="note">Эта копия страницы не может хранить точки. Откройте артефакт «Синапсы» в claude.ai.</p>`;$("side").innerHTML=h;return}
   if(!ready){h+='<p class="note">Загружаю карту…</p>';$("side").innerHTML=h;return}
-  if(panel==="new")h+=nodeForm(null); else if(panel==="edit"&&byId(selected))h+=nodeForm(byId(selected)); else if(panel==="spheres")h+=spheresForm();
+  if(panel==="new")h+=nodeForm(null); else if(panel==="edit"&&byId(selected))h+=nodeForm(byId(selected));
+  else if(panel==="cut"&&byId(selected))h+=nodeForm(null,byId(selected)); else if(panel==="spheres")h+=spheresForm();
   else{const n=byId(selected); h+= n?nodeCard(n):overview();}
   $("side").innerHTML=h; wire();
 }
@@ -471,6 +510,7 @@ function wire(){
   on("bDep",()=>{mode="dep";linkFrom=n.id;render()});
   on("bUnlock",()=>{mode="unlock";linkFrom=n.id;render()});
   on("bEdit",()=>{panel="edit";renderSide()});
+  on("bCut",()=>{panel="cut";renderSide();setTimeout(()=>{const t=$("fTitle");if(t)t.focus()},0)});
   on("bDel",()=>{$("slot").innerHTML=`<div class="confirm"><b>Удалить точку «${esc(short(n.title,40))}»?</b><span>Её связи и зависимости тоже исчезнут. В Notion ничего не изменится.</span>
     <div class="actions"><button class="danger" id="bDelYes">Удалить</button><button class="quiet" id="bDelNo">Оставить</button></div></div>`;
     on("bDelNo",()=>{$("slot").innerHTML=""});
@@ -486,7 +526,14 @@ function wire(){
       if(!title){$("fErr").textContent="Назовите точку.";return} if(!sp.length){$("fErr").textContent="Выберите хотя бы одну сферу.";return}
       if(notion&&!/^https:\/\/(app\.notion\.com|www\.notion\.so|notion\.so)\//.test(notion)){$("fErr").textContent="Ссылка должна вести в Notion.";return}
       try{ if(panel==="edit"){await writeNode(selected,{title,spheres:sp,notion,note});flash={ok:"Сохранено."}}
-        else{const ref=await db.collection("nodes").add({title,spheres:sp,notion,note,status:"open",doneAt:"",links:[],deps:[],sync:"none",syncNote:"",createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()});selected=ref.id;flash={ok:"Точка на карте. Тяните её, куда удобно."}}
+        else{const cut=panel==="cut"?byId(selected):null, place={};
+          if(cut&&typeof cut.x==="number"&&typeof cut.y==="number"){place.x=+(cut.x*0.9).toFixed(4);place.y=+(cut.y*0.9+0.06).toFixed(4)}
+          const ref=await db.collection("nodes").add({title,spheres:sp,notion,note,status:"open",doneAt:"",links:[],deps:[],sync:"none",syncNote:"",...place,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()});
+          if(cut){ /* то, что в круге ждало разрезаемую точку, теперь ждёт её первый шаг */
+            for(const id of loopOf(cut.id)||[]){const d=byId(id);if(d&&(d.deps||[]).includes(cut.id))await writeNode(d.id,{deps:d.deps.map(x=>x===cut.id?ref.id:x)})}
+            flash={ok:"Круг разрезан: первый шаг стоит в начале цепочки, сигнал пошёл."};
+          }else flash={ok:"Точка на карте. Тяните её, куда удобно."};
+          selected=ref.id;}
         panel=null;renderSide();}catch(err){$("fErr").textContent=dbErr(err)}};
     ["fTitle","fNotion"].forEach(id=>$(id).oninput=()=>{$("fErr").textContent=""});}
   const sf=$("sphForm");
