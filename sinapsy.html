@@ -1,4 +1,4 @@
-<!-- Синапсы v0.6-draft · 25.10.2026 (своя карта владельца; Notion сверяет Архитектор; зависимости и путь сигнала; заколдованные круги и их разрезание; крепнущие связи; охват и связность; оформление «нейронная ночь») · дом: Dem-i-urge/sinapsy (C:\Users\ivasi\dev\sinapsy) · артефакт claude.ai — проекция, не дом -->
+<!-- Синапсы v0.7-draft · 25.10.2026 (своя карта владельца; сверка с Notion — кнопкой или по пятницам задачей «Пятничная сверка»; зависимости и путь сигнала; заколдованные круги и их разрезание; «в работе» с остыванием и мягким лимитом; крепнущие связи; охват и связность; оформление «нейронная ночь») · дом: Dem-i-urge/sinapsy (C:\Users\ivasi\dev\sinapsy) · артефакт claude.ai — проекция, не дом -->
 <title>Синапсы</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -121,6 +121,12 @@ a:hover{color:#fff;text-decoration-color:#fff}
 .loopring{fill:none;stroke:var(--err);stroke-width:1.2;stroke-dasharray:2 3}
 .strip .loopc b,.strip .loopc{color:var(--err)}
 .loopbox{border-left-color:var(--err)}
+.spark{transform-origin:0 0}
+.spark .s{fill:#ffffff}
+.spark .h{fill:#ffffff;opacity:.28}
+.sparkorbit{fill:none;stroke:#ffffff;stroke-width:.8;stroke-dasharray:1 3}
+.chip.work{color:#fff;border-color:#fff}
+.strip .work b{color:#fff}
 .node.dim{opacity:.2!important}
 .edge.dim{opacity:.06!important;animation:none}
 .arrow.dim{opacity:.08!important}
@@ -129,11 +135,14 @@ a:hover{color:#fff;text-decoration-color:#fff}
 @media (prefers-reduced-motion:no-preference){
   .edge.flow{animation:flow .9s linear infinite}
   .edge.loop{animation:flow 1.8s linear infinite}
+  .spark{animation:spin 3.2s linear infinite}
+  .spark.cool{animation-duration:8s}
   .reach.pulse{animation:pulse 2.6s ease-in-out infinite}
   .glow{animation:breathe 4s ease-in-out infinite}
 }
 @keyframes flow{to{stroke-dashoffset:-9}}
 @keyframes pulse{0%,100%{opacity:.45}50%{opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
 @keyframes breathe{0%,100%{opacity:.75}50%{opacity:1}}
 </style>
 
@@ -145,12 +154,14 @@ a:hover{color:#fff;text-decoration-color:#fff}
   <div class="ctrl">
     <button class="primary" id="bNew">+ Точка</button>
     <button id="bSpheres">Сферы</button>
+    <button id="bSync" title="Сверить отметки «готово» с Notion">Сверка</button>
     <button id="hideDone" class="quiet" aria-pressed="false">Скрыть сделанное</button>
   </div>
 </header>
 
 <section class="strip" aria-label="Сводка">
   <span><b id="sOpen">—</b>в пути</span>
+  <span class="work"><b id="sWork">—</b>в работе</span>
   <span class="lit"><b id="sAvail">—</b>доступно сейчас</span>
   <span class="dimmed"><b id="sWait">—</b>ждут сигнала</span>
   <span class="loopc" id="sLoopW" hidden><b id="sLoop">0</b>заколдованных кругов</span>
@@ -166,6 +177,7 @@ a:hover{color:#fff;text-decoration-color:#fff}
     <div class="banner" id="banner" hidden></div>
     <div class="keys" aria-hidden="true">
       <span><svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="#9fd4ff" opacity=".25"/><circle cx="7" cy="7" r="3.6" fill="#dff1ff"/></svg>доступна</span>
+      <span><svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="3" fill="#dff1ff"/><circle cx="12.5" cy="3.5" r="1.7" fill="#fff"/></svg>в работе</span>
       <span><svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="3.8" fill="var(--field)" stroke="#9fd4ff" stroke-width="1.5"/></svg>ждёт сигнала</span>
       <span><svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="3" fill="var(--done)"/></svg>сделано</span>
       <span><svg viewBox="0 0 14 14"><path d="M7 1.5a5.5 5.5 0 0 1 5.2 3.7" fill="none" stroke="#ffd36b" stroke-width="2"/><path d="M12.4 8.3A5.5 5.5 0 0 1 3 11.2" fill="none" stroke="#6bd7ff" stroke-width="2"/><path d="M2 9.2A5.5 5.5 0 0 1 4.6 2.1" fill="none" stroke="#ff7ad9" stroke-width="2"/></svg>охват: сколько сфер</span>
@@ -222,10 +234,26 @@ function findLoops(){ const idx=new Map(), low=new Map(), on=new Set(), st=[], o
     if(low.get(v.id)===idx.get(v.id)){const comp=[];let w;do{w=st.pop();on.delete(w.id);comp.push(w.id)}while(w.id!==v.id);if(comp.length>1)out.push(comp)} };
   nodes.filter(isOpen).forEach(v=>{if(!idx.has(v.id))sc(v)}); LOOPS=out; return out; }
 const loopOf=id=>LOOPS.find(c=>c.includes(id))||null;
-/* крепнущая связь: смысловая связь крепнет, когда обе точки закрыты одна за другой */
+/* «в работе»: искра горит, пока к точке возвращаются, и остывает без возвратов; лимит мягкий — вопрос, не запрет */
+const WIP_LIMIT=3, COOL_DAYS=14;
+const isActive=n=>isOpen(n)&&!!n.active;
+const daysSince=d=>d?Math.max(0,Math.floor((new Date(TODAY)-new Date(d))/864e5)):0;
+const idleDays=n=>daysSince(n.touchedAt||n.startedAt);
+const heatOf=n=>{const d=idleDays(n);return d<=3?1:d<=7?.7:d<=COOL_DAYS?.4:.15};
+const idleLabel=n=>{const d=idleDays(n);return d===0?"сегодня":d>COOL_DAYS?`остыла · ${d} дн.`:`${d} дн.`};
+/* крепнущая связь: смысловая связь крепнет, когда обе точки были в работе одновременно
+   или закрыты одна за другой — берётся сильнейшее из двух */
 const HEBB_DAYS=7;
-const hebb=(a,b)=>{ if(!a||!b||isOpen(a)||isOpen(b)||!a.doneAt||!b.doneAt)return 0;
-  const d=Math.abs(new Date(a.doneAt)-new Date(b.doneAt))/864e5; return d<=1?3:d<=3?2:d<=HEBB_DAYS?1:0; };
+const span=n=>{ if(!n||!n.startedAt)return null; const s=new Date(n.startedAt), e=new Date(n.doneAt||n.touchedAt||n.startedAt); return [s,e<s?s:e]; };
+const hebb=(a,b)=>{ if(!a||!b)return 0; let w=0;
+  if(!isOpen(a)&&!isOpen(b)&&a.doneAt&&b.doneAt){const d=Math.abs(new Date(a.doneAt)-new Date(b.doneAt))/864e5; w=d<=1?3:d<=3?2:d<=HEBB_DAYS?1:0;}
+  const sa=span(a), sb=span(b);
+  if(sa&&sb){const ov=(Math.min(sa[1],sb[1])-Math.max(sa[0],sb[0]))/864e5; if(ov>=0)w=Math.max(w,ov>=7?3:ov>=3?2:1);}
+  return w; };
+/* сверка с Notion: кнопка запускает ту же задачу по расписанию, что и в пятницу, с пометкой «только сверка» */
+const SYNC_TASK="trig_01Nose1gzxy5pf41eo1M7ewD", SYNC_SERVER="Claude Code Remote";
+const SYNC_NOTE="Ручной запуск со страницы карты «Синапсы»: выполни только часть 1 (сверку). Стук по Sentinel в этот раз не печатай.";
+let syncBusyUntil=0;
 
 /* --- хранилище --- */
 async function writeNode(id,data){ if(readOnly)return;
@@ -258,7 +286,8 @@ function render(){
   const open=nodes.filter(isOpen), avail=open.filter(n=>!isBlocked(n));
   $("sLoopW").hidden=!LOOPS.length; $("sLoop").textContent=LOOPS.length;
   const st=(id,v)=>{$(id).textContent=ready?v:"—"};
-  st("sOpen",open.length); st("sAvail",avail.length); st("sWait",open.length-avail.length);
+  const pendN=nodes.filter(n=>n.sync==="pending").length; $("bSync").textContent=pendN?`Сверка · ${pendN}`:"Сверка";
+  st("sOpen",open.length); st("sWork",open.filter(isActive).length); st("sAvail",avail.length); st("sWait",open.length-avail.length);
   st("sRich",open.filter(isRich).length); st("sDone",nodes.length-open.length); st("sPend",nodes.filter(n=>n.sync==="pending").length);
   const svg=d3.select("#svg"); svg.selectAll("*").remove();
   const box=$("field").getBoundingClientRect(), W=Math.max(340,box.width), H=Math.max(480,box.height);
@@ -320,12 +349,13 @@ function render(){
       .force("c",d3.forceCollide(34)).stop();for(let i=0;i<160;i++)s.tick();}
   /* свойства точки: состояние, охват, связность → размер */
   P.forEach(p=>{const m=p.m; p.open=isOpen(m); p.blocked=isBlocked(m); p.reach=reachOf(m); p.deg=degree(m); p.col=nodeColor(m);
-    p.cr=(5+Math.min(5,p.deg*1.1))*(p.open?1:.75); p.vr=p.cr+(p.reach.length>=2?7:3);});
+    p.cr=(5+Math.min(5,p.deg*1.1))*(p.open?1:.75); p.vr=p.cr+(p.reach.length>=2?7:3);
+    p.active=isActive(m); if(p.active){p.heat=heatOf(m); p.vr=Math.max(p.vr,p.cr+10);} });
   /* путь выбранной точки: всё, что до неё, и всё, что она откроет */
   const sel=byId(selected), pos=new Map(P.map(p=>[p.m.id,p]));
   let route=null, upS=new Set(), downS=new Set();
   if(sel&&pos.has(sel.id)){upS=upstream(sel);downS=downstream(sel);route=new Set([sel.id,...upS,...downS,...linksOf(sel)]);}
-  P.forEach(p=>{p.loop=loopOf(p.m.id); p.pri=p.m.id===selected||p.m.id===linkFrom?0:route&&route.has(p.m.id)?.5:!p.open?3:p.loop?1:p.blocked?2.5:p.reach.length>=2?1:2});
+  P.forEach(p=>{p.loop=loopOf(p.m.id); p.pri=p.m.id===selected||p.m.id===linkFrom?0:route&&route.has(p.m.id)?.5:!p.open?3:p.active?.8:p.loop?1:p.blocked?2.5:p.reach.length>=2?1:2});
   /* рёбра */
   const E=[], seenA=new Set();
   visible.forEach(m=>{
@@ -354,7 +384,7 @@ function render(){
   node=g.append("g").selectAll("g").data(P).join("g").attr("class",d=>"node pin"+(route&&!route.has(d.m.id)?" dim":"")).attr("transform",pinT)
     .style("cursor",mode?"crosshair":"grab").attr("tabindex",0).attr("role","button").attr("aria-label",d=>d.m.title)
     .on("keydown",(e,d)=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();tap(d.m.id)}});
-  node.append("title").text(d=>d.m.title+(!d.open?" — сделано":d.loop?" — заколдованный круг":d.blocked?" — ждёт сигнала":" — доступна"));
+  node.append("title").text(d=>d.m.title+(!d.open?" — сделано":d.active?` — в работе, ${idleLabel(d.m)}`:d.loop?" — заколдованный круг":d.blocked?" — ждёт сигнала":" — доступна"));
   node.filter(d=>d.open&&!d.blocked).append("circle").attr("class","glow").attr("r",d=>d.cr*3.3).attr("fill",d=>`url(#${glId(d.col)})`);
   node.append("circle").attr("r",d=>d.vr+2).attr("fill","transparent");
   const arc=d3.arc();
@@ -367,6 +397,10 @@ function render(){
     .attr("fill",d=>!d.open?"var(--done)":d.blocked?"var(--field)":d3.interpolateRgb(d.col,"#ffffff")(.6))
     .attr("stroke",d=>d.open&&d.blocked?d.col:"none").attr("stroke-width",1.6);
   node.filter(d=>d.loop).append("circle").attr("class","loopring").attr("r",d=>d.vr+3);
+  node.filter(d=>d.active).each(function(d){const r=d.cr+7, gg=d3.select(this);
+    gg.append("circle").attr("class","sparkorbit").attr("r",r).attr("opacity",.55*d.heat);
+    const s=gg.append("g").attr("class","spark"+(d.heat<.5?" cool":"")).attr("opacity",d.heat);
+    s.append("circle").attr("class","h").attr("cx",r).attr("r",4.5); s.append("circle").attr("class","s").attr("cx",r).attr("r",2.1);});
   node.filter(d=>d.m.sync==="pending").append("path").attr("transform",d=>`translate(${d.cr+3},${-d.cr-3})`).attr("d","M0,-3.5 L3.5,0 L0,3.5 L-3.5,0Z").attr("fill","var(--ink)").attr("stroke","var(--field)");
   node.filter(d=>d.m.sync==="synced").append("text").attr("x",d=>d.cr+1).attr("y",d=>-d.cr+1).attr("font-size",10).attr("fill","var(--muted)").text("✓");
   node.filter(d=>d.m.sync==="not_found").append("text").attr("x",d=>d.cr+1).attr("y",d=>-d.cr+1).attr("font-size",11).attr("fill","var(--err)").text("?");
@@ -407,6 +441,7 @@ function tap(id){
 function sphChips(list){return `<div class="chips">${(list||[]).map(s=>`<span class="chip"><span class="dot" style="--c:${sphColor(s)}"></span>${esc(s)}</span>`).join("")}</div>`}
 function stateChip(m,long){
   if(!isOpen(m))return long?`<span class="chip done">сделано ${fmt(m.doneAt)}</span>`:'<span class="chip done">✓</span>';
+  if(isActive(m))return long?`<span class="chip work">в работе · ${idleLabel(m)}</span>`:'<span class="chip work">в работе</span>';
   if(loopOf(m.id))return '<span class="chip late">в кругу</span>';
   if(isBlocked(m))return '<span class="chip wait">ждёт сигнала</span>';
   return long?'<span class="chip lit">доступна</span>':"";
@@ -427,6 +462,7 @@ function nodeCard(n){
   return `<h2>Точка</h2><h3>${esc(n.title)}</h3>${sphChips(n.spheres)}
   <div class="chips">${stateChip(n,true)}${reach.length>=2?`<span class="chip rich">охват ${reach.length}</span>`:""}${unl?`<span class="chip">откроет ${unl}</span>`:""}</div>
   <div>${syncLine(n)}</div>
+  ${isActive(n)&&isBlocked(n)?'<p class="note">Точка в работе, хотя её зависимость ещё в пути. Карта напоминает, но не мешает.</p>':""}
   ${lp?`<h2>Заколдованный круг</h2><div class="confirm loopbox"><span>«${esc(short(n.title,40))}» ждёт ${inLoop.map(m=>`«${esc(short(m.title,30))}»`).join(", ")}, а сигнал по цепочке возвращается к ней же. В круге точек: ${lp.length}.</span>
     <b>Какую часть «${esc(short(n.title,40))}» можно сделать без ${inLoop.length>1?"них":`«${esc(short(inLoop[0].title,30))}»`}?</b>
     <span class="warn">Поставьте эту часть отдельной точкой. Она встанет первой: всё в круге, что ждало «${esc(short(n.title,30))}», будет ждать её.</span>
@@ -439,6 +475,7 @@ function nodeCard(n){
   <h2>Связи</h2>${ls.length?`<ul class="list">${ls.map(m=>liNode(m,"link",stateChip(m)+(hebb(n,m)?'<span class="chip rich">окрепла</span>':""))).join("")}</ul>`:'<p class="note">Связь с точкой из другой сферы расширяет охват.</p>'}
   <div class="actions">
     ${isOpen(n)?'<button class="primary" id="bDone">Готово</button>':'<button id="bUndo">Вернуть в путь</button>'}
+    ${isActive(n)?'<button id="bTouch">Вернулся к ней</button><button id="bPause">Отложить</button>':isOpen(n)?'<button id="bStart">Начата</button>':""}
     <button id="bDep">Нужна сначала…</button><button id="bUnlock">Открывает…</button>
     <button id="bLink">Связать</button><button id="bEdit">Изменить</button><button class="quiet danger" id="bDel">Удалить</button>
   </div><div id="slot"></div>
@@ -447,17 +484,20 @@ function nodeCard(n){
 function overview(){
   if(ready&&!nodes.length)return `<h2>Начало</h2><p class="note">Это ваша карта, а не выгрузка из Notion. Ставьте только крупное: цели, узлы, проекты, ради которых вы садитесь работать.</p>
     <ol class="note" style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px"><li>«+ Точка» — название и сфера.</li><li>Тяните точку куда удобно — место запомнится.</li><li>«Нужна сначала…» — от чего точка зависит. Пока зависимость не сделана, точка тёмная.</li><li>«Связать» — смысловая связь без порядка; связь через сферы расширяет охват.</li><li>«Готово» — когда мост сожжён. Архитектор сверит с Notion и закроет там.</li></ol>`;
-  const av=nodes.filter(n=>isOpen(n)&&!isBlocked(n)).map(n=>({n,u:unlockCount(n),r:reachOf(n).length,d:degree(n)})).sort((a,b)=>b.u-a.u||b.r-a.r||b.d-a.d);
+  const work=nodes.filter(isActive).sort((a,b)=>idleDays(b)-idleDays(a));
+  const back=work.length?`<h2>Вернуться · ${work.length}</h2><ul class="list">${work.map(m=>liNode(m,"",`<span class="sub2">${idleLabel(m)}</span>`)).join("")}</ul>
+    <p class="note">Сверху — то, к чему дольше всего не возвращались.${work.length>WIP_LIMIT?` В работе больше ${WIP_LIMIT}: может, что-то отложить?`:""}</p>`:"";
+  const av=nodes.filter(n=>isOpen(n)&&!isBlocked(n)&&!n.active).map(n=>({n,u:unlockCount(n),r:reachOf(n).length,d:degree(n)})).sort((a,b)=>b.u-a.u||b.r-a.r||b.d-a.d);
   const wait=nodes.filter(isBlocked), pend=nodes.filter(n=>n.sync==="pending"), nf=nodes.filter(n=>n.sync==="not_found");
   const tag=x=>[x.u?`<span class="chip">откроет ${x.u}</span>`:"",x.r>=2?`<span class="chip rich">охват ${x.r}</span>`:""].join("");
   const firstWait=m=>{const p=prereqsOf(m).map(byId).find(isOpen);return p?`<span class="sub2">ждёт: ${esc(short(p.title,22))}</span>`:""};
   const loops=LOOPS.length?`<h2>Заколдованные круги · ${LOOPS.length}</h2>${LOOPS.map(c=>`<ul class="list">${c.map(id=>liNode(byId(id),"")).join("")}</ul>`).join("")}
     <p class="note">Эти точки ждут друг друга, сигнал ходит по кругу и не выходит. Откройте любую и разрежьте круг первым шагом.</p>`:"";
-  return `${loops}<h2>Куда дальше</h2>${av.length?`<ul class="list">${av.slice(0,6).map(x=>liNode(x.n,"",tag(x))).join("")}</ul>
+  return `${loops}${back}<h2>Куда дальше</h2>${av.length?`<ul class="list">${av.slice(0,6).map(x=>liNode(x.n,"",tag(x))).join("")}</ul>
     <p class="note">Наверху — доступные точки, которые откроют больше всего других.</p>`:'<p class="note">Доступных точек нет. Самое время поставить новую.</p>'}
   ${wait.length?`<h2>Ждут сигнала · ${wait.length}</h2><ul class="list">${wait.slice(0,6).map(m=>liNode(m,"",firstWait(m))).join("")}</ul>`:""}
   <h2>Ждут сверки с Notion</h2>${pend.length?`<ul class="list">${pend.map(m=>liNode(m,"",`<span class="sub2">${fmt(m.doneAt)}</span>`)).join("")}</ul>
-    <p class="note">Скажите Архитектору: «сверь карту». Он найдёт эти точки в Notion, закроет, что не закрыто, и поставит ✓.</p>`:'<p class="note">Расхождений нет.</p>'}
+    <p class="note">Нажмите «Сверка» — или дождитесь пятницы, она сверит сама. Сверка найдёт эти точки в Notion, закроет, что не закрыто, и поставит ✓.</p>`:'<p class="note">Расхождений нет.</p>'}
   ${nf.length?`<h2>Не нашлось в Notion</h2><ul class="list">${nf.map(m=>liNode(m,"",'<span class="chip late">?</span>')).join("")}</ul>`:""}`;
 }
 function nodeForm(n,cut){
@@ -503,9 +543,20 @@ function wire(){
     <div class="actions"><button class="primary" id="bYes">Да, готово</button><button class="quiet" id="bNo">Ещё нет</button></div></div>`;
     on("bNo",()=>{$("slot").innerHTML=""});
     on("bYes",async()=>{const opened=dependentsOf(n).map(byId).filter(m=>isOpen(m)&&prereqsOf(m).filter(id=>id!==n.id).every(id=>!isOpen(byId(id)))).length;
-      await writeNode(n.id,{status:"done",doneAt:TODAY,sync:"pending",syncNote:""});
+      await writeNode(n.id,{status:"done",doneAt:TODAY,active:false,sync:"pending",syncNote:""});
       flash={ok:"Мост сожжён. Точка ждёт сверки с Notion."+(opened?` Сигнал дошёл до новых точек: ${opened}.`:"")};selected=null;renderSide()});});
   on("bUndo",()=>writeNode(n.id,{status:"open",doneAt:"",sync:n.sync==="synced"?"synced":"none"}));
+  const startIt=()=>writeNode(n.id,{active:true,startedAt:TODAY,touchedAt:TODAY});
+  on("bStart",()=>{const act=nodes.filter(m=>isActive(m)&&m.id!==n.id);
+    if(act.length<WIP_LIMIT){startIt();flash={ok:"Точка в работе: вокруг неё бегает искра."};return}
+    $("slot").innerHTML=`<div class="confirm"><b>В работе уже ${act.length}</b><span>Что из начатого отложить, чтобы взять эту?</span>
+      <div class="actions">${act.map(m=>`<button data-pause="${esc(m.id)}">Отложить «${esc(short(m.title,24))}»</button>`).join("")}</div>
+      <div class="actions"><button class="primary" id="bStartAnyway">Начать всё равно</button><button class="quiet" id="bStartNo">Отмена</button></div></div>`;
+    document.querySelectorAll("#slot [data-pause]").forEach(b=>b.onclick=async()=>{await writeNode(b.dataset.pause,{active:false});await startIt();flash={ok:"Одна отложена, эта в работе."}});
+    on("bStartAnyway",()=>{startIt();flash={ok:"Точка в работе."}});
+    on("bStartNo",()=>{$("slot").innerHTML=""});});
+  on("bTouch",()=>{writeNode(n.id,{touchedAt:TODAY});flash={ok:"Искра снова горит ярко."}});
+  on("bPause",()=>{writeNode(n.id,{active:false});flash={ok:"Отложена. Связи и зависимости на месте."}});
   on("bLink",()=>{mode="link";linkFrom=n.id;render()});
   on("bDep",()=>{mode="dep";linkFrom=n.id;render()});
   on("bUnlock",()=>{mode="unlock";linkFrom=n.id;render()});
@@ -545,6 +596,26 @@ function wire(){
 $("bNew").onclick=()=>{if(!db)return;panel="new";selected=null;renderSide();setTimeout(()=>{const t=$("fTitle");if(t)t.focus()},0)};
 $("bSpheres").onclick=()=>{if(!db)return;panel="spheres";renderSide()};
 $("hideDone").onclick=e=>{hideDone=!hideDone;e.currentTarget.setAttribute("aria-pressed",hideDone);render()};
+function syncErr(e){const c=e&&e.code;
+  if(c==="needs_reauth")return"Сверка не запустилась: переподключите Claude Code Remote в настройках claude.ai → Connectors.";
+  if(c==="server_not_connected"||c==="selection_required")return"Сверка не запустилась: в claude.ai не подключён Claude Code Remote (Настройки → Connectors).";
+  if(c==="not_in_manifest"||c==="approval_required"||c==="consent_required")return"Карте нужно ваше разрешение запускать сверку. Нажмите «Сверка» ещё раз и разрешите, или включите его в меню разрешений артефакта.";
+  if(c==="tool_error")return"Задача сверки отказалась запускаться: "+(e.message||"без пояснения")+".";
+  if(c==="server_unavailable"||c==="upstream_error")return"Неизвестно, запустилась ли сверка. Подождите пару минут: если отметки не обновятся, нажмите ещё раз.";
+  if(c==="not_granted"||c==="capability_disabled"||c==="capability_removed")return"Отсюда сверку не запустить. Откройте карту в claude.ai или скажите Архитектору: «сверь карту».";
+  return"Сверка не запустилась ("+(c||"ошибка")+").";}
+$("bSync").onclick=async e=>{const btn=e.currentTarget;
+  const pend=nodes.filter(n=>n.sync==="pending");
+  if(!pend.length){flash={ok:"Сверять нечего: все отметки «готово» уже сверены с Notion."};renderSide();return}
+  if(syncBusyUntil>Date.now()){flash={ok:"Сверка уже идёт. Отметки на карте обновятся сами."};renderSide();return}
+  let mcp=null; try{mcp=window.claude?await window.claude.use("mcp"):null}catch(_){mcp=null}
+  if(!mcp){flash={err:syncErr({code:"not_granted"})};renderSide();return}
+  btn.disabled=true;
+  try{ await mcp.callTool(SYNC_SERVER,"fire_trigger",{trigger_id:SYNC_TASK,text:SYNC_NOTE});
+    syncBusyUntil=Date.now()+3*60*1000;
+    flash={ok:`Сверка запущена: точек ${pend.length}. Через минуту-две отметки на карте обновятся сами, итог придёт уведомлением.`}; }
+  catch(err){ flash={err:syncErr(err)}; }
+  btn.disabled=false; renderSide(); };
 $("bZoom").onclick=()=>{if(zoomB)d3.select("#svg").transition().duration(250).call(zoomB.transform,d3.zoomIdentity)};
 let rs;addEventListener("resize",()=>{clearTimeout(rs);rs=setTimeout(render,200)});
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>render());
