@@ -1,133 +1,139 @@
-<!-- Синапсы v0.4.2-draft · 25.10.2026 (своя карта владельца; Notion сверяет Архитектор; оформление: серая шкала + алый акцент; зум раздвигает точки, подписи не растут и расступаются) · дом: Dem-i-urge/sinapsy (C:\Users\ivasi\dev\sinapsy) · артефакт claude.ai — проекция, не дом -->
+<!-- Синапсы v0.5-draft · 25.10.2026 (своя карта владельца; Notion сверяет Архитектор; зависимости и путь сигнала; охват и связность; оформление «нейронная ночь») · дом: Dem-i-urge/sinapsy (C:\Users\ivasi\dev\sinapsy) · артефакт claude.ai — проекция, не дом -->
 <title>Синапсы</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600&family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
-/* Раскладка: карта-астролябия владельца. Сферы — секторы кольца, точки ставит и двигает он сам,
-   связи рисует он сам. Справа пульт; Notion здесь не читается — сверку делает Архитектор.
-   Оформление v0.4.1: серая шкала + один алый акцент (по мотивам SweetPunk). Алым горит только сигнал. */
+/* Раскладка: ночное поле-астролябия, справа пульт. Свет = сигнал: горят только точки, к которым сигнал уже может дойти.
+   Цвет сферы — функция её места на кольце (непрерывный круговой спектр), а не произвольная палитра.
+   Один тёмный облик — по выбору: метафора сигнала держится на темноте. */
 :root{
-  --bg:#e6e6e3; --surface:#efefec; --ink:#121212; --muted:#6f6f6b; --line:#c4c4bf; --hair:#d6d6d1;
-  --field:#efefec; --orbit:#cfcfca; --halo:#efefec;
-  --impulse:#e10600; --impulse-soft:#e10600; --on-impulse:#ffffff;
-  --done:#121212; --done-soft:#121212; --late:#e10600; --late-soft:transparent;
-  --star:#121212;
-  --f-display:"Inter Tight", "Helvetica Neue", Arial, sans-serif;
-  --f-ui:"Inter Tight", "Helvetica Neue", Arial, sans-serif;
-  --f-data:"IBM Plex Mono", ui-monospace, Consolas, monospace;
+  --bg:#05070f; --field:#070b17; --surface:#0a0f1f; --raise:#121a33;
+  --ink:#e7edf8; --muted:#8792ad; --faint:#4b5675; --line:#253050; --hair:#151d36; --orbit:#152040;
+  --done:#3a4462; --err:#ff7a93; --halo:#070b17;
+  --f-display:"Unbounded","Golos Text",system-ui,sans-serif;
+  --f-ui:"Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-data:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  color-scheme:dark;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0e0e0e; --surface:#161616; --ink:#ececea; --muted:#8c8c88; --line:#333331; --hair:#262624;
-  --field:#161616; --orbit:#2c2c2a; --halo:#161616;
-  --impulse:#ff2a1a; --impulse-soft:#ff2a1a; --on-impulse:#0e0e0e;
-  --done:#ececea; --done-soft:#ececea; --late:#ff2a1a; --late-soft:transparent;
-  --star:#ececea;
-  color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#0e0e0e; --surface:#161616; --ink:#ececea; --muted:#8c8c88; --line:#333331; --hair:#262624;
-  --field:#161616; --orbit:#2c2c2a; --halo:#161616;
-  --impulse:#ff2a1a; --impulse-soft:#ff2a1a; --on-impulse:#0e0e0e;
-  --done:#ececea; --done-soft:#ececea; --late:#ff2a1a; --late-soft:transparent;
-  --star:#ececea;
-  color-scheme:dark}
 *{box-sizing:border-box}
 html,body{height:100%}
 body{background:var(--bg);color:var(--ink);font:15px/1.45 var(--f-ui);
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px 16px;
   display:flex;flex-direction:column;gap:12px;min-height:100%}
-.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:8px 20px;border-bottom:1px solid var(--ink);padding-bottom:10px}
+.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:10px 20px}
 .brand{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;min-width:0}
-h1{font:800 clamp(34px,5vw,56px)/.9 var(--f-display);margin:0;letter-spacing:-.045em;text-transform:lowercase}
-h1::after{content:".";color:var(--impulse)}
-.sub{color:var(--muted);font-size:13px;min-width:0;max-width:34ch}
-.ctrl{display:flex;flex-wrap:wrap;gap:0;align-items:stretch}
-select,button,input[type=text],input[type=url],textarea{font:inherit;font-size:14px;color:var(--ink);background:transparent;border:1px solid var(--ink);border-radius:0;padding:6px 12px}
-.ctrl button+button{border-left:0}
-textarea{resize:vertical;min-height:56px;width:100%}
-input[type=text],input[type=url]{width:100%;border-width:0 0 1px;padding-inline:0}
-textarea{border-width:1px}
+h1{font:600 clamp(28px,4vw,44px)/1 var(--f-display);margin:0;letter-spacing:-.02em;text-transform:lowercase}
+.sub{color:var(--muted);font-size:13px;min-width:0;max-width:44ch}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+select,button,input[type=text],input[type=url],textarea{font:inherit;font-size:14px;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:999px;padding:6px 14px}
+textarea{resize:vertical;min-height:56px;width:100%;border-radius:10px}
+input[type=text],input[type=url]{width:100%;border-radius:10px;background:var(--field)}
+textarea{background:var(--field)}
 button{cursor:pointer;font-weight:600}
-button:hover{background:var(--ink);color:var(--bg)}
-button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--impulse);outline-offset:2px}
+button:hover{background:var(--raise);border-color:var(--muted)}
+button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,.node:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 button.primary{background:var(--ink);border-color:var(--ink);color:var(--bg)}
-button.primary:hover{background:var(--impulse);border-color:var(--impulse);color:var(--on-impulse)}
-button.quiet{border-color:transparent;font-weight:500;text-decoration:underline;text-underline-offset:3px;padding-inline:4px}
-button.quiet:hover{background:transparent;color:var(--impulse)}
-button.danger{color:var(--impulse);border-color:transparent}
-button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+button.primary:hover{background:#ffffff;border-color:#ffffff}
+button.quiet{border-color:transparent;font-weight:500;text-decoration:underline;text-decoration-color:var(--faint);text-underline-offset:3px;padding-inline:6px}
+button.quiet:hover{background:transparent;color:#fff}
+button.danger{color:var(--err);border-color:transparent}
+button.danger:hover{border-color:var(--err);background:transparent}
+button[aria-pressed="true"]{background:var(--raise);border-color:var(--muted)}
 button[disabled]{opacity:.35;cursor:default}
-button[disabled]:hover{background:transparent;color:var(--ink)}
-.strip{display:flex;flex-wrap:wrap;gap:4px 28px;align-items:baseline;font-size:12px;color:var(--muted)}
-.strip b{font:500 22px/1 var(--f-data);font-variant-numeric:tabular-nums;color:var(--ink);margin-right:6px;letter-spacing:-.02em}
-.strip .rich b{color:var(--impulse)}
-.main{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:0;flex:1;min-height:600px;border:1px solid var(--ink)}
-@media (max-width:900px){.main{grid-template-columns:1fr}.field{min-height:520px;border-right:0!important;border-bottom:1px solid var(--ink)}}
-.field{position:relative;background:var(--field);border-right:1px solid var(--ink);overflow:hidden;min-width:0}
+button[disabled]:hover{background:transparent;border-color:var(--line)}
+.strip{display:flex;flex-wrap:wrap;gap:4px 26px;align-items:baseline;font-size:12px;color:var(--muted)}
+.strip b{font:500 21px/1 var(--f-data);font-variant-numeric:tabular-nums;color:var(--ink);margin-right:6px;letter-spacing:-.02em}
+.strip .lit b{color:#fff;text-shadow:0 0 12px rgba(160,210,255,.55)}
+.strip .dimmed b{color:var(--muted)}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:0;flex:1;min-height:600px;border:1px solid var(--hair);border-radius:14px;overflow:hidden}
+@media (max-width:900px){.main{grid-template-columns:1fr}.field{min-height:520px;border-right:0!important;border-bottom:1px solid var(--hair)}}
+.field{position:relative;background:radial-gradient(ellipse 70% 60% at 50% 46%,#0e1631 0%,var(--field) 62%,var(--bg) 100%);border-right:1px solid var(--hair);overflow:hidden;min-width:0}
 .field svg{display:block;width:100%;height:100%;touch-action:none}
-.banner{position:absolute;left:0;right:0;top:0;background:var(--impulse);color:var(--on-impulse);font-size:13px;font-weight:600;padding:7px 14px;display:flex;gap:12px;align-items:center;justify-content:space-between}
+.banner{position:absolute;left:10px;right:10px;top:10px;background:var(--ink);color:var(--bg);border-radius:10px;font-size:13px;font-weight:600;padding:7px 8px 7px 14px;display:flex;gap:12px;align-items:center;justify-content:space-between}
 .banner[hidden]{display:none}
-.banner button{font-size:12px;padding:2px 10px;background:transparent;color:inherit;border-color:currentColor}
-.banner button:hover{background:var(--on-impulse);color:var(--impulse)}
-.keys{position:absolute;left:12px;bottom:10px;display:flex;flex-wrap:wrap;gap:2px 16px;font:11px var(--f-data);color:var(--muted);pointer-events:none;max-width:calc(100% - 24px)}
-.keys svg{width:12px;height:12px;vertical-align:-2px;margin-right:5px;display:inline-block}
-.side{background:var(--surface);padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0;overflow:auto;max-height:84vh}
-.side h2{font:500 11px/1.3 var(--f-data);letter-spacing:0;color:var(--muted);margin:0;padding-top:10px;border-top:1px solid var(--hair)}
+.banner button{font-size:12px;padding:2px 12px;color:inherit;border-color:currentColor}
+.banner button:hover{background:var(--bg);color:var(--ink)}
+.zoomreset{position:absolute;right:10px;top:10px;font-size:12px;padding:3px 12px;background:var(--surface)}
+.zoomreset[hidden]{display:none}
+.keys{position:absolute;left:12px;bottom:10px;display:flex;flex-wrap:wrap;gap:3px 16px;font:11px var(--f-data);color:var(--muted);pointer-events:none;max-width:calc(100% - 24px)}
+.keys svg{width:14px;height:14px;vertical-align:-3px;margin-right:5px;display:inline-block;overflow:visible}
+.side{background:var(--surface);padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0;overflow:auto;max-height:84vh}
+.side h2{font:500 11px/1.3 var(--f-data);letter-spacing:.04em;color:var(--muted);margin:0;padding-top:12px;border-top:1px solid var(--hair)}
 .side h2:first-child{border-top:0;padding-top:0}
-.side h3{font:700 24px/1.05 var(--f-display);letter-spacing:-.03em;margin:0;text-wrap:balance}
-.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:13px;margin:0}
-.kv dt{color:var(--muted)} .kv dd{margin:0;min-width:0;overflow-wrap:anywhere}
-.chip{display:inline-flex;align-items:center;gap:6px;font:12px var(--f-data);padding:1px 6px;border:1px solid var(--line);color:var(--ink)}
-.chip i{font-style:normal;color:var(--muted)}
-.chip.done{background:var(--ink);border-color:var(--ink);color:var(--bg)} .chip.late{color:var(--impulse);border-color:var(--impulse)} .chip.run{color:var(--impulse);border-color:var(--impulse)}
+.side h3{font:500 21px/1.15 var(--f-display);letter-spacing:-.02em;margin:0;text-wrap:balance}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--c);box-shadow:0 0 8px var(--c);flex:none}
+.chip{display:inline-flex;align-items:center;gap:6px;font:12px var(--f-data);padding:2px 8px;border:1px solid var(--line);border-radius:999px;color:var(--ink);white-space:nowrap}
+.chip.done{color:var(--muted);border-color:var(--done)}
+.chip.wait{color:var(--muted);border-style:dashed}
+.chip.lit{color:#fff;border-color:#fff;box-shadow:0 0 10px rgba(160,210,255,.35)}
+.chip.rich{border-color:var(--muted)}
+.chip.late{color:var(--err);border-color:var(--err)}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
-.chips label{display:inline-flex;align-items:center;gap:6px;font-size:13px;border:1px solid var(--line);padding:3px 8px;cursor:pointer}
-.chips label:has(input:checked){background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.chips label:has(input:checked) i{color:var(--bg)}
-.chips label i{font:11px var(--f-data);font-style:normal;color:var(--muted)}
-.chips input{margin:0;accent-color:var(--impulse)}
+.chips label{display:inline-flex;align-items:center;gap:7px;font-size:13px;border:1px solid var(--line);border-radius:999px;padding:3px 10px;cursor:pointer}
+.chips label:has(input:checked){background:var(--raise);border-color:var(--ink)}
+.chips input{position:absolute;opacity:0;pointer-events:none}
+.chips label:has(input:focus-visible){outline:2px solid var(--ink);outline-offset:2px}
 .actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.confirm{border-left:3px solid var(--impulse);padding:6px 0 6px 12px;display:flex;flex-direction:column;gap:8px;font-size:13px}
-.confirm b{font-size:16px;letter-spacing:-.01em}
+.confirm{border-left:2px solid var(--ink);padding:6px 0 6px 12px;display:flex;flex-direction:column;gap:8px;font-size:13px}
+.confirm b{font-size:15px}
+.confirm .warn{color:var(--muted)}
 .form{display:flex;flex-direction:column;gap:10px;font-size:13px}
 .form label.t,.form span.t{color:var(--muted);font:11px var(--f-data)}
-.list{display:flex;flex-direction:column;gap:0;margin:0;padding:0;list-style:none;border-top:1px solid var(--hair)}
-.list li{display:flex;gap:6px;align-items:center;border-bottom:1px solid var(--hair)}
-.list li button.go{flex:1;min-width:0;text-align:left;display:flex;justify-content:space-between;gap:8px;align-items:center;border:0;padding:8px 2px;font-weight:500}
-.list li button.go:hover{background:transparent;color:var(--impulse)}
-.list li button.go span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.list,.path{display:flex;flex-direction:column;gap:0;margin:0;padding:0;list-style:none;border-top:1px solid var(--hair)}
+.list li,.path li{display:flex;gap:4px;align-items:center;border-bottom:1px solid var(--hair)}
+.list li button.go,.path li button.go{flex:1;min-width:0;text-align:left;display:flex;gap:9px;align-items:center;border:0;border-radius:0;padding:8px 2px;font-weight:500}
+.list li button.go:hover,.path li button.go:hover{background:transparent;color:#fff}
+.go .tt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.go .sub2{font:11px var(--f-data);color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:45%}
+button.rm{border:0;padding:2px 8px;color:var(--muted);font-weight:500}
+button.rm:hover{color:var(--err);background:transparent}
+.path{counter-reset:step}
+.path li::before{counter-increment:step;content:counter(step);font:11px var(--f-data);color:var(--muted);width:16px;flex:none}
 .note{font-size:13px;color:var(--muted);margin:0}
-.msg{font-size:13px;padding:2px 0 2px 10px;border-left:3px solid var(--ink)}
-.msg.err{border-left-color:var(--impulse);color:var(--impulse)} .msg.ok{border-left-color:var(--ink);color:var(--ink)}
-.err-inline{color:var(--impulse);font-size:13px}
-a{color:var(--ink);text-decoration-color:var(--impulse);text-underline-offset:3px}
-a:hover{color:var(--impulse)}
-/* карта */
-/* зум раздвигает точки, но не растит: линии, значки и подписи держат экранный размер */
+.msg{font-size:13px;padding:2px 0 2px 10px;border-left:2px solid var(--ink)}
+.msg.err{border-left-color:var(--err);color:var(--err)}
+.err-inline{color:var(--err);font-size:13px}
+a{color:var(--ink);text-decoration-color:var(--faint);text-underline-offset:3px}
+a:hover{color:#fff;text-decoration-color:#fff}
+/* карта: зум раздвигает точки, но не растит — линии, значки и подписи держат экранный размер */
 .orbit,.sector,.edge{vector-effect:non-scaling-stroke}
 .orbit{fill:none;stroke:var(--orbit);stroke-width:1}
-.sector{stroke:var(--orbit);stroke-width:1}
+.sector{stroke:var(--orbit);stroke-width:1;opacity:.7}
+.sph-name{font:500 11.5px var(--f-data);paint-order:stroke;stroke:var(--halo);stroke-width:4px}
+.sph-num{fill:var(--faint)}
+.n-label{font:600 12.5px var(--f-ui);fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-width:4px;stroke-linejoin:round}
+.n-label.wait{fill:var(--muted);font-weight:500}
+.n-label.done{fill:var(--faint);font-weight:500}
 .n-label.hid{opacity:0}
 .node:hover .n-label.hid,.node:focus .n-label.hid{opacity:1}
-.zoomreset{position:absolute;right:10px;top:10px;font-size:12px;padding:3px 10px;background:var(--field)}
-.zoomreset[hidden]{display:none}
-.sph-name{font:500 11.5px var(--f-data);fill:var(--muted);paint-order:stroke;stroke:var(--halo);stroke-width:4px}
-.sph-num{fill:var(--ink)}
-.n-label{font:600 13px var(--f-ui);letter-spacing:-.01em;fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-width:4px}
-.n-label.done{fill:var(--muted);font-weight:500}
-.edge{stroke:var(--muted);stroke-width:1;opacity:.7}
-.edge.rich{stroke:var(--impulse);stroke-width:1.5;opacity:1}
-.center-hint{font:800 30px var(--f-display);letter-spacing:-.04em;fill:var(--orbit)}
-@media (max-width:640px){.center-hint{font-size:19px}}
-@media (prefers-reduced-motion:no-preference){.pulse{animation:pulse 2.4s ease-in-out infinite}}
-@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+.edge{fill:none}
+.edge.assoc{stroke-width:1;opacity:.4}
+.edge.dep{stroke-width:1.7;opacity:.9}
+.edge.dep.wait{stroke-dasharray:3 5;opacity:.45}
+.edge.flow{stroke-width:2.4;opacity:1;stroke-dasharray:2 7}
+.arrow path{fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.reach.off{opacity:.35}
+.node.dim{opacity:.2!important}
+.edge.dim{opacity:.06!important;animation:none}
+.arrow.dim{opacity:.08!important}
+.center-hint{font:500 22px var(--f-display);fill:var(--faint)}
+@media (max-width:640px){.center-hint{font-size:15px}}
+@media (prefers-reduced-motion:no-preference){
+  .edge.flow{animation:flow .9s linear infinite}
+  .reach.pulse{animation:pulse 2.6s ease-in-out infinite}
+  .glow{animation:breathe 4s ease-in-out infinite}
+}
+@keyframes flow{to{stroke-dashoffset:-9}}
+@keyframes pulse{0%,100%{opacity:.45}50%{opacity:1}}
+@keyframes breathe{0%,100%{opacity:.75}50%{opacity:1}}
 </style>
 
 <header class="top">
   <div class="brand">
     <h1>Синапсы</h1>
-    <div class="sub" id="sub">Своя карта: крупные точки по сферам. Отметки сверяются с Notion.</div>
+    <div class="sub" id="sub">Своя карта: крупные точки по сферам. Сигнал идёт по зависимостям, отметки сверяются с Notion.</div>
   </div>
   <div class="ctrl">
     <button class="primary" id="bNew">+ Точка</button>
@@ -138,8 +144,10 @@ a:hover{color:var(--impulse)}
 
 <section class="strip" aria-label="Сводка">
   <span><b id="sOpen">—</b>в пути</span>
-  <span class="ok"><b id="sDone">—</b>сделано</span>
-  <span class="rich"><b id="sRich">—</b>богатых точек</span>
+  <span class="lit"><b id="sAvail">—</b>доступно сейчас</span>
+  <span class="dimmed"><b id="sWait">—</b>ждут сигнала</span>
+  <span><b id="sRich">—</b>богатых</span>
+  <span class="dimmed"><b id="sDone">—</b>сделано</span>
   <span><b id="sPend">—</b>ждут сверки с Notion</span>
 </section>
 
@@ -149,12 +157,13 @@ a:hover{color:var(--impulse)}
     <button class="zoomreset" id="bZoom" hidden>Сбросить масштаб</button>
     <div class="banner" id="banner" hidden></div>
     <div class="keys" aria-hidden="true">
-      <span><svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="4" fill="var(--field)" stroke="var(--ink)" stroke-width="1.8"/></svg>в пути</span>
-      <span><svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="4.5" fill="var(--ink)"/></svg>сделано</span>
-      <span><svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="3" fill="var(--impulse)"/></svg>ждёт сверки</span>
-      <span><svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="5" fill="none" stroke="var(--impulse)" stroke-width="1.4"/></svg>богатая точка</span>
-      <span>тяните точку — она остаётся там, где вы её оставили</span>
-      <span>приближение раздвигает точки; скрытая подпись видна под курсором</span>
+      <span><svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="7" fill="#9fd4ff" opacity=".25"/><circle cx="7" cy="7" r="3.6" fill="#dff1ff"/></svg>доступна</span>
+      <span><svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="3.8" fill="var(--field)" stroke="#9fd4ff" stroke-width="1.5"/></svg>ждёт сигнала</span>
+      <span><svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="3" fill="var(--done)"/></svg>сделано</span>
+      <span><svg viewBox="0 0 14 14"><path d="M7 1.5a5.5 5.5 0 0 1 5.2 3.7" fill="none" stroke="#ffd36b" stroke-width="2"/><path d="M12.4 8.3A5.5 5.5 0 0 1 3 11.2" fill="none" stroke="#6bd7ff" stroke-width="2"/><path d="M2 9.2A5.5 5.5 0 0 1 4.6 2.1" fill="none" stroke="#ff7ad9" stroke-width="2"/></svg>охват: сколько сфер</span>
+      <span><svg viewBox="0 0 14 14"><line x1="0" y1="7" x2="14" y2="7" stroke="var(--muted)" stroke-width="1.5"/><path d="M5 3.5 L9 7 L5 10.5" fill="none" stroke="var(--ink)" stroke-width="1.5"/></svg>зависимость</span>
+      <span><svg viewBox="0 0 14 14"><path d="M7 3 L11 7 L7 11 L3 7Z" fill="var(--ink)"/></svg>ждёт сверки</span>
+      <span>клик по точке — её путь · приближение раздвигает точки</span>
     </div>
   </div>
   <aside class="side" id="side" aria-live="polite"></aside>
@@ -164,16 +173,34 @@ a:hover{color:var(--impulse)}
 <script>
 const DEFAULT_SPHERES=["Психопрактика","Призма","Меркор-ПРУФ","Творчество","ИИ и технологии","Обучение","Контент","Финансы","Личное","Хобби"];
 const today=new Date(); const TODAY=today.getFullYear()+"-"+String(today.getMonth()+1).padStart(2,"0")+"-"+String(today.getDate()).padStart(2,"0");
-let db=null, nodes=[], spheres=DEFAULT_SPHERES.slice(), selected=null, mode=null, linkFrom=null, hideDone=false, flash=null, ready=false, readOnly=false;
+let db=null, nodes=[], spheres=DEFAULT_SPHERES.slice(), selected=null, mode=null, linkFrom=null, hideDone=false, flash=null, ready=false, readOnly=false, panel=null;
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const fmt=d=>d?d.split("-").reverse().join("."):"—";
 const short=(s,n)=>{s=String(s||"");return s.length>n?s.slice(0,n-1)+"…":s};
-const sphNum=s=>{const i=spheres.indexOf(s);return i<0?"—":String(i+1).padStart(2,"0")};
 const byId=id=>nodes.find(n=>n.id===id);
-const linksOf=n=>{const out=new Set(n.links||[]);nodes.forEach(m=>{if((m.links||[]).includes(n.id))out.add(m.id)});out.delete(n.id);return [...out].filter(byId)};
-const isRich=n=>(n.spheres||[]).length>=2||linksOf(n).some(id=>{const m=byId(id);return m&&!(m.spheres||[]).some(s=>(n.spheres||[]).includes(s))});
 const hash=s=>{let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return (h>>>0)/4294967295};
+
+/* --- цвет: место сферы на кольце → оттенок кругового спектра --- */
+const sphIdx=s=>spheres.indexOf(s);
+const sphNum=s=>{const i=sphIdx(s);return i<0?"—":String(i+1).padStart(2,"0")};
+const sphColor=s=>{const i=sphIdx(s);if(i<0)return"#8792ad";return d3.interpolateRgb(d3.interpolateSinebow((i/spheres.length+.12)%1),"#ffffff")(.2)};
+const nodeColor=n=>{const s=(n.spheres||[]).find(x=>sphIdx(x)>=0);return s?sphColor(s):"#8792ad"};
+
+/* --- граф: связи (ассоциации) и зависимости (deps у точки = что нужно сначала) --- */
+const linksOf=n=>{const out=new Set(n.links||[]);nodes.forEach(m=>{if((m.links||[]).includes(n.id))out.add(m.id)});out.delete(n.id);return [...out].filter(byId)};
+const prereqsOf=n=>(n.deps||[]).filter(id=>id!==n.id&&byId(id));
+const dependentsOf=n=>nodes.filter(m=>m.id!==n.id&&(m.deps||[]).includes(n.id)).map(m=>m.id);
+const walk=(id,next)=>{const seen=new Set(),st=[id];while(st.length){const c=byId(st.pop());if(!c)continue;for(const x of next(c))if(x!==id&&!seen.has(x)){seen.add(x);st.push(x)}}return seen};
+const upstream=n=>walk(n.id,prereqsOf);
+const downstream=n=>walk(n.id,dependentsOf);
+const isOpen=n=>n&&n.status!=="done";
+const isBlocked=n=>isOpen(n)&&prereqsOf(n).some(id=>isOpen(byId(id)));
+const reachOf=n=>{const s=new Set((n.spheres||[]).filter(x=>sphIdx(x)>=0));
+  [...linksOf(n),...prereqsOf(n),...dependentsOf(n)].forEach(id=>(byId(id).spheres||[]).forEach(x=>{if(sphIdx(x)>=0)s.add(x)}));return [...s]};
+const isRich=n=>reachOf(n).length>=2;
+const unlockCount=n=>[...downstream(n)].filter(id=>isOpen(byId(id))).length;
+const degree=n=>linksOf(n).length+prereqsOf(n).length+dependentsOf(n).length;
 
 /* --- хранилище --- */
 async function writeNode(id,data){ if(readOnly)return;
@@ -191,24 +218,31 @@ function dbErr(e){const c=e&&e.code;
 
 /* --- карта --- */
 let geo=null, zoomB=null, kNow=1;
-/* Подписи: каждая пробует четыре места вокруг точки (справа, слева, снизу, сверху) в экранных координатах.
-   Порядок — по важности: выбранная, богатые, в пути, сделанные. Не нашла свободного места — прячется до наведения
-   или до приближения. Выбранная видна всегда. */
-const LBL=[ {a:"start",dx:o=>o,dy:()=>4,  bx:(o,w)=>o,     by:()=>-8},
-            {a:"end",  dx:o=>-o,dy:()=>4, bx:(o,w)=>-o-w,  by:()=>-8},
-            {a:"middle",dx:()=>0,dy:o=>o+8,bx:(o,w)=>-w/2,by:o=>o-4},
-            {a:"middle",dx:()=>0,dy:o=>-o+2,bx:(o,w)=>-w/2,by:o=>-o-10} ];
+/* Подписи пробуют четыре места вокруг точки (справа, слева, снизу, сверху) в экранных координатах.
+   Порядок — по важности: выбранная, её путь, богатые доступные, доступные, ждущие, сделанные.
+   Не нашла места — прячется до наведения или приближения. Выбранная видна всегда. */
+const LBL=[ {a:"start", dx:o=>o, dy:()=>4,   bx:(o,w)=>o,    by:()=>-8},
+            {a:"end",   dx:o=>-o,dy:()=>4,   bx:(o,w)=>-o-w, by:()=>-8},
+            {a:"middle",dx:()=>0,dy:o=>o+8,  bx:(o,w)=>-w/2, by:o=>o-4},
+            {a:"middle",dx:()=>0,dy:o=>-o+2, bx:(o,w)=>-w/2, by:o=>-o-10} ];
+const MODE_MSG={link:t=>`Кликните точку, которую связать с «${t}». Клик по уже связанной снимает связь.`,
+  dep:t=>`Кликните точку, без которой «${t}» не сдвинется.`, unlock:t=>`Кликните точку, которую откроет «${t}».`};
+
 function render(){
-  const open=nodes.filter(n=>n.status!=="done");
-  $("sOpen").textContent=ready?open.length:"—"; $("sDone").textContent=ready?nodes.length-open.length:"—";
-  $("sRich").textContent=ready?open.filter(isRich).length:"—"; $("sPend").textContent=ready?nodes.filter(n=>n.sync==="pending").length:"—";
+  const open=nodes.filter(isOpen), avail=open.filter(n=>!isBlocked(n));
+  const st=(id,v)=>{$(id).textContent=ready?v:"—"};
+  st("sOpen",open.length); st("sAvail",avail.length); st("sWait",open.length-avail.length);
+  st("sRich",open.filter(isRich).length); st("sDone",nodes.length-open.length); st("sPend",nodes.filter(n=>n.sync==="pending").length);
   const svg=d3.select("#svg"); svg.selectAll("*").remove();
   const box=$("field").getBoundingClientRect(), W=Math.max(340,box.width), H=Math.max(480,box.height);
   const cx=W/2, cy=H/2-10, R=W<640?Math.min(W*0.29,H*0.40):Math.min(W,H)*0.40; geo={cx,cy,R};
   svg.attr("viewBox",`0 0 ${W} ${H}`);
+  const defs=svg.append("defs");
   const g=svg.append("g");
-  /* «булавки» — группы, которые держат экранный размер: точки, подписи сфер, подсказка в центре */
-  const pinT=d=>`translate(${d.x},${d.y}) scale(${1/kNow})`;
+  /* «булавки» держат экранный размер: точки, подписи сфер, стрелки зависимостей, подсказка */
+  const pinT=d=>{ if(d.isEdge){const x=(d.a.x+d.b.x)/2,y=(d.a.y+d.b.y)/2,a=Math.atan2(d.b.y-d.a.y,d.b.x-d.a.x)*180/Math.PI;
+      return `translate(${x},${y}) rotate(${a}) scale(${1/kNow})`}
+    return `translate(${d.x},${d.y}) scale(${1/kNow})`};
   let raf=0, P=[], node=null, sph=null;
   const applyZoom=t=>{kNow=t.k; g.attr("transform",t); g.selectAll(".pin").attr("transform",pinT);
     $("bZoom").hidden=Math.abs(t.k-1)<.01&&Math.abs(t.x)<1&&Math.abs(t.y)<1;
@@ -217,13 +251,14 @@ function render(){
     .filter(e=>(!e.ctrlKey||e.type==="wheel")&&!e.button&&(e.type==="wheel"||!(e.target.closest&&e.target.closest(".node"))))
     .on("zoom",e=>applyZoom(e.transform));
   zoomB=zoom; svg.call(zoom).on("dblclick.zoom",null);
+  svg.on("click",e=>{if(e.target===svg.node()&&!mode){selected=null;render();renderSide()}});
   function declutter(t){ if(!node)return;
     const sv=svg.node().getBoundingClientRect(), f=sv.width?W/sv.width:1, rects=[];
     const hit=r=>r.x<0||r.x+r.w>W||rects.some(q=>r.x<q.x+q.w&&r.x+r.w>q.x&&r.y<q.y+q.h&&r.y+r.h>q.y);
-    P.forEach(p=>{const [x,y]=t.apply([p.x,p.y]);p.sx=x;p.sy=y;rects.push({x:x-14,y:y-14,w:28,h:28})});
+    P.forEach(p=>{const [x,y]=t.apply([p.x,p.y]);p.sx=x;p.sy=y;rects.push({x:x-p.vr,y:y-p.vr,w:2*p.vr,h:2*p.vr})});
     if(sph)sph.each(function(){const b=this.getBoundingClientRect();if(b.width)rects.push({x:(b.left-sv.left)*f,y:(b.top-sv.top)*f,w:b.width*f,h:b.height*f})});
     const place=new Map();
-    [...P].sort((a,b)=>a.pri-b.pri).forEach(p=>{const o=p.pri===0?28:22, w=p.w||60;
+    [...P].sort((a,b)=>a.pri-b.pri).forEach(p=>{const o=p.vr+(p.pri===0?11:6), w=p.w||60;
       let pick=-1; for(let i=0;i<LBL.length;i++){const c=LBL[i], r={x:p.sx+c.bx(o,w)-2,y:p.sy+c.by(o),w:w+4,h:16};
         if(!hit(r)){pick=i;rects.push(r);break}}
       if(pick<0&&p.pri===0)pick=0;
@@ -231,19 +266,19 @@ function render(){
     node.select("text.n-label").each(function(p){const s=place.get(p.m.id), c=LBL[Math.max(0,s.i)];
       d3.select(this).classed("hid",s.i<0).attr("text-anchor",c.a).attr("x",c.dx(s.o)).attr("y",c.dy(s.o))});
   }
-  svg.on("click",e=>{if(e.target===svg.node()&&mode!=="link"){selected=null;render();renderSide()}});
+  /* кольцо сфер */
   [R*0.35,R*0.7,R*1.02].forEach(r=>g.append("circle").attr("class","orbit").attr("cx",cx).attr("cy",cy).attr("r",r));
-  const used=spheres.filter(s=>true), n=Math.max(1,used.length), ang=i=>-Math.PI/2+i*2*Math.PI/n;
+  const used=spheres, n=Math.max(1,used.length), ang=i=>-Math.PI/2+i*2*Math.PI/n;
   if(n>1)used.forEach((s,i)=>{const a=ang(i)+Math.PI/n;g.append("line").attr("class","sector").attr("x1",cx+Math.cos(a)*R*0.18).attr("y1",cy+Math.sin(a)*R*0.18).attr("x2",cx+Math.cos(a)*R*1.08).attr("y2",cy+Math.sin(a)*R*1.08)});
-  const narrow=W<640;
-  const sphG=g.append("g");
-  used.forEach((s,i)=>{const a=ang(i), k=narrow?1.22:1.05, lx=cx+Math.cos(a)*R*k, ly=cy+Math.sin(a)*R*k;
+  const narrow=W<640, sphG=g.append("g");
+  used.forEach((s,i)=>{const a=ang(i), k=narrow?1.22:1.05, lx=cx+Math.cos(a)*R*k, ly=cy+Math.sin(a)*R*k, col=sphColor(s);
     const pin=sphG.append("g").attr("class","pin").datum({x:lx,y:ly});
     if(narrow){ /* узкий экран: номер над названием, по центру — подписи не вылезают за край */
       const t=pin.append("text").attr("class","sph-name").attr("text-anchor","middle").attr("x",0).attr("y",-3);
-      t.append("tspan").attr("class","sph-num").attr("x",0).text(sphNum(s)); t.append("tspan").attr("x",0).attr("dy","1.15em").text(s); return; }
+      t.append("tspan").attr("class","sph-num").attr("x",0).text(sphNum(s)); t.append("tspan").attr("x",0).attr("dy","1.15em").attr("fill",col).text(s); return; }
     pin.append("text").attr("class","sph-name").attr("x",0).attr("y",Math.sin(a)>.5?18:Math.sin(a)<-.5?-8:5)
-      .attr("text-anchor",Math.abs(Math.cos(a))<.25?"middle":(Math.cos(a)>0?"start":"end")).call(t=>{t.append("tspan").attr("class","sph-num").text(sphNum(s)+" ");t.append("tspan").text(s)})});
+      .attr("text-anchor",Math.abs(Math.cos(a))<.25?"middle":(Math.cos(a)>0?"start":"end"))
+      .call(t=>{t.append("tspan").attr("class","sph-num").text(sphNum(s)+" ");t.append("tspan").attr("fill",col).text(s)})});
   sph=sphG.selectAll("text.sph-name");
   const visible=nodes.filter(m=>!(hideDone&&m.status==="done"));
   if(ready&&!nodes.length)g.append("g").attr("class","pin").datum({x:cx,y:cy}).append("text").attr("class","center-hint").attr("text-anchor","middle").text("Нажмите «+ Точка»");
@@ -256,48 +291,84 @@ function render(){
   const free=P.filter(p=>p.fx===undefined);
   if(free.length){const s=d3.forceSimulation(P).force("x",d3.forceX(d=>d.ax??d.x).strength(.12)).force("y",d3.forceY(d=>d.ay??d.y).strength(.12))
       .force("c",d3.forceCollide(34)).stop();for(let i=0;i<160;i++)s.tick();}
-  const pos=new Map(P.map(p=>[p.m.id,p]));
-  /* связи */
-  const E=[];visible.forEach(m=>(m.links||[]).forEach(t=>{if(pos.has(t))E.push({a:pos.get(m.id),b:pos.get(t),rich:!(m.spheres||[]).some(s=>(byId(t).spheres||[]).includes(s))})}));
-  g.append("g").selectAll("line").data(E).join("line").attr("class",d=>"edge"+(d.rich?" rich":""))
-    .attr("x1",d=>d.a.x).attr("y1",d=>d.a.y).attr("x2",d=>d.b.x).attr("y2",d=>d.b.y);
+  /* свойства точки: состояние, охват, связность → размер */
+  P.forEach(p=>{const m=p.m; p.open=isOpen(m); p.blocked=isBlocked(m); p.reach=reachOf(m); p.deg=degree(m); p.col=nodeColor(m);
+    p.cr=(5+Math.min(5,p.deg*1.1))*(p.open?1:.75); p.vr=p.cr+(p.reach.length>=2?7:3);});
+  /* путь выбранной точки: всё, что до неё, и всё, что она откроет */
+  const sel=byId(selected), pos=new Map(P.map(p=>[p.m.id,p]));
+  let route=null, upS=new Set(), downS=new Set();
+  if(sel&&pos.has(sel.id)){upS=upstream(sel);downS=downstream(sel);route=new Set([sel.id,...upS,...downS,...linksOf(sel)]);}
+  P.forEach(p=>{p.pri=p.m.id===selected||p.m.id===linkFrom?0:route&&route.has(p.m.id)?.5:!p.open?3:p.blocked?2.5:p.reach.length>=2?1:2});
+  /* рёбра */
+  const E=[], seenA=new Set();
+  visible.forEach(m=>{
+    (m.links||[]).forEach(t=>{if(!pos.has(t)||t===m.id)return;const k=[m.id,t].sort().join("|");if(seenA.has(k))return;seenA.add(k);E.push({isEdge:1,kind:"assoc",a:pos.get(m.id),b:pos.get(t)})});
+    prereqsOf(m).forEach(t=>{if(pos.has(t))E.push({isEdge:1,kind:"dep",a:pos.get(t),b:pos.get(m.id),live:!isOpen(byId(t))})});
+  });
+  const inUp=id=>id===selected||upS.has(id), inDown=id=>id===selected||downS.has(id);
+  E.forEach((e,i)=>{e.id="eg"+i; const ia=e.a.m.id, ib=e.b.m.id;
+    e.on=!route||(e.kind==="dep"?(inUp(ia)&&inUp(ib))||(inDown(ia)&&inDown(ib)):(ia===selected||ib===selected));
+    e.flow=!!route&&e.kind==="dep"&&e.on;});
+  const grad=defs.selectAll("linearGradient").data(E).join("linearGradient").attr("id",d=>d.id).attr("gradientUnits","userSpaceOnUse");
+  grad.append("stop").attr("offset","0").attr("stop-color",d=>d.a.col);
+  grad.append("stop").attr("offset","1").attr("stop-color",d=>d.b.col);
+  const cols=[...new Set(P.map(p=>p.col))], glId=c=>"gl"+cols.indexOf(c);
+  defs.selectAll("radialGradient").data(cols).join("radialGradient").attr("id",(c,i)=>"gl"+i)
+    .call(r=>{r.append("stop").attr("offset","0").attr("stop-color",c=>c).attr("stop-opacity",.6);r.append("stop").attr("offset","1").attr("stop-color",c=>c).attr("stop-opacity",0)});
+  const edges=g.append("g").selectAll("line").data(E).join("line")
+    .attr("class",d=>"edge "+d.kind+(d.kind==="dep"&&!d.live&&!d.flow?" wait":"")+(d.flow?" flow":"")+(route&&!d.on?" dim":""))
+    .attr("stroke",d=>`url(#${d.id})`);
+  const arrows=g.append("g").selectAll("g").data(E.filter(e=>e.kind==="dep")).join("g").attr("class",d=>"pin arrow"+(route&&!d.on?" dim":""));
+  arrows.append("path").attr("d","M-3.5,-4.5 L2.5,0 L-3.5,4.5").attr("stroke",d=>d.b.col);
+  const updEdges=()=>{edges.attr("x1",d=>d.a.x).attr("y1",d=>d.a.y).attr("x2",d=>d.b.x).attr("y2",d=>d.b.y);
+    grad.attr("x1",d=>d.a.x).attr("y1",d=>d.a.y).attr("x2",d=>d.b.x).attr("y2",d=>d.b.y); arrows.attr("transform",pinT);};
+  updEdges();
   /* точки */
-  P.forEach(p=>{p.pri=p.m.id===selected||p.m.id===linkFrom?0:p.m.status==="done"?3:isRich(p.m)?1:2});
-  node=g.append("g").selectAll("g").data(P).join("g").attr("class","node pin").attr("transform",pinT)
-    .style("cursor",mode==="link"?"crosshair":"grab").attr("tabindex",0).attr("role","button").attr("aria-label",d=>d.m.title)
+  node=g.append("g").selectAll("g").data(P).join("g").attr("class",d=>"node pin"+(route&&!route.has(d.m.id)?" dim":"")).attr("transform",pinT)
+    .style("cursor",mode?"crosshair":"grab").attr("tabindex",0).attr("role","button").attr("aria-label",d=>d.m.title)
     .on("keydown",(e,d)=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();tap(d.m.id)}});
-  node.append("title").text(d=>d.m.title);
-  node.filter(d=>d.m.status!=="done"&&isRich(d.m)).append("circle").attr("r",17).attr("fill","none").attr("stroke","var(--impulse)").attr("stroke-width",1.4).attr("class","pulse");
-  node.append("circle").attr("r",13).attr("fill","var(--field)").attr("stroke","none");
-  node.filter(d=>(d.m.spheres||[]).length>1).append("circle").attr("r",12).attr("fill","none").attr("stroke","var(--muted)").attr("stroke-width",1).attr("stroke-dasharray","2 2.5");
-  node.append("circle").attr("r",7).attr("fill",d=>d.m.status==="done"?"var(--ink)":"var(--field)").attr("stroke","var(--ink)").attr("stroke-width",2);
-  node.filter(d=>d.m.sync==="pending").append("circle").attr("cx",10).attr("cy",-10).attr("r",4).attr("fill","var(--impulse)");
-  node.filter(d=>d.m.sync==="synced").append("text").attr("x",7).attr("y",-6).attr("font-size",11).attr("fill","var(--ink)").text("✓");
-  node.filter(d=>d.m.sync==="not_found").append("text").attr("x",7).attr("y",-6).attr("font-size",11).attr("fill","var(--late)").text("?");
-  node.filter(d=>d.m.id===selected||d.m.id===linkFrom).append("circle").attr("r",22).attr("fill","none").attr("stroke","var(--ink)").attr("stroke-width",1).attr("stroke-dasharray","1 3");
-  node.append("text").attr("class",d=>"n-label"+(d.m.status==="done"?" done":"")).attr("x",d=>d.m.id===selected||d.m.id===linkFrom?28:22).attr("y",4).text(d=>short(d.m.title,d.m.id===selected?60:30))
-    .each(function(d){d.w=this.getComputedTextLength()});
+  node.append("title").text(d=>d.m.title+(!d.open?" — сделано":d.blocked?" — ждёт сигнала":" — доступна"));
+  node.filter(d=>d.open&&!d.blocked).append("circle").attr("class","glow").attr("r",d=>d.cr*3.3).attr("fill",d=>`url(#${glId(d.col)})`);
+  node.append("circle").attr("r",d=>d.vr+2).attr("fill","transparent");
+  const arc=d3.arc();
+  node.filter(d=>d.reach.length>=2).each(function(d){
+    const gg=d3.select(this).append("g").attr("class","reach"+(d.open&&!d.blocked&&d.reach.length>=3?" pulse":"")+(!d.open?" off":""));
+    const k=d.reach.length, r=d.cr+4.5, gap=Math.min(.4,Math.PI/k*.45);
+    d.reach.forEach((s,i)=>gg.append("path").attr("fill",sphColor(s))
+      .attr("d",arc({innerRadius:r-1,outerRadius:r+1,startAngle:i/k*2*Math.PI+gap/2,endAngle:(i+1)/k*2*Math.PI-gap/2})));});
+  node.append("circle").attr("class","core").attr("r",d=>d.cr)
+    .attr("fill",d=>!d.open?"var(--done)":d.blocked?"var(--field)":d3.interpolateRgb(d.col,"#ffffff")(.6))
+    .attr("stroke",d=>d.open&&d.blocked?d.col:"none").attr("stroke-width",1.6);
+  node.filter(d=>d.m.sync==="pending").append("path").attr("transform",d=>`translate(${d.cr+3},${-d.cr-3})`).attr("d","M0,-3.5 L3.5,0 L0,3.5 L-3.5,0Z").attr("fill","var(--ink)").attr("stroke","var(--field)");
+  node.filter(d=>d.m.sync==="synced").append("text").attr("x",d=>d.cr+1).attr("y",d=>-d.cr+1).attr("font-size",10).attr("fill","var(--muted)").text("✓");
+  node.filter(d=>d.m.sync==="not_found").append("text").attr("x",d=>d.cr+1).attr("y",d=>-d.cr+1).attr("font-size",11).attr("fill","var(--err)").text("?");
+  node.filter(d=>d.m.id===selected||d.m.id===linkFrom).append("circle").attr("r",d=>d.vr+5).attr("fill","none").attr("stroke","var(--ink)").attr("stroke-width",1).attr("stroke-dasharray","1 3");
+  node.append("text").attr("class",d=>"n-label"+(!d.open?" done":d.blocked?" wait":"")).attr("x",d=>d.vr+6).attr("y",4)
+    .text(d=>short(d.m.title,d.m.id===selected?60:30)).each(function(d){d.w=this.getComputedTextLength()});
   /* перетаскивание: короткий жест — выбор, длинный — перенос */
   let moved=false;
   node.call(d3.drag().on("start",()=>{moved=false})
-    .on("drag",function(e,d){moved=true;d.x=e.x;d.y=e.y;d3.select(this).attr("transform",pinT(d))})
+    .on("drag",function(e,d){moved=true;d.x=e.x;d.y=e.y;d3.select(this).attr("transform",pinT(d));updEdges()})
     .on("end",function(e,d){ if(!moved){tap(d.m.id);return}
       if(readOnly){render();return}
       const nx=(d.x-cx)/R, ny=(d.y-cy)/R; writeNode(d.m.id,{x:+nx.toFixed(4),y:+ny.toFixed(4)}); }));
-  $("banner").hidden=mode!=="link";
-  if(mode==="link")$("banner").innerHTML=`Кликните точку, которую связать с «${esc(short(byId(linkFrom)?.title,30))}» <button id="bLinkCancel">Отмена</button>`;
+  $("banner").hidden=!mode;
+  if(mode)$("banner").innerHTML=`<span>${esc(MODE_MSG[mode](short(byId(linkFrom)?.title,30)))}</span><button id="bLinkCancel">Отмена</button>`;
   const bc=$("bLinkCancel"); if(bc)bc.onclick=()=>{mode=null;linkFrom=null;render();renderSide()};
-  /* масштаб переживает перерисовку: раньше слой после любой правки возвращался к 100%, а колесо потом прыгало */
+  /* масштаб переживает перерисовку */
   applyZoom(d3.zoomTransform(svg.node()));
 }
-$("bZoom").onclick=()=>{if(zoomB)d3.select("#svg").transition().duration(250).call(zoomB.transform,d3.zoomIdentity)};
-if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>render());
 function tap(id){
-  if(mode==="link"&&linkFrom){
-    if(id!==linkFrom){const a=byId(linkFrom), b=byId(id);
-      const linked=linksOf(a).includes(id);
-      if(linked){ writeNode(a.id,{links:(a.links||[]).filter(x=>x!==id)}); writeNode(b.id,{links:(b.links||[]).filter(x=>x!==a.id)}); flash={ok:"Связь снята."}; }
-      else{ writeNode(a.id,{links:[...(a.links||[]),id]}); flash={ok:"Связь проведена."}; }
+  if(mode&&linkFrom){ const a=byId(linkFrom), b=byId(id);
+    if(a&&b&&id!==linkFrom){
+      if(mode==="link"){
+        if(linksOf(a).includes(id)){ writeNode(a.id,{links:(a.links||[]).filter(x=>x!==id)}); writeNode(b.id,{links:(b.links||[]).filter(x=>x!==a.id)}); flash={ok:"Связь снята."}; }
+        else{ writeNode(a.id,{links:[...(a.links||[]),id]}); flash={ok:"Связь проведена."}; }
+      }else{ const pre=mode==="dep"?b:a, dep=mode==="dep"?a:b; /* сигнал идёт pre → dep */
+        if((dep.deps||[]).includes(pre.id)){ writeNode(dep.id,{deps:dep.deps.filter(x=>x!==pre.id)}); flash={ok:"Зависимость снята."}; }
+        else if(downstream(dep).has(pre.id)){ flash={err:`Получится круг: «${short(pre.title,30)}» сама ждёт «${short(dep.title,30)}».`}; }
+        else{ writeNode(dep.id,{deps:[...(dep.deps||[]),pre.id]}); flash={ok:`«${short(dep.title,30)}» теперь ждёт «${short(pre.title,30)}».`}; }
+      }
     }
     mode=null; selected=linkFrom; linkFrom=null; render(); renderSide(); return;
   }
@@ -305,54 +376,70 @@ function tap(id){
 }
 
 /* --- пульт --- */
-function sphChips(list){return `<div class="chips">${(list||[]).map(s=>`<span class="chip"><i>${sphNum(s)}</i>${esc(s)}</span>`).join("")}</div>`}
+function sphChips(list){return `<div class="chips">${(list||[]).map(s=>`<span class="chip"><span class="dot" style="--c:${sphColor(s)}"></span>${esc(s)}</span>`).join("")}</div>`}
+function stateChip(m,long){
+  if(!isOpen(m))return long?`<span class="chip done">сделано ${fmt(m.doneAt)}</span>`:'<span class="chip done">✓</span>';
+  if(isBlocked(m))return '<span class="chip wait">ждёт сигнала</span>';
+  return long?'<span class="chip lit">доступна</span>':"";
+}
 function syncLine(n){
-  if(n.sync==="pending")return'<span class="chip run">ждёт сверки с Notion</span>';
+  if(n.sync==="pending")return'<span class="chip lit">ждёт сверки с Notion</span>';
   if(n.sync==="synced")return`<span class="chip done">сверено с Notion</span>${n.syncNote?` <span class="note">${esc(n.syncNote)}</span>`:""}`;
   if(n.sync==="not_found")return`<span class="chip late">в Notion не найдено</span>${n.syncNote?` <span class="note">${esc(n.syncNote)}</span>`:""}`;
   return"";
 }
+const liNode=(m,rm,extra)=>`<li><button class="go" data-go="${esc(m.id)}"><span class="dot" style="--c:${isOpen(m)?nodeColor(m):"var(--done)"}"></span><span class="tt">${esc(m.title)}</span>${extra||stateChip(m)}</button>${rm?`<button class="rm" data-rm="${rm}:${esc(m.id)}" aria-label="Убрать">×</button>`:""}</li>`;
 function nodeCard(n){
-  const ls=linksOf(n).map(byId);
+  const pre=prereqsOf(n).map(byId), nxt=dependentsOf(n).map(byId), ls=linksOf(n).map(byId);
+  const reach=reachOf(n), unl=unlockCount(n);
+  const up=[...upstream(n)].map(byId).filter(isOpen).sort((a,b)=>upstream(a).size-upstream(b).size);
+  const deep=up.some(m=>!pre.includes(m));
   return `<h2>Точка</h2><h3>${esc(n.title)}</h3>${sphChips(n.spheres)}
-  <div>${n.status==="done"?`<span class="chip done">сделано ${fmt(n.doneAt)}</span>`:'<span class="chip">в пути</span>'} ${isRich(n)&&n.status!=="done"?'<span class="chip run">богатая</span>':""}</div>
+  <div class="chips">${stateChip(n,true)}${reach.length>=2?`<span class="chip rich">охват ${reach.length}</span>`:""}${unl?`<span class="chip">откроет ${unl}</span>`:""}</div>
   <div>${syncLine(n)}</div>
   ${n.note?`<p class="note">${esc(n.note)}</p>`:""}
   ${n.notion?`<a href="${esc(n.notion)}" target="_blank" rel="noopener">Открыть в Notion</a>`:""}
-  <h2>Связи</h2>${ls.length?`<ul class="list">${ls.map(m=>`<li><button class="go" data-go="${esc(m.id)}"><span>${esc(m.title)}</span>${m.status==="done"?'<span class="chip done">✓</span>':""}</button></li>`).join("")}</ul>`:'<p class="note">Пока одна. Связь с точкой из другой сферы делает её богатой.</p>'}
+  ${isOpen(n)&&deep?`<h2>Путь сигнала сюда — по порядку</h2><ol class="path">${up.map(m=>liNode(m,"")).join("")}</ol>`:""}
+  <h2>Нужна сначала</h2>${pre.length?`<ul class="list">${pre.map(m=>liNode(m,"pre")).join("")}</ul>`:'<p class="note">Ни от чего не зависит.</p>'}
+  <h2>Открывает</h2>${nxt.length?`<ul class="list">${nxt.map(m=>liNode(m,"next")).join("")}</ul>`:'<p class="note">Пока ничто не ждёт эту точку.</p>'}
+  <h2>Связи</h2>${ls.length?`<ul class="list">${ls.map(m=>liNode(m,"link")).join("")}</ul>`:'<p class="note">Связь с точкой из другой сферы расширяет охват.</p>'}
   <div class="actions">
-    ${n.status!=="done"?'<button class="primary" id="bDone">Готово</button>':'<button id="bUndo">Вернуть в путь</button>'}
+    ${isOpen(n)?'<button class="primary" id="bDone">Готово</button>':'<button id="bUndo">Вернуть в путь</button>'}
+    <button id="bDep">Нужна сначала…</button><button id="bUnlock">Открывает…</button>
     <button id="bLink">Связать</button><button id="bEdit">Изменить</button><button class="quiet danger" id="bDel">Удалить</button>
   </div><div id="slot"></div>
   <button class="quiet" id="bBack">← К обзору</button>`;
 }
 function overview(){
-  const open=nodes.filter(n=>n.status!=="done").sort((a,b)=>(isRich(b)-isRich(a))||linksOf(b).length-linksOf(a).length);
-  const pend=nodes.filter(n=>n.sync==="pending"), nf=nodes.filter(n=>n.sync==="not_found");
   if(ready&&!nodes.length)return `<h2>Начало</h2><p class="note">Это ваша карта, а не выгрузка из Notion. Ставьте только крупное: цели, узлы, проекты, ради которых вы садитесь работать.</p>
-    <ol class="note" style="margin:0;padding-left:18px"><li>«+ Точка» — название и сфера.</li><li>Тяните точку куда удобно — место запомнится.</li><li>«Связать» — от точки к точке; связь через сферы = богатый узел.</li><li>«Готово» — когда мост сожжён. Архитектор сверит с Notion и закроет там.</li></ol>`;
-  return `<h2>Куда дальше</h2>${open.length?`<ul class="list">${open.slice(0,5).map(m=>`<li><button class="go" data-go="${esc(m.id)}"><span>${esc(m.title)}</span>${isRich(m)?'<span class="chip run">богатая</span>':""}</button></li>`).join("")}</ul>`:'<p class="note">Всё отмечено. Самое время поставить новую точку.</p>'}
-  <h2>Ждут сверки с Notion</h2>${pend.length?`<ul class="list">${pend.map(m=>`<li><button class="go" data-go="${esc(m.id)}"><span>${esc(m.title)}</span><span class="chip run">${fmt(m.doneAt)}</span></button></li>`).join("")}</ul>
+    <ol class="note" style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px"><li>«+ Точка» — название и сфера.</li><li>Тяните точку куда удобно — место запомнится.</li><li>«Нужна сначала…» — от чего точка зависит. Пока зависимость не сделана, точка тёмная.</li><li>«Связать» — смысловая связь без порядка; связь через сферы расширяет охват.</li><li>«Готово» — когда мост сожжён. Архитектор сверит с Notion и закроет там.</li></ol>`;
+  const av=nodes.filter(n=>isOpen(n)&&!isBlocked(n)).map(n=>({n,u:unlockCount(n),r:reachOf(n).length,d:degree(n)})).sort((a,b)=>b.u-a.u||b.r-a.r||b.d-a.d);
+  const wait=nodes.filter(isBlocked), pend=nodes.filter(n=>n.sync==="pending"), nf=nodes.filter(n=>n.sync==="not_found");
+  const tag=x=>[x.u?`<span class="chip">откроет ${x.u}</span>`:"",x.r>=2?`<span class="chip rich">охват ${x.r}</span>`:""].join("");
+  const firstWait=m=>{const p=prereqsOf(m).map(byId).find(isOpen);return p?`<span class="sub2">ждёт: ${esc(short(p.title,22))}</span>`:""};
+  return `<h2>Куда дальше</h2>${av.length?`<ul class="list">${av.slice(0,6).map(x=>liNode(x.n,"",tag(x))).join("")}</ul>
+    <p class="note">Наверху — доступные точки, которые откроют больше всего других.</p>`:'<p class="note">Доступных точек нет. Самое время поставить новую.</p>'}
+  ${wait.length?`<h2>Ждут сигнала · ${wait.length}</h2><ul class="list">${wait.slice(0,6).map(m=>liNode(m,"",firstWait(m))).join("")}</ul>`:""}
+  <h2>Ждут сверки с Notion</h2>${pend.length?`<ul class="list">${pend.map(m=>liNode(m,"",`<span class="sub2">${fmt(m.doneAt)}</span>`)).join("")}</ul>
     <p class="note">Скажите Архитектору: «сверь карту». Он найдёт эти точки в Notion, закроет, что не закрыто, и поставит ✓.</p>`:'<p class="note">Расхождений нет.</p>'}
-  ${nf.length?`<h2>Не нашлось в Notion</h2><ul class="list">${nf.map(m=>`<li><button class="go" data-go="${esc(m.id)}"><span>${esc(m.title)}</span><span class="chip late">?</span></button></li>`).join("")}</ul>`:""}`;
+  ${nf.length?`<h2>Не нашлось в Notion</h2><ul class="list">${nf.map(m=>liNode(m,"",'<span class="chip late">?</span>')).join("")}</ul>`:""}`;
 }
 function nodeForm(n){
   const sel=new Set(n?n.spheres||[]:[]);
   return `<form class="form" id="nodeForm"><h2>${n?"Изменить точку":"Новая точка"}</h2>
    <label class="t" for="fTitle">Что это</label><input type="text" id="fTitle" maxlength="140" value="${esc(n?n.title:"")}" placeholder="Например: колода Felt Sense в печать">
    <span class="t">Сферы (одна или несколько)</span>
-   <div class="chips">${spheres.map((s,i)=>`<label><input type="checkbox" name="sph" value="${esc(s)}" ${sel.has(s)?"checked":""}><i>${sphNum(s)}</i>${esc(s)}</label>`).join("")}</div>
+   <div class="chips">${spheres.map((s,i)=>`<label><input type="checkbox" id="fSph${i}" name="sph" value="${esc(s)}" ${sel.has(s)?"checked":""}><span class="dot" style="--c:${sphColor(s)}"></span>${esc(s)}</label>`).join("")}</div>
    <label class="t" for="fNotion">Ссылка на Notion — необязательно, без неё Архитектор найдёт по названию</label><input type="url" id="fNotion" value="${esc(n?n.notion||"":"")}" placeholder="https://app.notion.com/p/…">
    <label class="t" for="fNote">Заметка</label><textarea id="fNote" maxlength="600">${esc(n?n.note||"":"")}</textarea>
    <span class="err-inline" id="fErr"></span>
    <div class="actions"><button class="primary" type="submit">${n?"Сохранить":"Поставить на карту"}</button><button class="quiet" type="button" id="fCancel">Отмена</button></div></form>`;
 }
 function spheresForm(){
-  return `<form class="form" id="sphForm"><h2>Сферы карты</h2><p class="note">По одной в строке. Порядок — порядок секторов по часовой стрелке. Точки сферы, которую вы уберёте, встанут в центр.</p>
+  return `<form class="form" id="sphForm"><h2>Сферы карты</h2><p class="note">По одной в строке. Порядок — порядок секторов по часовой стрелке. Цвет сферы следует из её места на круге: поменяете порядок — сменятся и цвета. Точки сферы, которую вы уберёте, встанут в центр.</p>
    <textarea id="sphList" rows="10">${esc(spheres.join("\n"))}</textarea><span class="err-inline" id="sErr"></span>
    <div class="actions"><button class="primary" type="submit">Сохранить</button><button class="quiet" type="button" id="sCancel">Отмена</button></div></form>`;
 }
-let panel=null;
 function renderSide(){
   let h=flash?`<div class="msg ${flash.err?"err":"ok"}">${esc(flash.err||flash.ok)}</div>`:"";
   if(!db&&ready){h+=`<h2>Карта недоступна</h2><p class="note">Эта копия страницы не может хранить точки. Откройте артефакт «Синапсы» в claude.ai.</p>`;$("side").innerHTML=h;return}
@@ -366,17 +453,31 @@ function wire(){
   document.querySelectorAll("#side [data-go]").forEach(b=>b.onclick=()=>{selected=b.dataset.go;panel=null;flash=null;render();renderSide()});
   on("bBack",()=>{selected=null;flash=null;render();renderSide()});
   const n=byId(selected);
-  on("bDone",()=>{$("slot").innerHTML=`<div class="confirm"><b>Мост сожжён?</b><span>Готово — когда назад не отыграть: отправлено, показано, сдано, опубликовано.</span>
+  document.querySelectorAll("#side [data-rm]").forEach(b=>b.onclick=()=>{const [kind,id]=b.dataset.rm.split(":"), m=byId(id); if(!n||!m)return;
+    if(kind==="pre")writeNode(n.id,{deps:(n.deps||[]).filter(x=>x!==id)});
+    if(kind==="next")writeNode(m.id,{deps:(m.deps||[]).filter(x=>x!==n.id)});
+    if(kind==="link"){ if((n.links||[]).includes(id))writeNode(n.id,{links:n.links.filter(x=>x!==id)}); if((m.links||[]).includes(n.id))writeNode(m.id,{links:m.links.filter(x=>x!==n.id)}); }
+    flash={ok:kind==="link"?"Связь снята.":"Зависимость снята."};});
+  on("bDone",()=>{const waitFor=prereqsOf(n).map(byId).filter(isOpen);
+    $("slot").innerHTML=`<div class="confirm"><b>Мост сожжён?</b><span>Готово — когда назад не отыграть: отправлено, показано, сдано, опубликовано.</span>
+    ${waitFor.length?`<span class="warn">Сначала была нужна ${waitFor.map(m=>`«${esc(short(m.title,30))}»`).join(", ")} — она ещё в пути. Если всё же готово, зависимость, похоже, лишняя.</span>`:""}
     <div class="actions"><button class="primary" id="bYes">Да, готово</button><button class="quiet" id="bNo">Ещё нет</button></div></div>`;
     on("bNo",()=>{$("slot").innerHTML=""});
-    on("bYes",async()=>{await writeNode(n.id,{status:"done",doneAt:TODAY,sync:"pending",syncNote:""});flash={ok:"Мост сожжён. Точка ждёт сверки с Notion."};selected=null;renderSide()});});
+    on("bYes",async()=>{const opened=dependentsOf(n).map(byId).filter(m=>isOpen(m)&&prereqsOf(m).filter(id=>id!==n.id).every(id=>!isOpen(byId(id)))).length;
+      await writeNode(n.id,{status:"done",doneAt:TODAY,sync:"pending",syncNote:""});
+      flash={ok:"Мост сожжён. Точка ждёт сверки с Notion."+(opened?` Сигнал дошёл до новых точек: ${opened}.`:"")};selected=null;renderSide()});});
   on("bUndo",()=>writeNode(n.id,{status:"open",doneAt:"",sync:n.sync==="synced"?"synced":"none"}));
   on("bLink",()=>{mode="link";linkFrom=n.id;render()});
+  on("bDep",()=>{mode="dep";linkFrom=n.id;render()});
+  on("bUnlock",()=>{mode="unlock";linkFrom=n.id;render()});
   on("bEdit",()=>{panel="edit";renderSide()});
-  on("bDel",()=>{$("slot").innerHTML=`<div class="confirm"><b>Удалить точку «${esc(short(n.title,40))}»?</b><span>Связи с ней тоже исчезнут. В Notion ничего не изменится.</span>
+  on("bDel",()=>{$("slot").innerHTML=`<div class="confirm"><b>Удалить точку «${esc(short(n.title,40))}»?</b><span>Её связи и зависимости тоже исчезнут. В Notion ничего не изменится.</span>
     <div class="actions"><button class="danger" id="bDelYes">Удалить</button><button class="quiet" id="bDelNo">Оставить</button></div></div>`;
     on("bDelNo",()=>{$("slot").innerHTML=""});
-    on("bDelYes",async()=>{try{for(const m of nodes)if((m.links||[]).includes(n.id))await writeNode(m.id,{links:m.links.filter(x=>x!==n.id)});
+    on("bDelYes",async()=>{try{for(const m of nodes){const up={};
+        if((m.links||[]).includes(n.id))up.links=m.links.filter(x=>x!==n.id);
+        if((m.deps||[]).includes(n.id))up.deps=m.deps.filter(x=>x!==n.id);
+        if(Object.keys(up).length)await writeNode(m.id,up);}
       await db.collection("nodes").doc(n.id).delete();selected=null;flash={ok:"Точка удалена."}}catch(e){flash={err:dbErr(e)}}renderSide()});});
   const f=$("nodeForm");
   if(f){on("fCancel",()=>{panel=null;renderSide()});
@@ -385,7 +486,7 @@ function wire(){
       if(!title){$("fErr").textContent="Назовите точку.";return} if(!sp.length){$("fErr").textContent="Выберите хотя бы одну сферу.";return}
       if(notion&&!/^https:\/\/(app\.notion\.com|www\.notion\.so|notion\.so)\//.test(notion)){$("fErr").textContent="Ссылка должна вести в Notion.";return}
       try{ if(panel==="edit"){await writeNode(selected,{title,spheres:sp,notion,note});flash={ok:"Сохранено."}}
-        else{const ref=await db.collection("nodes").add({title,spheres:sp,notion,note,status:"open",doneAt:"",links:[],sync:"none",syncNote:"",createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()});selected=ref.id;flash={ok:"Точка на карте. Тяните её, куда удобно."}}
+        else{const ref=await db.collection("nodes").add({title,spheres:sp,notion,note,status:"open",doneAt:"",links:[],deps:[],sync:"none",syncNote:"",createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()});selected=ref.id;flash={ok:"Точка на карте. Тяните её, куда удобно."}}
         panel=null;renderSide();}catch(err){$("fErr").textContent=dbErr(err)}};
     ["fTitle","fNotion"].forEach(id=>$(id).oninput=()=>{$("fErr").textContent=""});}
   const sf=$("sphForm");
@@ -397,7 +498,9 @@ function wire(){
 $("bNew").onclick=()=>{if(!db)return;panel="new";selected=null;renderSide();setTimeout(()=>{const t=$("fTitle");if(t)t.focus()},0)};
 $("bSpheres").onclick=()=>{if(!db)return;panel="spheres";renderSide()};
 $("hideDone").onclick=e=>{hideDone=!hideDone;e.currentTarget.setAttribute("aria-pressed",hideDone);render()};
+$("bZoom").onclick=()=>{if(zoomB)d3.select("#svg").transition().duration(250).call(zoomB.transform,d3.zoomIdentity)};
 let rs;addEventListener("resize",()=>{clearTimeout(rs);rs=setTimeout(render,200)});
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>render());
 render(); renderSide();
 (async()=>{
   try{db=window.claude?await window.claude.use("db"):null}catch(e){db=null}
