@@ -1,4 +1,4 @@
-<!-- Синапсы v0.7-draft · 25.10.2026 (своя карта владельца; сверка с Notion — кнопкой или по пятницам задачей «Пятничная сверка»; зависимости и путь сигнала; заколдованные круги и их разрезание; «в работе» с остыванием и мягким лимитом; крепнущие связи; охват и связность; оформление «нейронная ночь») · дом: Dem-i-urge/sinapsy (C:\Users\ivasi\dev\sinapsy) · артефакт claude.ai — проекция, не дом -->
+<!-- Синапсы v0.8-draft · 25.10.2026 (своя карта владельца; сверка с Notion — кнопкой или по пятницам задачей «Пятничная сверка»; «Позвать Архитектора» — аудит связей задачей «Архитектор по карте Синапсы», правки принимает владелец; зависимости и путь сигнала; заколдованные круги и их разрезание; «в работе» с остыванием и мягким лимитом; крепнущие связи; охват и связность; оформление «нейронная ночь») · дом: Dem-i-urge/sinapsy (C:\Users\ivasi\dev\sinapsy) · артефакт claude.ai — проекция, не дом -->
 <title>Синапсы</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -126,6 +126,15 @@ a:hover{color:#fff;text-decoration-color:#fff}
 .spark .h{fill:#ffffff;opacity:.28}
 .sparkorbit{fill:none;stroke:#ffffff;stroke-width:.8;stroke-dasharray:1 3}
 .chip.work{color:#fff;border-color:#fff}
+.arch{border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px;background:var(--field)}
+.arch .sum{font-size:13px;margin:0}
+.arch .item{border-top:1px solid var(--hair);padding-top:9px;display:flex;flex-direction:column;gap:6px;font-size:13px}
+.arch .item .what{font-weight:600}
+.arch .item .what button{border:0;padding:0;font:inherit;text-decoration:underline;text-decoration-color:var(--faint);text-underline-offset:3px;border-radius:0}
+.arch .item .what button:hover{background:transparent;color:#fff}
+.arch .kind{font:11px var(--f-data);color:var(--muted)}
+.arch .why{color:var(--muted)}
+.arch .actions button{font-size:12px;padding:3px 12px}
 .strip .work b{color:#fff}
 .node.dim{opacity:.2!important}
 .edge.dim{opacity:.06!important;animation:none}
@@ -155,6 +164,7 @@ a:hover{color:#fff;text-decoration-color:#fff}
     <button class="primary" id="bNew">+ Точка</button>
     <button id="bSpheres">Сферы</button>
     <button id="bSync" title="Сверить отметки «готово» с Notion">Сверка</button>
+    <button id="bArch" title="Архитектор проверит зависимости и предложит правки">Позвать Архитектора</button>
     <button id="hideDone" class="quiet" aria-pressed="false">Скрыть сделанное</button>
   </div>
 </header>
@@ -254,6 +264,10 @@ const hebb=(a,b)=>{ if(!a||!b)return 0; let w=0;
 const SYNC_TASK="trig_01Nose1gzxy5pf41eo1M7ewD", SYNC_SERVER="Claude Code Remote";
 const SYNC_NOTE="Ручной запуск со страницы карты «Синапсы»: выполни только часть 1 (сверку). Стук по Sentinel в этот раз не печатай.";
 let syncBusyUntil=0;
+/* Архитектор: кнопка запускает задачу аудита; она пишет предложения в meta/audit, принимает их владелец */
+const ARCH_TASK="trig_01Vq1MhNqyBg8dS28MpeLLnZ", ARCH_WAIT_MIN=15;
+let audit=null;
+const KIND={drop_dep:"снять зависимость",to_link:"сделать смысловой связью",reverse_dep:"развернуть зависимость",add_dep:"добавить зависимость",note:"наблюдение"};
 
 /* --- хранилище --- */
 async function writeNode(id,data){ if(readOnly)return;
@@ -493,12 +507,51 @@ function overview(){
   const firstWait=m=>{const p=prereqsOf(m).map(byId).find(isOpen);return p?`<span class="sub2">ждёт: ${esc(short(p.title,22))}</span>`:""};
   const loops=LOOPS.length?`<h2>Заколдованные круги · ${LOOPS.length}</h2>${LOOPS.map(c=>`<ul class="list">${c.map(id=>liNode(byId(id),"")).join("")}</ul>`).join("")}
     <p class="note">Эти точки ждут друг друга, сигнал ходит по кругу и не выходит. Откройте любую и разрежьте круг первым шагом.</p>`:"";
-  return `${loops}${back}<h2>Куда дальше</h2>${av.length?`<ul class="list">${av.slice(0,6).map(x=>liNode(x.n,"",tag(x))).join("")}</ul>
+  return `${archPanel()}${loops}${back}<h2>Куда дальше</h2>${av.length?`<ul class="list">${av.slice(0,6).map(x=>liNode(x.n,"",tag(x))).join("")}</ul>
     <p class="note">Наверху — доступные точки, которые откроют больше всего других.</p>`:'<p class="note">Доступных точек нет. Самое время поставить новую.</p>'}
   ${wait.length?`<h2>Ждут сигнала · ${wait.length}</h2><ul class="list">${wait.slice(0,6).map(m=>liNode(m,"",firstWait(m))).join("")}</ul>`:""}
   <h2>Ждут сверки с Notion</h2>${pend.length?`<ul class="list">${pend.map(m=>liNode(m,"",`<span class="sub2">${fmt(m.doneAt)}</span>`)).join("")}</ul>
     <p class="note">Нажмите «Сверка» — или дождитесь пятницы, она сверит сама. Сверка найдёт эти точки в Notion, закроет, что не закрыто, и поставит ✓.</p>`:'<p class="note">Расхождений нет.</p>'}
   ${nf.length?`<h2>Не нашлось в Notion</h2><ul class="list">${nf.map(m=>liNode(m,"",'<span class="chip late">?</span>')).join("")}</ul>`:""}`;
+}
+function archWaiting(){return audit&&audit.status==="requested"&&audit.requestedAt&&(Date.now()-new Date(audit.requestedAt))<ARCH_WAIT_MIN*60000}
+function archPanel(){
+  if(!audit)return"";
+  if(audit.status==="requested"){
+    if(archWaiting())return`<h2>Архитектор</h2><div class="arch"><p class="sum">Смотрит карту, сверяется с Вахтой, Лоцией и Notion. Обычно это пара минут — предложения появятся здесь сами.</p></div>`;
+    return`<h2>Архитектор</h2><div class="arch"><p class="sum">Ответа так и не пришло. Позовите ещё раз.</p></div>`;}
+  if(audit.status==="error")return`<h2>Архитектор</h2><div class="arch"><p class="sum err-inline">Разбор не получился: ${esc(audit.summary||"причина не названа")}</p></div>`;
+  const items=Array.isArray(audit.items)?audit.items:[], open=items.filter(x=>x.state==="new"), closed=items.length-open.length;
+  const t=id=>{const m=byId(id);return m?`<button data-go="${esc(m.id)}">${esc(short(m.title,40))}</button>`:"<i>точка удалена</i>"};
+  if(items.length&&!open.length)return`<p class="note">Архитектор${audit.finishedAt?` · ${fmt(String(audit.finishedAt).slice(0,10))}`:""}: все предложения решены (${items.length}).</p>`;
+  const what=x=>x.kind==="note"?`${t(x.from)}`:x.kind==="reverse_dep"?`${t(x.from)} → ${t(x.to)}, станет наоборот`:`${t(x.from)} → ${t(x.to)}`;
+  return`<h2>Архитектор${audit.finishedAt?` · ${fmt(String(audit.finishedAt).slice(0,10))}`:""}</h2><div class="arch">
+    ${audit.summary?`<p class="sum">${esc(audit.summary)}</p>`:""}
+    ${open.map(x=>`<div class="item"><span class="kind">${esc(KIND[x.kind]||x.kind)}</span><span class="what">${what(x)}</span>${x.why?`<span class="why">${esc(x.why)}</span>`:""}
+      <div class="actions">${x.kind==="note"?`<button data-arch="ok:${esc(x.id)}">Понятно</button>`:`<button class="primary" data-arch="ok:${esc(x.id)}">Принять</button><button class="quiet" data-arch="no:${esc(x.id)}">Отклонить</button>`}</div></div>`).join("")}
+    ${!items.length?'<p class="sum">Правок нет: зависимости на карте держат то, что держат.</p>':""}
+    ${closed?`<span class="kind">${open.length?"Уже решено":"Всё решено"}: ${closed} из ${items.length}</span>`:""}
+  </div>`;
+}
+async function archDecide(itemId,accept){
+  const items=(audit.items||[]).map(x=>({...x})), it=items.find(x=>x.id===itemId); if(!it)return;
+  const a=byId(it.from), b=byId(it.to);
+  try{
+    if(accept&&it.kind!=="note"){
+      if(!a||!b){it.state="stale";}
+      else{
+        const bd=(b.deps||[]).filter(x=>x!==a.id);
+        if(it.kind==="drop_dep")await writeNode(b.id,{deps:bd});
+        if(it.kind==="to_link"){await writeNode(b.id,{deps:bd}); if(!linksOf(b).includes(a.id))await writeNode(b.id,{links:[...(b.links||[]),a.id]});}
+        if(it.kind==="reverse_dep"){await writeNode(b.id,{deps:bd}); if(!(a.deps||[]).includes(b.id))await writeNode(a.id,{deps:[...(a.deps||[]),b.id]});}
+        if(it.kind==="add_dep"&&!(b.deps||[]).includes(a.id))await writeNode(b.id,{deps:[...(b.deps||[]),a.id]});
+        it.state="accepted";
+      }
+    }else it.state=accept?"accepted":"rejected";
+    await db.doc("meta/audit").update({items});
+    flash={ok:it.state==="stale"?"Одной из точек уже нет — предложение снято.":accept?(it.kind==="note"?"Принято к сведению.":"Правка внесена на карту."):"Отклонено. Карта не изменилась."};
+  }catch(e){flash={err:dbErr(e)}}
+  renderSide();
 }
 function nodeForm(n,cut){
   const sel=new Set(n?n.spheres||[]:cut?cut.spheres||[]:[]);
@@ -530,6 +583,7 @@ function renderSide(){
 function wire(){
   const on=(id,f)=>{const el=$(id);if(el)el.onclick=f};
   document.querySelectorAll("#side [data-go]").forEach(b=>b.onclick=()=>{selected=b.dataset.go;panel=null;flash=null;render();renderSide()});
+  document.querySelectorAll("#side [data-arch]").forEach(b=>b.onclick=()=>{const [v,id]=b.dataset.arch.split(":");b.disabled=true;archDecide(id,v==="ok")});
   on("bBack",()=>{selected=null;flash=null;render();renderSide()});
   const n=byId(selected);
   document.querySelectorAll("#side [data-rm]").forEach(b=>b.onclick=()=>{const [kind,id]=b.dataset.rm.split(":"), m=byId(id); if(!n||!m)return;
@@ -596,25 +650,41 @@ function wire(){
 $("bNew").onclick=()=>{if(!db)return;panel="new";selected=null;renderSide();setTimeout(()=>{const t=$("fTitle");if(t)t.focus()},0)};
 $("bSpheres").onclick=()=>{if(!db)return;panel="spheres";renderSide()};
 $("hideDone").onclick=e=>{hideDone=!hideDone;e.currentTarget.setAttribute("aria-pressed",hideDone);render()};
-function syncErr(e){const c=e&&e.code;
-  if(c==="needs_reauth")return"Сверка не запустилась: переподключите Claude Code Remote в настройках claude.ai → Connectors.";
-  if(c==="server_not_connected"||c==="selection_required")return"Сверка не запустилась: в claude.ai не подключён Claude Code Remote (Настройки → Connectors).";
-  if(c==="not_in_manifest"||c==="approval_required"||c==="consent_required")return"Карте нужно ваше разрешение запускать сверку. Нажмите «Сверка» ещё раз и разрешите, или включите его в меню разрешений артефакта.";
-  if(c==="tool_error")return"Задача сверки отказалась запускаться: "+(e.message||"без пояснения")+".";
-  if(c==="server_unavailable"||c==="upstream_error")return"Неизвестно, запустилась ли сверка. Подождите пару минут: если отметки не обновятся, нажмите ещё раз.";
-  if(c==="not_granted"||c==="capability_disabled"||c==="capability_removed")return"Отсюда сверку не запустить. Откройте карту в claude.ai или скажите Архитектору: «сверь карту».";
-  return"Сверка не запустилась ("+(c||"ошибка")+").";}
+/* общий разбор ошибок запуска задачи: fail — что не удалось, своими словами для каждой кнопки */
+function taskErr(e,fail){const c=e&&e.code;
+  if(c==="needs_reauth")return fail+": переподключите Claude Code Remote в настройках claude.ai → Connectors.";
+  if(c==="server_not_connected"||c==="selection_required")return fail+": в claude.ai не подключён Claude Code Remote (Настройки → Connectors).";
+  if(c==="not_in_manifest"||c==="approval_required"||c==="consent_required")return"Карте нужно ваше разрешение запускать задачи. Нажмите кнопку ещё раз и разрешите, или включите его в меню разрешений артефакта.";
+  if(c==="tool_error")return fail+": задача отказалась запускаться — "+(e.message||"без пояснения")+".";
+  if(c==="server_unavailable"||c==="upstream_error")return"Неизвестно, запустилась ли задача. Подождите пару минут: если на карте ничего не изменится, нажмите ещё раз.";
+  if(c==="not_granted"||c==="capability_disabled"||c==="capability_removed")return"Отсюда задачу не запустить. Откройте карту в claude.ai.";
+  return fail+" ("+(c||"ошибка")+").";}
+async function fireTask(id,text){
+  let mcp=null; try{mcp=window.claude?await window.claude.use("mcp"):null}catch(_){mcp=null}
+  if(!mcp)throw{code:"not_granted"};
+  const input={trigger_id:id}; if(text)input.text=text;
+  return mcp.callTool(SYNC_SERVER,"fire_trigger",input);
+}
+$("bArch").onclick=async e=>{const btn=e.currentTarget;
+  if(!db)return;
+  if(archWaiting()){flash={ok:"Архитектор уже смотрит карту. Предложения появятся в обзоре сами."};selected=null;panel=null;render();renderSide();return}
+  if(!nodes.some(n=>prereqsOf(n).length)){flash={ok:"На карте пока нет зависимостей — Архитектору нечего проверять."};renderSide();return}
+  btn.disabled=true;
+  try{ await db.doc("meta/audit").set({status:"requested",requestedAt:new Date().toISOString(),summary:"",items:[]});
+    await fireTask(ARCH_TASK,"");
+    flash={ok:"Архитектор позван. Через пару минут предложения появятся в обзоре, итог придёт и уведомлением."}; }
+  catch(err){ flash={err:taskErr(err,"Архитектор не позван")};
+    try{ if(audit&&audit.status==="requested")await db.doc("meta/audit").set({status:"error",summary:"задача не запустилась",items:[]}) }catch(_){} }
+  btn.disabled=false; selected=null; panel=null; render(); renderSide(); };
 $("bSync").onclick=async e=>{const btn=e.currentTarget;
   const pend=nodes.filter(n=>n.sync==="pending");
   if(!pend.length){flash={ok:"Сверять нечего: все отметки «готово» уже сверены с Notion."};renderSide();return}
   if(syncBusyUntil>Date.now()){flash={ok:"Сверка уже идёт. Отметки на карте обновятся сами."};renderSide();return}
-  let mcp=null; try{mcp=window.claude?await window.claude.use("mcp"):null}catch(_){mcp=null}
-  if(!mcp){flash={err:syncErr({code:"not_granted"})};renderSide();return}
   btn.disabled=true;
-  try{ await mcp.callTool(SYNC_SERVER,"fire_trigger",{trigger_id:SYNC_TASK,text:SYNC_NOTE});
+  try{ await fireTask(SYNC_TASK,SYNC_NOTE);
     syncBusyUntil=Date.now()+3*60*1000;
     flash={ok:`Сверка запущена: точек ${pend.length}. Через минуту-две отметки на карте обновятся сами, итог придёт уведомлением.`}; }
-  catch(err){ flash={err:syncErr(err)}; }
+  catch(err){ flash={err:taskErr(err,"Сверка не запустилась")}; }
   btn.disabled=false; renderSide(); };
 $("bZoom").onclick=()=>{if(zoomB)d3.select("#svg").transition().duration(250).call(zoomB.transform,d3.zoomIdentity)};
 let rs;addEventListener("resize",()=>{clearTimeout(rs);rs=setTimeout(render,200)});
@@ -622,7 +692,8 @@ if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>render());
 render(); renderSide();
 (async()=>{
   try{db=window.claude?await window.claude.use("db"):null}catch(e){db=null}
-  if(!db){ready=true;render();renderSide();["bNew","bSpheres"].forEach(id=>$(id).disabled=true);return}
+  if(!db){ready=true;render();renderSide();["bNew","bSpheres","bArch"].forEach(id=>$(id).disabled=true);return}
+  db.doc("meta/audit").onSnapshot(s=>{audit=s.exists?s.data():null;if(!panel&&!selected)renderSide()},()=>{});
   db.doc("meta/spheres").onSnapshot(s=>{const l=s.exists&&s.data().list;spheres=Array.isArray(l)&&l.length?l.slice():DEFAULT_SPHERES.slice();render();if(panel!=="spheres")renderSide()},e=>{flash={err:dbErr(e)};renderSide()});
   db.collection("nodes").onSnapshot(s=>{nodes=s.docs.map(d=>({id:d.id,...d.data()}));ready=true;
       if(selected&&!byId(selected))selected=null; render(); if(!panel)renderSide();},
