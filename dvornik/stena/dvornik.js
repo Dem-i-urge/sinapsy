@@ -1,10 +1,10 @@
-/* Дворник · dvornik.js v0.1-draft · 27.10.2026
-   Прогон: вход → engine.js → check.js → plan.json и отчёт для треда.
-   node dvornik.js <input.json> <graph.js> [out-dir]
+/* Дворник · dvornik.js v0.1.1-draft · 27.10.2026
+   Прогон: вход → engine.js → check.js → plan.json, wall.json (документ стены plan/current) и отчёт для треда.
+   node dvornik.js <input.json> <graph.js> [out-dir] [--dry]   (--dry — сухой прогон: стена помечает, что в Notion не писалось)
    graph.js — тот, что опубликован рядом с картой (SPEC §5 п. 2), а не копия из git.
    Код выхода: 0 — проверка пройдена; 1 — не пройдена (публикации и записи в Notion нет); 2 — ошибка входа. */
 const fs=require("fs"), path=require("path");
-const [inFile,graphFile,outDir=path.dirname(inFile)]=process.argv.slice(2);
+const argv=process.argv.slice(2), dry=argv.includes("--dry"), [inFile,graphFile,outDir=path.dirname(inFile)]=argv.filter(a=>a!=="--dry");
 if(!inFile||!graphFile){console.error("node dvornik.js <input.json> <graph.js> [out-dir]");process.exit(2)}
 const G=require(path.resolve(graphFile)), E=require("./engine.js"), C=require("./check.js");
 const input=JSON.parse(fs.readFileSync(inFile,"utf8"));
@@ -13,6 +13,9 @@ const prevLog=input.log||[], newLog=[...prevLog,...plan.logAppend];
 const res=C.check(input,plan,{prevLog,newLog});
 fs.writeFileSync(path.join(outDir,"plan.json"),JSON.stringify(plan,null,1));
 fs.writeFileSync(path.join(outDir,"check.json"),JSON.stringify(res,null,1));
+const W=E.wall(plan,res,{mode:dry?"сухой":"живой",ranAt:new Date().toISOString()}), wj=JSON.stringify(W);
+if(Buffer.byteLength(wj)>250*1024){console.error("wall.json больше 250 КБ ("+Buffer.byteLength(wj)+" Б): документ стены не запишется");process.exit(2)}
+fs.writeFileSync(path.join(outDir,"wall.json"),wj);
 const P=plan.passport, out=[];
 const DOW=["пн","вт","ср","чт","пт","сб","вс"];
 out.push(`Дворник ${plan.version} · ${plan.graph} · прогон на ${plan.today}`);

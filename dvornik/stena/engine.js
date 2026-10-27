@@ -1,4 +1,4 @@
-/* Дворник · engine.js v0.1-draft · 27.10.2026
+/* Дворник · engine.js v0.1.1-draft · 27.10.2026
    Планировщик стены: чистая функция plan(data, graph) → раскладка. Без сети, без DOM, без часов:
    «сегодня» приходит во входе. Спецификация — sinapsy/dvornik/SPEC.md §3–5; проверяет результат check.js.
    Дом — Dem-i-urge/sinapsy/dvornik/stena/engine.js; опубликованный файл стены — проекция.
@@ -6,7 +6,7 @@
    В браузере: глобальный DvornikEngine, граф — глобальный SinapsyGraph. */
 (function(root,factory){ if(typeof module==="object"&&module.exports)module.exports=factory(); else root.DvornikEngine=factory(); })(typeof self!=="undefined"?self:this,function(){
   "use strict";
-  const VERSION="0.1";
+  const VERSION="0.1.1";
 
   /* ---------- параметры по умолчанию (SPEC §3.1, §3.5, §4); meta/params стены их перекрывает ---------- */
   const DEFAULTS={
@@ -282,9 +282,11 @@
         months:[...placed.values()].filter(p=>p.where==="month").length,none:undated.length}
     };
 
-    /* --- строки журнала «предложено» (дописываются задачей; check.js сверяет префикс) --- */
+    /* --- строки журнала «предложено» (дописываются задачей; check.js сверяет префикс).
+           Только показанные в треде позиции (≤ proposalLimit): непоказанное не предлагалось, а журнал
+           не должен расти на сотни строк за прогон (хранилище стены — до 25 000 документов) --- */
     const stamp=start.replace(/-/g,"");
-    const logAppend=all.filter(p=>p.task&&p.field).map(p=>({id:`${p.task}-${stamp}-${p.field==="Плановая дата"?"d":p.field==="Синапс"?"s":"h"}`,
+    const logAppend=all.slice(0,P.proposalLimit).filter(p=>p.task&&p.field).map(p=>({id:`${p.task}-${stamp}-${p.field==="Плановая дата"?"d":p.field==="Синапс"?"s":"h"}`,
       task:p.task,date:start,field:p.field,proposed:p.to,was:p.from,answer:null}));
 
     return {
@@ -293,7 +295,7 @@
       days:days.map(d=>({date:d.date,dow:d.dow,office:d.office,route:d.route,travel:d.travel,officeH:d.officeH,homeFree:d.homeFree,cap:d.cap,load:d.load,bricks:d.bricks})),
       buckets:buckets.filter(b=>b.tasks.length||b.type==="week").map(b=>({type:b.type,start:b.start,end:b.end,cap:b.cap,load:b.load,tasks:b.tasks,points:b.points})),
       placements:Object.fromEntries(placed), undated, overloads,
-      tasks:tasks.map(t=>({id:t.id,title:t.title,node:t.node,bind:t.bind,score:t.score,hours:t.h,hSrc:t.hSrc,deadline:t.deadline,planned:t.planned,merkor:t.merkor,bg:t.bg,pre:[...preTasks.get(t.id)]})),
+      tasks:tasks.map(t=>({id:t.id,title:t.title,node:t.node,bind:t.bind,score:t.score,hours:t.h,hSrc:t.hSrc,deadline:t.deadline,planned:t.planned,merkor:t.merkor,spheres:t.spheres,bg:t.bg,pre:[...preTasks.get(t.id)]})),
       proposals:{all,top:all.slice(0,P.proposalLimit)}, logAppend, notes
     };
   }
@@ -316,5 +318,31 @@
     }};
   }
 
-  return {VERSION,DEFAULTS,plan,dayCapacity,_dates:{d2n,n2d,addD,dow,monday,toMsk}};
+  /* ---------- документ стены plan/current (SPEC §2.2): проекция раскладки под лимит 256 КБ на документ.
+     Задачи — только те, что стоят кирпичами или в перегрузах; дальний горизонт — точками без задач.
+     wall(plan, checkResult, {mode, ranAt}) → объект для записи в plan/current ---------- */
+  function wall(p,res,meta){
+    meta=meta||{};
+    const need=new Set(); for(const d of p.days)for(const b of d.bricks)need.add(b.task);
+    for(const o of p.overloads)if(o.task)need.add(o.task);
+    for(const x of p.proposals.top)if(x.task)need.add(x.task);
+    const T={}; for(const t of p.tasks)if(need.has(t.id))T[t.id]={title:t.title,node:t.node,hours:t.hours,hSrc:t.hSrc,
+      deadline:t.deadline,planned:t.planned,merkor:t.merkor,sphere:(t.spheres||[])[0]||null,bg:t.bg?1:0,where:(p.placements[t.id]||{}).date||null};
+    const nodeTitle={}; for(const t of p.top)nodeTitle[t.node]=t.title;
+    for(const b of p.buckets)for(const x of b.points)if(x.node)nodeTitle[x.node]=x.title;
+    return {
+      schema:"stena/plan 1", mode:meta.mode||"живой", ranAt:meta.ranAt||null, version:p.version, engine:p.engine, graph:p.graph, today:p.today,
+      check:res?{ok:!!res.ok,violations:(res.violations||[]).slice(0,30),nViolations:(res.violations||[]).length,counts:res.counts||{}}:null,
+      passport:p.passport, learn:p.learn, top:p.top, overloads:p.overloads,
+      days:p.days.map(d=>({...d,bricks:d.bricks.map(b=>({task:b.task,hours:b.hours,pool:b.pool,role:b.role}))})),
+      buckets:p.buckets.map(b=>({type:b.type,start:b.start,end:b.end,cap:b.cap,load:b.load,n:b.tasks.length,points:b.points})),
+      tasks:T, nodeTitle,
+      proposals:{total:p.proposals.all.length,top:p.proposals.top.map(x=>({task:x.task||null,field:x.field||null,from:x.from||null,to:x.to||null,slot:x.slot||null,reason:x.reason}))},
+      params:{window:p.params.window,homeShare:p.params.homeShare,officeOwnShare:p.params.officeOwnShare,capFactor:p.params.capFactor,
+        defaultHours:p.params.defaultHours,heavyPerWeek:p.params.heavyPerWeek,weights:p.params.weights,proposalLimit:p.params.proposalLimit},
+      notes:p.notes
+    };
+  }
+
+  return {VERSION,DEFAULTS,plan,wall,dayCapacity,_dates:{d2n,n2d,addD,dow,monday,toMsk}};
 });
