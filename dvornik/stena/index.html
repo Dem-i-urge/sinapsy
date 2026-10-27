@@ -1,140 +1,154 @@
 <title>Стена Дворника</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<!-- Дворник · стена (А3) · index.html v0.1-draft · 27.10.2026
+<!-- Дворник · стена (А3) · index.html v0.2-draft · 27.10.2026 — оформление «лофт»: кладка в цветах Призмы
      Дом — Dem-i-urge/sinapsy/dvornik/stena/index.html; артефакт claude.ai — проекция.
      Рисует документ plan/current из хранилища стены (его пишет задача «Дворник»: engine.wall()).
      Рядом опубликованы engine.js и check.js — их берёт задача по расписанию (SPEC §5 п. 2). Страница ничего не пишет. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tektur:wght@500;700&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
-/* Раскладка: кладка — три недели стенами по дням (кирпич = задача, высота = часы), ниже дальний горизонт рядами-точками */
+/* Лофт: бетонная стена цеха, на ней кладка — день = столб кирпичей в перевязку, курс = час, стальная балка = ёмкость дня.
+   Кирпич в цветах Призмы: оранжевый — свой с оценкой, жёлтый — сырец без оценки, пурпур — Меркор, малиновый — дедлайн горит. */
 :root{
-  --bg:#eceeea; --panel:#f7f8f5; --ink:#1d2320; --muted:#5f6a64; --line:#c9cfc8; --mortar:#dde1db;
-  --own:#c08a2e; --own-ink:#3a2706; --merkor:#41678c; --merkor-ink:#ffffff;
-  --alarm:#b8322a; --alarm-bg:#f6dcd8; --ok:#2f7d4f; --ok-bg:#d9eedf; --dot:#7a6a3d;
-  --f-display:"Tektur","Golos Text",system-ui,sans-serif;
+  --bg:#d9d6d2; --panel:#e9e7e4; --ink:#1f1b1e; --muted:#5e575b; --line:#bdb7b1; --mortar:#b8b1a8; --steel:#29262a; --steel-ink:#f1ede9;
+  --b-yellow:#f7b82b; --b-orange:#e7761e; --b-magenta:#d2206b; --b-purple:#7a3581;
+  --ok:#2e7a4c; --ok-bg:#d5e6da; --alarm:#b0124f; --alarm-bg:#f3d4df; --off-ink:#7a3581;
+  --f-display:"Oswald","Arial Narrow","Golos Text",sans-serif;
   --f-body:"Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  --concrete:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#141716; --panel:#1c201e; --ink:#e4e8e3; --muted:#98a39c; --line:#353c38; --mortar:#252a27;
-  --own:#d49b3b; --own-ink:#241703; --merkor:#5f8bb6; --merkor-ink:#0b1622;
-  --alarm:#ef6f63; --alarm-bg:#3a1d1a; --ok:#6cc48f; --ok-bg:#16301f; --dot:#cdb578; color-scheme:dark}}
+  --bg:#1a181b; --panel:#252226; --ink:#eee9e5; --muted:#a39a9f; --line:#3d383c; --mortar:#4a4446; --steel:#0c0b0d; --steel-ink:#e9e4e0;
+  --ok:#6cc08f; --ok-bg:#183223; --alarm:#ff6aa1; --alarm-bg:#3c1626; --off-ink:#c991d4; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#141716; --panel:#1c201e; --ink:#e4e8e3; --muted:#98a39c; --line:#353c38; --mortar:#252a27;
-  --own:#d49b3b; --own-ink:#241703; --merkor:#5f8bb6; --merkor-ink:#0b1622;
-  --alarm:#ef6f63; --alarm-bg:#3a1d1a; --ok:#6cc48f; --ok-bg:#16301f; --dot:#cdb578; color-scheme:dark}
+  --bg:#1a181b; --panel:#252226; --ink:#eee9e5; --muted:#a39a9f; --line:#3d383c; --mortar:#4a4446; --steel:#0c0b0d; --steel-ink:#e9e4e0;
+  --ok:#6cc08f; --ok-bg:#183223; --alarm:#ff6aa1; --alarm-bg:#3c1626; --off-ink:#c991d4; color-scheme:dark}
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-body)}
-.wrap{max-width:1120px;margin:0 auto;padding-block:28px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:36px}
-h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:.01em;text-wrap:balance;margin:0}
-h1{font-size:clamp(26px,4.4vw,38px);line-height:1.1}
-h2{font-size:19px}
+body{background:var(--bg) var(--concrete);color:var(--ink);font:15px/1.5 var(--f-body)}
+.wrap{max-width:1160px;margin:0 auto;padding-block:30px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:38px}
+h1,h2{font-family:var(--f-display);font-weight:600;text-transform:uppercase;text-wrap:balance;margin:0}
+h1{font-size:clamp(34px,6vw,58px);line-height:.95;letter-spacing:.04em;font-weight:700}
+h2{font-size:21px;letter-spacing:.06em}
 .sec{display:flex;flex-direction:column;gap:14px;min-width:0}
-.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:3px solid var(--steel);padding-bottom:6px}
 .hint{color:var(--muted);font-size:13px}
 .mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+
+/* шапка: табличка на стене и один курс кирпичей в цветах Призмы */
+header{display:flex;flex-direction:column;gap:14px}
+.course{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;max-width:420px}
+.course i{height:16px;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,255,255,.25),inset 0 -2px 0 rgba(0,0,0,.18)}
+.course i:nth-child(4n+1){background:var(--b-yellow)}.course i:nth-child(4n+2){background:var(--b-orange)}
+.course i:nth-child(4n+3){background:var(--b-magenta)}.course i:nth-child(4n){background:var(--b-purple)}
+.sub{color:var(--muted);max-width:72ch}
 .chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.chip{font:600 12px/1 var(--f-body);letter-spacing:.04em;text-transform:uppercase;padding:6px 9px;border-radius:4px;border:1px solid var(--line);color:var(--muted);background:var(--panel)}
-.chip.ok{color:var(--ok);background:var(--ok-bg);border-color:transparent}
-.chip.bad{color:var(--alarm);background:var(--alarm-bg);border-color:transparent}
-.chip.dry{color:var(--ink);border-style:dashed}
-header{display:flex;flex-direction:column;gap:12px}
-.sub{color:var(--muted);max-width:70ch}
+.chip{font:600 11px/1 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;padding:7px 10px;border-radius:2px;background:var(--steel);color:var(--steel-ink)}
+.chip.ok{background:var(--ok-bg);color:var(--ok)}
+.chip.bad{background:var(--alarm-bg);color:var(--alarm)}
+.chip.dry{background:transparent;color:var(--ink);outline:2px dashed var(--muted);outline-offset:-2px}
 
-/* перегрузы — первой строкой (SPEC §3.2 п. 1) */
+/* перегрузы — первой строкой (SPEC §3.2 п. 1): малиновые таблички */
 .alarm{display:flex;flex-direction:column;gap:8px;margin:0;padding:0;list-style:none}
-.alarm li{border-left:4px solid var(--alarm);background:var(--alarm-bg);padding:10px 14px;border-radius:0 6px 6px 0;min-width:0}
+.alarm li{display:grid;grid-template-columns:10px minmax(0,1fr);gap:12px;background:var(--panel);padding:10px 14px 10px 0;border-radius:2px;min-width:0}
+.alarm li::before{content:"";background:var(--b-magenta);border-radius:0 2px 2px 0}
 .alarm b{font-weight:600}
-.alarm .why{color:var(--alarm);font-size:13px}
+.alarm .why{color:var(--alarm);font-size:13px;font-family:var(--f-mono)}
 
-/* стена: неделя — ряд из семи столбцов-дней */
-.weeks{display:flex;flex-direction:column;gap:18px}
-.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
-.wlabel{grid-column:1/-1;font:600 12px var(--f-mono);color:var(--muted);letter-spacing:.03em}
+/* кладка: неделя — ряд из семи столбов */
+.weeks{display:flex;flex-direction:column;gap:22px}
+.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+.wlabel{grid-column:1/-1;font:600 13px var(--f-display);color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
 .day{container-type:inline-size;display:flex;flex-direction:column;gap:6px;min-width:0}
-.day.past{opacity:.35}
-.dhead{display:flex;justify-content:space-between;align-items:baseline;gap:4px;font-size:12px;line-height:1.2}
-.dhead .dn{font:700 14px var(--f-display)}
-.dhead .dw{color:var(--muted);text-transform:lowercase}
-.dhead.off .dw{color:var(--merkor);font-weight:600}
-.col{position:relative;background:var(--mortar);border-radius:4px;overflow:visible}
-.pool{position:absolute;left:0;right:0;display:flex;flex-direction:column-reverse;gap:2px;padding:0 2px}
-.cap{position:absolute;left:0;right:0;border-top:2px solid var(--ink);opacity:.55}
-.cap.m{border-top-style:dashed;border-color:var(--merkor);opacity:.9}
-.brick{display:block;width:100%;border:0;border-radius:2px;padding:0 4px;text-align:left;cursor:pointer;font:500 11px/1.25 var(--f-body);overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:var(--own-ink);background:var(--own)}
-.brick.m{background:var(--merkor);color:var(--merkor-ink)}
-.brick.est{background-image:repeating-linear-gradient(135deg,transparent 0 5px,rgba(255,255,255,.28) 5px 8px)}
-.brick.late{box-shadow:inset 3px 0 0 var(--alarm)}
-.brick.sel{outline:2px solid var(--ink);outline-offset:1px}
-.brick:focus-visible{outline:2px solid var(--ink);outline-offset:1px}
-.brick span{display:block;padding-top:1px}
-@container (max-width:84px){.brick span{display:none}}
+.day.past{opacity:.3}
+.dhead{display:flex;justify-content:space-between;align-items:baseline;gap:4px;line-height:1.1}
+.dhead .dn{font:700 22px var(--f-display)}
+.dhead .dw{font:600 11px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.dhead.off .dw{color:var(--off-ink)}
+.col{position:relative}
+.bed{position:absolute;left:0;right:0;bottom:0;background:var(--mortar) var(--concrete);border-radius:2px 2px 0 0}
+.pool{position:absolute;left:0;right:0;display:flex;flex-direction:column-reverse;gap:3px;padding:3px 3px 0}
+.beam{position:absolute;left:-3px;right:-3px;height:5px;background:var(--steel);border-radius:1px;box-shadow:0 2px 0 rgba(0,0,0,.18)}
+.beam.m{height:0;left:0;right:0;background:none;box-shadow:none;border-top:2px dashed var(--b-purple)}
+.brick{position:relative;display:block;width:100%;border:0;border-radius:2px;padding:0 5px;text-align:left;cursor:pointer;overflow:hidden;
+  font:500 11px/1.2 var(--f-body);white-space:nowrap;text-overflow:ellipsis;color:#2a1704;
+  background-color:var(--b-orange);background-image:var(--bond),var(--concrete);background-size:100% var(--c2),180px 180px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.28),inset 0 -2px 0 rgba(0,0,0,.2)}
+.brick.raw{background-color:var(--b-yellow)}
+.brick.m{background-color:var(--b-purple);color:#fff}
+.brick.late{background-color:var(--b-magenta);color:#fff}
+.brick.sel{outline:3px solid var(--ink);outline-offset:1px;z-index:1}
+.brick:focus-visible{outline:3px solid var(--ink);outline-offset:1px}
+.brick span{display:block;padding-top:2px;text-shadow:0 1px 0 rgba(255,255,255,.25)}
+.brick.m span,.brick.late span{text-shadow:0 1px 0 rgba(0,0,0,.3)}
+@container (max-width:88px){.brick span{display:none}}
 .dfoot{font:12px var(--f-mono);color:var(--muted);display:flex;flex-direction:column;line-height:1.3}
 .dfoot .over{color:var(--alarm);font-weight:600}
-.route{letter-spacing:.06em}
-@container (max-width:84px){.dfoot .route{display:none}}
-.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--muted)}
-.legend i{display:inline-block;width:18px;height:12px;border-radius:2px;vertical-align:-1px;margin-right:6px}
-.detail{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:14px 16px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 16px;min-width:0}
-.detail h3{margin:0;font:600 16px var(--f-body);grid-column:1/-1}
-.detail dl{margin:0;display:grid;grid-template-columns:max-content minmax(0,1fr);gap:3px 12px;font-size:14px;grid-column:1/-1}
-.detail dt{color:var(--muted)}
+@container (max-width:88px){.dfoot .route{display:none}}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:13px;color:var(--muted);align-items:center}
+.legend i{display:inline-block;width:26px;height:13px;border-radius:2px;vertical-align:-2px;margin-right:7px;box-shadow:inset 0 -2px 0 rgba(0,0,0,.2)}
+.detail{background:var(--panel);border-left:10px solid var(--b-orange);border-radius:2px;padding:14px 16px;display:grid;gap:8px;min-width:0}
+.detail.raw{border-left-color:var(--b-yellow)}.detail.m{border-left-color:var(--b-purple)}.detail.late{border-left-color:var(--b-magenta)}
+.detail h3{margin:0;font:600 17px var(--f-body)}
+.detail dl{margin:0;display:grid;grid-template-columns:max-content minmax(0,1fr);gap:3px 14px;font-size:14px}
+.detail dt{color:var(--muted);font:12px var(--f-mono);padding-top:2px;text-transform:uppercase;letter-spacing:.04em}
 .detail dd{margin:0;min-width:0;overflow-wrap:anywhere}
-.detail .links{display:flex;gap:14px;grid-column:1/-1;font-size:14px}
-a{color:var(--merkor)}
+.detail .links{display:flex;gap:16px;font-size:14px;flex-wrap:wrap}
+a{color:inherit;text-decoration-color:var(--b-orange);text-decoration-thickness:2px;text-underline-offset:3px}
 
-/* дальний горизонт: ряд = неделя или месяц, полоса ёмкости и точки карты */
-.rows{display:flex;flex-direction:column;gap:0;border-top:1px solid var(--line)}
-.row{display:grid;grid-template-columns:118px minmax(0,1fr);gap:12px;padding:12px 0;border-bottom:1px solid var(--line);align-items:start}
-.rlab{font:600 13px var(--f-mono);line-height:1.3}
-.rlab small{display:block;font-weight:400;color:var(--muted)}
+/* дальний горизонт: ряд = курс кладки, кирпич = точка карты, длина — часы */
+.rows{display:flex;flex-direction:column}
+.row{display:grid;grid-template-columns:130px minmax(0,1fr);gap:14px;padding:12px 0;border-bottom:1px solid var(--line);align-items:start}
+.rlab{font:600 15px var(--f-display);text-transform:uppercase;letter-spacing:.06em;line-height:1.2}
+.rlab small{display:block;font:400 12px var(--f-mono);color:var(--muted);text-transform:none;letter-spacing:0}
 .rbody{display:flex;flex-direction:column;gap:8px;min-width:0}
-.bar{display:flex;gap:6px;align-items:center;font:12px var(--f-mono);color:var(--muted);flex-wrap:wrap}
-.track{position:relative;height:8px;background:var(--mortar);border-radius:4px;flex:1 1 160px;min-width:120px;overflow:hidden}
-.track b{position:absolute;top:0;bottom:0;left:0;background:var(--own);border-radius:4px}
-.track b.m{background:var(--merkor);height:3px;top:auto}
-.dots{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
-.pt{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--ink);text-decoration:none;min-width:0}
-.pt i{flex:none;border-radius:50%;background:var(--dot)}
-.pt.none i{background:transparent;border:2px solid var(--muted)}
-.pt.none{color:var(--muted)}
-.pt em{font-style:normal;color:var(--muted);font:12px var(--f-mono)}
+.bar{font:12px var(--f-mono);color:var(--muted)}
+.track{position:relative;height:10px;background:var(--mortar) var(--concrete);border-radius:2px;overflow:hidden;margin-top:4px}
+.track b{position:absolute;top:0;bottom:0;left:0;background:var(--b-orange)}
+.track b.m{background:var(--b-purple);top:auto;height:4px}
+.dots{display:flex;flex-wrap:wrap;gap:4px;align-items:stretch}
+.pt{display:inline-flex;align-items:center;gap:6px;min-height:24px;padding:3px 8px;border-radius:2px;font-size:12.5px;line-height:1.2;text-decoration:none;min-width:0;max-width:100%;
+  background:var(--b-orange) var(--concrete);color:#2a1704;box-shadow:inset 0 1px 0 rgba(255,255,255,.28),inset 0 -2px 0 rgba(0,0,0,.2)}
+.pt.none{background-color:var(--b-yellow)}
+.pt.m{background-color:var(--b-purple);color:#fff}
+.pt em{font-style:normal;font:600 11px var(--f-mono);opacity:.8}
+.pt span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-/* верхние 10 — разложение балла по слагаемым */
-.top{display:flex;flex-direction:column;gap:8px;margin:0;padding:0;list-style:none;counter-reset:t}
-.top li{display:grid;grid-template-columns:28px minmax(0,1fr) 52px;gap:10px;align-items:center;counter-increment:t}
-.top li::before{content:counter(t);font:600 13px var(--f-mono);color:var(--muted);text-align:right}
+/* верхние 10 — балл, разложенный по слагаемым */
+.top{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none;counter-reset:t}
+.top li{display:grid;grid-template-columns:30px minmax(0,1fr) 56px;gap:12px;align-items:center;counter-increment:t}
+.top li::before{content:counter(t);font:700 20px var(--f-display);color:var(--muted);text-align:right}
 .tname{display:flex;flex-direction:column;gap:4px;min-width:0}
-.tname a{color:var(--ink);text-decoration:none;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tname a{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-decoration:none}
 .tname a:hover{text-decoration:underline}
-.seg{display:flex;height:10px;border-radius:3px;overflow:hidden;background:var(--mortar)}
-.seg b{display:block;height:100%}
-.score{font:600 15px var(--f-mono);text-align:right}
+.seg{display:flex;gap:2px;height:12px}
+.seg b{display:block;height:100%;border-radius:1px;box-shadow:inset 0 -2px 0 rgba(0,0,0,.2)}
+.score{font:700 20px var(--f-display);text-align:right}
 .parts{font-size:12px;color:var(--muted)}
 
 .props{margin:0;padding-left:28px;display:flex;flex-direction:column;gap:6px;font-size:14px}
 .props li{min-width:0;overflow-wrap:anywhere}
 .props .r{color:var(--muted)}
-details{border-top:1px solid var(--line);padding-top:10px}
-summary{cursor:pointer;font:600 15px var(--f-body)}
-.grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden}
-.cell{background:var(--panel);padding:10px 12px;display:flex;flex-direction:column;gap:2px;min-width:0}
-.cell .v{font:600 20px var(--f-mono);font-variant-numeric:tabular-nums}
+details{border-top:3px solid var(--steel);padding-top:10px}
+summary{cursor:pointer;font:600 19px var(--f-display);text-transform:uppercase;letter-spacing:.06em}
+.grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px}
+.cell{background:var(--panel);padding:10px 12px;display:flex;flex-direction:column;gap:2px;min-width:0;border-radius:2px}
+.cell .v{font:700 26px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
 .cell .k{font-size:12px;color:var(--muted);line-height:1.3}
 .cell.warn .v{color:var(--alarm)}
-.note{font-size:13px;color:var(--muted);max-width:75ch}
-.empty{background:var(--panel);border:1px dashed var(--line);border-radius:6px;padding:28px 20px;display:flex;flex-direction:column;gap:6px;max-width:640px}
-.empty b{font:700 17px var(--f-display)}
-footer{font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--line);padding-top:14px}
+.note{font-size:13px;color:var(--muted);max-width:78ch;margin:0}
+.empty{background:var(--panel);border-left:10px solid var(--b-yellow);border-radius:2px;padding:24px 20px;display:flex;flex-direction:column;gap:6px;max-width:640px}
+.empty b{font:600 20px var(--f-display);text-transform:uppercase;letter-spacing:.04em}
+footer{font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:6px;border-top:3px solid var(--steel);padding-top:14px}
 footer code{font-family:var(--f-mono);font-size:12px}
 @media (max-width:820px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media (max-width:560px){.row{grid-template-columns:1fr;gap:6px}.week{gap:3px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (prefers-reduced-motion:no-preference){.brick{transition:filter .12s}.brick:hover{filter:brightness(1.08)}}
+@media (max-width:560px){.row{grid-template-columns:1fr;gap:6px}.week{gap:4px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dhead .dn{font-size:17px}}
+@media (prefers-reduced-motion:no-preference){.brick,.pt{transition:filter .12s}.brick:hover,.pt:hover{filter:brightness(1.1)}}
 </style>
 
 <div class="wrap">
   <header>
+    <div class="course" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
     <h1>Стена Дворника</h1>
     <div class="chips" id="chips"><span class="chip">жду хранилище стены…</span></div>
     <div class="sub" id="sub">Раскладка открытых задач из Notion по дням и неделям: граф «Синапсов», календарь и часы внимания. Пишет её задача «Дворник» по понедельникам; переносы владелец подтверждает в треде прогона.</div>
@@ -142,13 +156,13 @@ footer code{font-family:var(--f-mono);font-size:12px}
 
   <div id="root" class="sec">
     <div class="empty" id="empty">
-      <b>Прогона на стене пока нет</b>
-      <span>Стена покажет раскладку, когда задача «Дворник» запишет документ <span class="mono">plan/current</span> в хранилище этой страницы. Каждый понедельник окно сдвигается на неделю.</span>
+      <b>Стена пока не сложена</b>
+      <span>Кладка появится, когда задача «Дворник» запишет документ <span class="mono">plan/current</span> в хранилище этой страницы. Каждый понедельник окно сдвигается на неделю.</span>
     </div>
   </div>
 
   <footer id="foot">
-    <span>Стена v0.1-draft · 27.10.2026 · дом — <code>Dem-i-urge/sinapsy/dvornik/stena/</code>, спецификация — <code>dvornik/SPEC.md</code>.</span>
+    <span>Стена v0.2-draft · 27.10.2026 · дом — <code>Dem-i-urge/sinapsy/dvornik/stena/</code>, спецификация — <code>dvornik/SPEC.md</code>.</span>
     <span>Рядом со страницей опубликованы <code>engine.js</code> и <code>check.js</code>: прогон берёт их отсюда, <code>graph.js</code> — со страницы карты.</span>
     <span id="dbinfo"></span>
   </footer>
@@ -172,14 +186,26 @@ const dNum=s=>Date.UTC(+s.slice(0,4),+s.slice(5,7)-1,+s.slice(8,10))/864e5;
 const iso=k=>new Date(k*864e5).toISOString().slice(0,10);
 const dow=s=>(new Date(dNum(s)*864e5).getUTCDay()+6)%7;
 const plural=(k,a,b,c)=>{k=Math.abs(k)%100;const r=k%10;return k>10&&k<20?c:r===1?a:r>=2&&r<=4?b:c};
+// тон кирпича: у каждого свой обжиг — детерминированно от id задачи
+const tone=id=>{let h=2166136261;for(const ch of String(id))h=Math.imul(h^ch.charCodeAt(0),16777619);return 0.9+((h>>>0)%1000)/1000*0.18};
+// перевязка: курс = час; соседние курсы сдвинуты на полкирпича
+const bondFor=px=>{const c=Math.max(8,px),w=100;
+  const svg=`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${w} ${2*c}' preserveAspectRatio='none' width='${w}' height='${2*c}'>`+
+    `<g stroke='rgba(35,22,20,.42)' stroke-width='2' vector-effect='non-scaling-stroke' fill='none'>`+
+    `<path d='M0 ${c}H${w}M0 ${2*c}H${w}'/><path d='M50 ${c}V${2*c}'/></g>`+
+    `<path d='M0 1H${w}M0 ${c+1}H${w}' stroke='rgba(255,255,255,.18)' stroke-width='1' vector-effect='non-scaling-stroke'/></svg>`;
+  return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`};
 
 let W=null, sel=null, logInfo=null, paramsDoc=null;
 const EMPTY=document.getElementById("empty");
 
+function kindOf(t,overIds){return overIds.has(t.id||"")?"late":t.merkor?"m":t.hSrc==="нет оценки"?"raw":""}
+
 function render(){
   const root=$("#root"); root.replaceChildren();
   if(!W){root.append(EMPTY);return}
-  const T=W.tasks||{};
+  const T={}; for(const id in (W.tasks||{}))T[id]={...W.tasks[id],id};   // документ хранилища заморожен — копия
+  const ov=W.overloads||[], overIds=new Set(ov.filter(o=>o.task).map(o=>o.task));
   // шапка
   const ch=$("#chips"); ch.replaceChildren();
   ch.append(el("span",{class:"chip",text:"прогон на "+dShort(W.today)+" "+W.today.slice(0,4)}));
@@ -187,54 +213,59 @@ function render(){
   if(W.check)ch.append(el("span",{class:"chip "+(W.check.ok?"ok":"bad"),text:W.check.ok?"проверка пройдена":"проверка не пройдена · "+W.check.nViolations}));
   ch.append(el("span",{class:"chip",text:W.engine+" · "+W.graph}));
   const P=W.passport;
-  $("#sub").textContent=`Открыто ${P.open} задач: по дням стоит ${P.placed.days}, по неделям ${P.placed.weeks}, по месяцам ${P.placed.months}. Часы оценены у ${P.hours.владелец+P.hours.Дворник} из ${P.open}; остальные стоят по ${n(W.params.defaultHours)} ч, поэтому кладка дней условна до оценок.`;
+  $("#sub").textContent=`Открыто ${P.open} задач: по дням стоит ${P.placed.days}, по неделям ${P.placed.weeks}, по месяцам ${P.placed.months}. Часы оценены у ${P.hours.владелец+P.hours.Дворник} из ${P.open}; остальные лежат сырцом по ${n(W.params.defaultHours)} ч, поэтому кладка дней условна до оценок.`;
 
   // 1. перегрузы
-  const ov=W.overloads||[];
   const s1=el("section",{class:"sec"},el("div",{class:"sec-head"},el("h2",{text:"Сначала"}),el("span",{class:"hint",text:ov.length?ov.length+" "+plural(ov.length,"перегруз","перегруза","перегрузов"):"перегрузов нет"})));
   if(ov.length){const ul=el("ul",{class:"alarm"});
-    for(const o of ov){ if(o.type==="день")ul.append(el("li",{},el("b",{text:"День "+dShort(o.date)+": "+n(o.load)+" ч при ёмкости "+n(o.cap)+" ч"})));
-      else{const t=T[o.task]||{};ul.append(el("li",{},el("b",{text:t.title||o.task}),el("div",{class:"why",text:"дедлайн "+dShort(o.deadline)+" · стоит "+dShort(o.placed)+" · "+o.reason})))}}
+    for(const o of ov){ if(o.type==="день")ul.append(el("li",{},el("div",{},el("b",{text:"День "+dShort(o.date)+": "+n(o.load)+" ч при ёмкости "+n(o.cap)+" ч"}))));
+      else{const t=T[o.task]||{};ul.append(el("li",{},el("div",{},el("b",{text:t.title||o.task}),el("div",{class:"why",text:"дедлайн "+dShort(o.deadline)+" · стоит "+dShort(o.placed)+" · "+o.reason}))))}}
     s1.append(ul)}
   root.append(s1);
 
-  // 2. стена дней
+  // 2. кладка дней
   const s2=el("section",{class:"sec"},el("div",{class:"sec-head"},el("h2",{text:"Три недели по дням"}),
-    el("span",{class:"hint",text:"кирпич — задача, высота — часы внимания; столбец — ёмкость дня"})));
-  const legend=el("div",{class:"legend"},
-    el("span",{},el("i",{style:"background:var(--own)"}),"свои задачи"),
-    el("span",{},el("i",{style:"background:var(--merkor)"}),"Меркор (офисная доля)"),
-    el("span",{},el("i",{style:"background:var(--own);background-image:repeating-linear-gradient(135deg,transparent 0 5px,rgba(255,255,255,.4) 5px 8px)"}),"без оценки — стоит "+n(W.params.defaultHours)+" ч"),
-    el("span",{},el("i",{style:"background:var(--own);box-shadow:inset 3px 0 0 var(--alarm)"}),"дедлайн прошёл или не помещается"),
-    el("span",{},el("i",{style:"background:none;border-top:2px dashed var(--merkor);height:0;width:18px"}),"граница офисной доли"));
-  s2.append(legend);
+    el("span",{class:"hint",text:"столб — день, курс кладки — час внимания, балка — ёмкость дня"})));
+  const li=(cls,txt)=>el("span",{},el("i",{style:cls}),txt);
+  s2.append(el("div",{class:"legend"},
+    li("background:var(--b-orange)","свой, с оценкой"),
+    li("background:var(--b-yellow)","сырец — без оценки, стоит "+n(W.params.defaultHours)+" ч"),
+    li("background:var(--b-purple)","Меркор"),
+    li("background:var(--b-magenta)","дедлайн прошёл или не помещается"),
+    li("background:var(--steel);height:5px;vertical-align:3px","ёмкость дня"),
+    li("background:none;border-top:2px dashed var(--b-purple);height:0;box-shadow:none;vertical-align:3px","офисная доля Меркора")));
   const days=W.days||[], byDate=new Map(days.map(d=>[d.date,d]));
   const maxCap=Math.max(6,...days.map(d=>Math.max(d.cap.total,d.load.total)));
-  const PX=Math.max(12,Math.min(20,190/maxCap));
+  const PX=Math.max(14,Math.min(22,210/maxCap));
+  const BOND=bondFor(PX);
   const weeks=el("div",{class:"weeks"});
   if(days.length){
     const first=dNum(days[0].date)-dow(days[0].date), last=dNum(days[days.length-1].date);
+    const H=Math.round(maxCap*PX)+10;
     for(let w=first;w<=last;w+=7){
       const row=el("div",{class:"week"},el("div",{class:"wlabel",text:"неделя с "+dShort(iso(w))}));
       for(let k=0;k<7;k++){const date=iso(w+k), d=byDate.get(date);
         if(!d){row.append(el("div",{class:"day past"},el("div",{class:"dhead"},el("span",{class:"dn",text:dParts(date).d}),el("span",{class:"dw",text:DOW[k]})),
-          el("div",{class:"col",style:`height:${Math.round(maxCap*PX)}px`})));continue}
-        const H=Math.round(maxCap*PX), over=d.load.total>d.cap.total+1e-9;
+          el("div",{class:"col",style:`height:${H}px`})));continue}
+        const over=d.load.total>d.cap.total+1e-9;
         const col=el("div",{class:"col",style:`height:${H}px`});
-        const mH=d.cap.merkor*PX;
-        // пул Меркора внизу, свои — над ним; кирпичи растут снизу вверх
+        const capH=Math.round(d.cap.total*PX), mH=Math.round(d.cap.merkor*PX);
+        col.append(el("div",{class:"bed",style:`height:${capH}px`}));
         const mk=(pool,bottom)=>{const box=el("div",{class:"pool",style:`bottom:${bottom}px`});
-          for(const b of d.bricks.filter(b=>b.pool===pool)){const t=T[b.task]||{title:b.task};
-            const late=ov.some(o=>o.task===b.task);
-            const cls="brick"+(pool==="merkor"?" m":"")+(t.hSrc==="нет оценки"?" est":"")+(late?" late":"")+(sel&&sel.task===b.task&&sel.date===d.date?" sel":"");
-            const btn=el("button",{class:cls,type:"button",style:`height:${Math.max(6,b.hours*PX-2)}px`,title:`${t.title} · ${n(b.hours)} ч`,"aria-label":`${t.title}, ${n(b.hours)} ч`,
+          for(const b of d.bricks.filter(b=>b.pool===pool)){const t=T[b.task]||{title:b.task,id:b.task};
+            const kind=kindOf(t,overIds);
+            const cls="brick"+(kind?" "+kind:"")+(sel&&sel.task===b.task&&sel.date===d.date?" sel":"");
+            const h=Math.max(8,b.hours*PX-3);
+            const btn=el("button",{class:cls,type:"button",
+              style:`height:${h}px;--bond:${BOND};--c2:${2*PX}px;filter:brightness(${tone(b.task).toFixed(3)})`,
+              title:`${t.title} · ${n(b.hours)} ч`,"aria-label":`${t.title}, ${n(b.hours)} ч`,
               onclick:()=>{sel={task:b.task,date:d.date,role:b.role,hours:b.hours};render();const x=document.getElementById("detail");x&&x.scrollIntoView({block:"nearest",behavior:"smooth"})}},
               el("span",{text:(b.role&&b.role!=="шаг"&&b.role.length<12?b.role+": ":"")+t.title}));
             box.append(btn)}
           return box};
-        col.append(mk("merkor",0), mk("own",Math.round(mH)));
-        if(d.cap.merkor>0)col.append(el("div",{class:"cap m",style:`bottom:${Math.round(mH)}px`}));
-        col.append(el("div",{class:"cap",style:`bottom:${Math.round(d.cap.total*PX)}px`}));
+        col.append(mk("merkor",0), mk("own",mH));
+        if(d.cap.merkor>0)col.append(el("div",{class:"beam m",style:`bottom:${mH}px`}));
+        col.append(el("div",{class:"beam",style:`bottom:${capH}px`}));
         const route=(d.route||[]).map(p=>PLACE[p]||p);
         row.append(el("div",{class:"day"},
           el("div",{class:"dhead"+(d.office?" off":"")},el("span",{class:"dn",text:dParts(date).d}),el("span",{class:"dw",text:d.office?DOW[k]+" · офис":DOW[k]})),
@@ -246,48 +277,49 @@ function render(){
     }
   }
   s2.append(weeks);
-  // карточка выбранного кирпича
-  if(sel&&T[sel.task]){const t=T[sel.task];
+  if(sel&&T[sel.task]){const t=T[sel.task], kind=kindOf(t,overIds);
     const dl=el("dl",{},
       el("dt",{text:"стоит"}),el("dd",{text:dShort(sel.date)+(sel.role&&sel.role!=="шаг"?" · "+sel.role:"")}),
       el("dt",{text:"часы"}),el("dd",{text:n(sel.hours)+" ч · "+(t.hSrc==="владелец"?"оценка владельца":t.hSrc==="Дворник"?"оценка Дворника":"оценки нет, стоит по умолчанию")}),
-      el("dt",{text:"плановая дата"}),el("dd",{text:t.planned?dShort(t.planned)+(t.planned!==sel.date?" → предложено "+dShort(sel.date):" · совпадает"):"не стоит → предложено "+dShort(sel.date)}),
+      el("dt",{text:"план"}),el("dd",{text:t.planned?dShort(t.planned)+(t.planned!==sel.date?" → предложено "+dShort(sel.date):" · совпадает"):"не стоит → предложено "+dShort(sel.date)}),
       el("dt",{text:"дедлайн"}),el("dd",{text:t.deadline?dShort(t.deadline)+" (Дворник его не трогает)":"нет"}),
       el("dt",{text:"сфера"}),el("dd",{text:(t.sphere||"—")+(t.merkor?" · только офисный день":"")}),
-      el("dt",{text:"точка карты"}),el("dd",{text:t.node?(W.nodeTitle&&W.nodeTitle[t.node])||t.node:"без точки — приоритет нейтральный"}));
-    s2.append(el("div",{class:"detail",id:"detail"},el("h3",{text:t.title}),dl,
+      el("dt",{text:"точка"}),el("dd",{text:t.node?(W.nodeTitle&&W.nodeTitle[t.node])||t.node:"без точки — приоритет нейтральный"}));
+    s2.append(el("div",{class:"detail"+(kind?" "+kind:""),id:"detail"},el("h3",{text:t.title}),dl,
       el("div",{class:"links"},el("a",{href:NOTION+sel.task,target:"_blank",rel:"noopener",text:"Задача в Notion"}),t.node?el("a",{href:MAP+t.node,target:"_blank",rel:"noopener",text:"Точка на карте"}):null)))}
   else s2.append(el("div",{class:"hint",text:"Нажмите на кирпич — откроется задача: где стоит, откуда часы, что с плановой датой и дедлайном."}));
   root.append(s2);
 
   // 3. дальний горизонт
   const s3=el("section",{class:"sec"},el("div",{class:"sec-head"},el("h2",{text:"Дальше: недели и месяцы"}),
-    el("span",{class:"hint",text:"точка карты, размер — сумма часов её шагов; пустой кружок — задачи без точки"})));
+    el("span",{class:"hint",text:"кирпич — точка карты, подпись — сумма часов её шагов; жёлтый — задачи без точки"})));
   const rows=el("div",{class:"rows"});
   for(const b of W.buckets||[]){ if(!b.n&&b.type==="month")continue;
     const p=dParts(b.start), lab=b.type==="week"?["неделя",dShort(b.start)+" – "+dShort(b.end)]:[MONN[p.m],String(p.y)];
     const loadO=b.load.own, capO=b.cap.own, loadM=b.load.merkor, capM=b.cap.merkor;
     const track=el("div",{class:"track"},el("b",{style:`width:${Math.min(100,capO?100*loadO/capO:0)}%`}),el("b",{class:"m",style:`width:${Math.min(100,capM?100*loadM/capM:0)}%`}));
     const dots=el("div",{class:"dots"});
-    const maxH=Math.max(1,...(b.points||[]).map(x=>x.hours));
-    for(const x of (b.points||[]).slice(0,14)){const sz=Math.round(6+16*Math.sqrt(x.hours/maxH));
-      const inner=[el("i",{style:`width:${sz}px;height:${sz}px`}),x.title,el("em",{text:n(x.hours)+" ч"})];
-      dots.append(x.node?el("a",{class:"pt",href:MAP+x.node,target:"_blank",rel:"noopener",title:x.n+" "+plural(x.n,"задача","задачи","задач")},...inner):el("span",{class:"pt none",title:x.n+" "+plural(x.n,"задача","задачи","задач")},...inner))}
-    if((b.points||[]).length>14)dots.append(el("span",{class:"hint",text:"и ещё "+(b.points.length-14)}));
+    const pts=(b.points||[]), maxH=Math.max(1,...pts.map(x=>x.hours));
+    for(const x of pts.slice(0,14)){const grow=Math.round(10+90*x.hours/maxH);
+      const inner=[el("span",{text:x.title}),el("em",{text:n(x.hours)+" ч"})];
+      const style=`flex:0 1 ${grow*2}px;filter:brightness(${tone(x.node||"none").toFixed(3)})`;
+      dots.append(x.node?el("a",{class:"pt",href:MAP+x.node,target:"_blank",rel:"noopener",style,title:x.n+" "+plural(x.n,"задача","задачи","задач")},...inner)
+        :el("span",{class:"pt none",style,title:x.n+" "+plural(x.n,"задача","задачи","задач")},...inner))}
+    if(pts.length>14)dots.append(el("span",{class:"hint",text:"и ещё "+(pts.length-14)}));
     rows.append(el("div",{class:"row"},el("div",{class:"rlab"},lab[0],el("small",{text:lab[1]})),
-      el("div",{class:"rbody"},el("div",{class:"bar"},track,el("span",{text:`свои ${n(loadO)} из ${n(capO)} ч · Меркор ${n(loadM)} из ${n(capM)} ч · ${b.n} ${plural(b.n,"задача","задачи","задач")}`})),dots)))}
+      el("div",{class:"rbody"},el("div",{class:"bar"},el("span",{text:`свои ${n(loadO)} из ${n(capO)} ч · Меркор ${n(loadM)} из ${n(capM)} ч · ${b.n} ${plural(b.n,"задача","задачи","задач")}`}),track),dots)))}
   s3.append(rows); root.append(s3);
 
   // 4. верхние 10
   const w=W.params.weights||{unlock:1,found:3,prod:2,reach:.5,active:2};
-  const PART=[["unlock","держит дерево","var(--merkor)"],["found","фундамент","var(--ink)"],["prod","у продукта","var(--own)"],["reach","охват","var(--dot)"],["active","в работе","var(--ok)"]];
+  const PART=[["unlock","держит дерево","var(--b-purple)"],["found","фундамент","var(--b-magenta)"],["prod","у продукта","var(--b-orange)"],["reach","охват","var(--b-yellow)"],["active","в работе","var(--steel)"]];
   const maxT=Math.max(1,...(W.top||[]).map(t=>t.total));
   const s4=el("section",{class:"sec"},el("div",{class:"sec-head"},el("h2",{text:"Верхние "+(W.top||[]).length+" точек по баллу"}),
     el("span",{class:"hint",text:"калибровка весов: согласны ли вы с этим порядком (SPEC §7 п. 6)"})));
-  const leg=el("div",{class:"legend"},...PART.map(([k,l,c])=>el("span",{},el("i",{style:`background:${c}`}),l+" ×"+n(w[k]))));
+  const leg=el("div",{class:"legend"},...PART.map(([k,l,c])=>li(`background:${c}`,l+" ×"+n(w[k]))));
   const ol=el("ol",{class:"top"});
   for(const t of W.top||[]){const seg=el("div",{class:"seg",style:`width:${Math.max(8,100*t.total/maxT)}%`});
-    for(const [k,,c] of PART){const v=(t.parts[k]||0)*(w[k]||0);if(v>0)seg.append(el("b",{style:`width:${100*v/t.total}%;background:${c}`,title:k}))}
+    for(const [k,,c] of PART){const v=(t.parts[k]||0)*(w[k]||0);if(v>0)seg.append(el("b",{style:`flex:${v} 1 0;background:${c}`,title:k}))}
     const bits=[`держит ${t.parts.unlock}`,t.parts.found?"фундамент":null,t.parts.prod?"у продукта":null,`охват ${t.parts.reach}`,t.parts.active?"в работе":null,`шагов в Notion ${t.steps}`].filter(Boolean).join(" · ");
     ol.append(el("li",{},el("div",{class:"tname"},el("a",{href:MAP+t.node,target:"_blank",rel:"noopener",text:t.title}),seg,el("span",{class:"parts",text:bits})),el("span",{class:"score",text:n(t.total)})))}
   s4.append(leg,ol); root.append(s4);
@@ -295,7 +327,7 @@ function render(){
   // 5. предложения
   const pr=W.proposals||{top:[],total:0};
   const det=el("details",{},el("summary",{text:`Предложения прогона: ${pr.top.length} из ${pr.total}`}),
-    el("p",{class:"note",text:"Ответ — в треде прогона свободной формой («да всё», «да кроме 3 и 7», «5 → пятница»). В Notion уходит только подтверждённое; дедлайн Дворник не трогает."}));
+    el("p",{class:"note",style:"margin-top:8px",text:"Ответ — в треде прогона свободной формой («да всё», «да кроме 3 и 7», «5 → пятница»). В Notion уходит только подтверждённое; дедлайн Дворник не трогает."}));
   const pol=el("ol",{class:"props"});
   for(const x of pr.top){const t=x.task&&T[x.task];
     pol.append(el("li",{},t?el("b",{text:t.title}):null,t?" · ":null,x.field?`${x.field}: ${x.from?dShort(x.from):"—"} → ${x.to?dShort(x.to):(x.slot||"?")}`:"",el("span",{class:"r",text:(x.field?" · ":"")+x.reason})))}
@@ -310,12 +342,11 @@ function render(){
   const g1=el("div",{class:"grid"},...cells.map(([v,k,warn])=>el("div",{class:"cell"+(warn?" warn":"")},el("span",{class:"v",text:v}),el("span",{class:"k",text:k}))));
   const viol=(W.check&&W.check.violations)||[];
   const chk=el("p",{class:"note",text:`Проверка check.js: ${W.check?(W.check.ok?"пройдена":"не пройдена"):"нет данных"}, нарушений ${W.check?W.check.nViolations:"—"}. Контрольные числа: задач ${C.tasks??"—"}, разложено ${C.placed??"—"}, дней ${C.days??"—"}, сверок зависимостей ${C.depChecks??"—"}, задач Меркора ${C.merkor??"—"}, офисных дней ${C.officeDays??"—"}.`+(C.depChecks===0?" Сверок зависимостей 0: у задач почти нет «Синапса», инвариант 1 на этих данных молчит.":"")});
-  const vl=viol.length?el("ul",{class:"alarm"},...viol.map(v=>el("li",{},el("b",{text:v.inv}),el("div",{class:"why",text:v.msg})))):null;
+  const vl=viol.length?el("ul",{class:"alarm"},...viol.map(v=>el("li",{},el("div",{},el("b",{text:v.inv}),el("div",{class:"why",text:v.msg}))))):null;
   const lrn=el("p",{class:"note",text:`Стартовый ряд «план → факт»: ${S.n??0} закрытых задач, медиана сдвига ${S.median??"—"} дн., поздно ${S.lateShare??"—"} %, медиана опоздания ${S.lateMedian??"—"} дн. Коэффициент часов: ${L.hoursCoef}. «Чей прогноз ближе» появится после первых подтверждённых предложений.`});
   root.append(el("section",{class:"sec"},el("div",{class:"sec-head"},el("h2",{text:"Паспорт данных"}),el("span",{class:"hint",text:"привязка к точке: синапс "+P.bind.синапс+", проект "+P.bind.проект+", задача "+P.bind.задача})),g1,chk,vl,lrn,
     (W.notes&&W.notes.length)?el("p",{class:"note",text:"Заметки движка: "+W.notes.join("; ")}):null));
 
-  // подвал: хранилище
   const pa=W.params, src=paramsDoc?"meta/params":"по умолчанию движка";
   $("#dbinfo").textContent=`Параметры (${src}): окно ${pa.window[0]}:00–${pa.window[1]}:00, дома на задачи ${Math.round(pa.homeShare*100)} %, в офисе на свои ${Math.round(pa.officeOwnShare*100)} %, тяжёлых прогонов в неделю ≤ ${pa.heavyPerWeek}. Журнал предложений: ${logInfo?`${logInfo.n} ${plural(logInfo.n,"строка","строки","строк")}, с ответом ${logInfo.answered}`:"пуст"}. Запись прогона — ${W.ranAt?new Date(W.ranAt).toLocaleString("ru-RU",{timeZone:"Europe/Moscow"})+" МСК":"время не указано"}.`;
 }
