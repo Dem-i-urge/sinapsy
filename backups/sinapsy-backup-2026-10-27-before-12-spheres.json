@@ -1,0 +1,5624 @@
+{
+ "taken": "2026-10-27",
+ "source": "https://claude.ai/artifact/NNPSJnwn5hP9fDbi4SdsPv",
+ "note": "Снимок базы карты до перехода на 12 сфер и перераскладки точек. Восстановление: записать nodes/<id> и meta/spheres обратно.",
+ "meta": {
+  "spheres": {
+   "list": [
+    "Психопрактика",
+    "Призма",
+    "Меркор-ПРУФ",
+    "Творчество",
+    "ИИ и технологии",
+    "Наука и обучение",
+    "Контент",
+    "Финансы",
+    "Личное",
+    "Хобби"
+   ],
+   "updatedAt": "2026-10-26T09:32:19.764Z"
+  },
+  "audit": {
+   "finishedAt": "2026-10-27T02:20:00+03:00",
+   "items": [
+    {
+     "from": "j2rpkymxywelwtlvkyvd",
+     "id": "a1",
+     "kind": "to_link",
+     "state": "accepted",
+     "to": "67vkqq03aew5zicvlqjw",
+     "why": "По Вахте Ева уже работает: промпт v0.4 прошёл первый живой прогон 25.10, профили сайтов, B17, ВК, Яндекса и 2ГИС выровнены с ней — vault-biz тогда был только черновиком. Библиотека сделает Еву сильнее, но не запускает её. Твоё подозрение верное: это обогащение, а не замок."
+    },
+    {
+     "from": "0dqox5jm8ex9rkezubcu",
+     "id": "a2",
+     "kind": "to_link",
+     "state": "accepted",
+     "to": "inb17g1lsha7eraoakzn",
+     "why": "Sentinel v2.1 — рабочая версия с 24.10, обход по расписанию стоит на 02.11, а vault-ai пока на сборе источников. Сейчас эта стрелка держит через Sentinel шесть точек: границу, VPN, Mail-Tinder, SEO-аудит, «Безопасность» и «Флигель». Без неё все они становятся доступны."
+    },
+    {
+     "from": "67vkqq03aew5zicvlqjw",
+     "id": "a3",
+     "kind": "to_link",
+     "state": "accepted",
+     "to": "6w4fci27911hl9t5ouwi",
+     "why": "Задача ждёт целый проект Евы, у которого цель — «стабильная реклама с метриками». Для анкеты КЦП хватит того, что уже есть: анкету B17 Ева с тобой сделала 25.10. Ева сейчас держит десять точек; это самый простой пример, остальные (SEO-аудит, «Отложка», МАК-посты) стоит проверить тем же вопросом."
+    },
+    {
+     "from": "pivc1tb3ifba1nj8ge0c",
+     "id": "a4",
+     "kind": "reverse_dep",
+     "state": "accepted",
+     "to": "bofs1wpi1fpkskzrzk26",
+     "why": "Учёт затрат — база в Notion из выписок, маркетплейсов и подписок; она собирается руками и без ассистента. А финансовому ассистенту Драйзеру как раз нужны эти данные. Стрелка стоит задом наперёд, и через неё ждут ещё «Ежедневные траты»."
+    },
+    {
+     "from": "pivc1tb3ifba1nj8ge0c",
+     "id": "a5",
+     "kind": "to_link",
+     "state": "accepted",
+     "to": "11ww2ouolttjfzvp3xhv",
+     "why": "Налоговый вычет — это документы и заявление, а Драйзер ждёт три библиотеки и курсы. Помощь ассистента приятна, но не обязательна. Сужу по названию точки: в Вахте о вычете ничего нет."
+    },
+    {
+     "from": "j2rpkymxywelwtlvkyvd",
+     "id": "a6",
+     "kind": "drop_dep",
+     "state": "accepted",
+     "to": "pivc1tb3ifba1nj8ge0c",
+     "why": "Vault-biz — библиотека по бизнесу и маркетингу, а Драйзер — про личные финансы, кредиты и трейдинг. Смысловая связь между ними на карте уже есть, поэтому зависимость можно просто снять."
+    },
+    {
+     "from": "nq00untr6uvyafg6ux5y",
+     "id": "a7",
+     "kind": "to_link",
+     "state": "accepted",
+     "to": "38vdq9mr48b3fdulm227",
+     "why": "Фрейд 4.0 уже в эксплуатации (плагин 0.3.0, навык retro-intake), а ретро клиентов по Вахте — следующий шаг работы на нём, а не его постройка. Сейчас из-за этой стрелки Кафедра, ТГ «Психо и точка», «Невозможная эмоция» и статья «Модель Синапсы» ждут ввода клиентских историй. Клиентские точки я не открывал."
+    }
+   ],
+   "requestedAt": "2026-10-26T23:04:56.244Z",
+   "status": "done",
+   "summary": "Главная картина: два работающих ассистента — Ева (промпт v0.4, первый живой прогон 25.10) и Sentinel (v2.1, рабочая версия 24.10) — на карте стоят «незакрытыми» за своими библиотеками, хотя уже работают без них. Через них ждут больше десяти точек, которые на деле можно двигать сейчас. Второй узел — Драйзер: учёт затрат и налоговый вычет ждут целого финансового ассистента, хотя по смыслу это ему нужны данные, а не наоборот."
+  }
+ },
+ "nodes": {
+  "tqp9aznbsc1tyqubosfs": {
+   "createdAt": "2026-10-26T07:37:20.636Z",
+   "deps": [
+    "dq5z0i46lcrjgpl02se8",
+    "652do1tbcksm8kil1xcd"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Сборка всех скиллов по маркетингу в плагин",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Plugin маркетинговых скиллов",
+   "updatedAt": "2026-10-26T09:37:40.239Z",
+   "x": 0.0729,
+   "y": -0.3425
+  },
+  "ls1ebwgqm4oi44co43cg": {
+   "createdAt": "2026-10-27T07:44:59.325Z",
+   "deps": [
+    "qa9g4fn9hj9upgi397og"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Печать прототипа колоды",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Контент",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Талисманы-print",
+   "updatedAt": "2026-10-27T08:06:15.193Z",
+   "x": 0.2632,
+   "y": -0.9858
+  },
+  "wo80x2zzhx2t5jwk4mik": {
+   "createdAt": "2026-10-17T15:54:29.599Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Перепарковка архитектора на локальный AI",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Меркор-ПРУФ",
+    "Творчество",
+    "ИИ и технологии",
+    "Наука и обучение",
+    "Контент",
+    "Финансы",
+    "Личное",
+    "Хобби"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "CloudAI 2 Local",
+   "updatedAt": "2026-10-26T11:16:40.627Z",
+   "x": 0.2619,
+   "y": 0.3231
+  },
+  "fqzqx70idqzcsstosvcy": {
+   "active": false,
+   "createdAt": "2026-10-26T11:49:54.257Z",
+   "deps": [],
+   "doneAt": "2026-10-26",
+   "kind": "task",
+   "links": [],
+   "note": "Подключение репозитория для хранения и доступа к инфопроектам",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Меркор-ПРУФ",
+    "Творчество",
+    "ИИ и технологии",
+    "Наука и обучение",
+    "Контент",
+    "Финансы",
+    "Личное",
+    "Хобби"
+   ],
+   "status": "done",
+   "sync": "synced",
+   "syncNote": "Задачи в Notion не было и не могло быть: GitHub появился раньше Notion.",
+   "title": "GitHub",
+   "updatedAt": "2026-10-26T11:50:01.363Z",
+   "x": 0.1735,
+   "y": 0.1619
+  },
+  "8uedn9qwh1rtxtyr3j2r": {
+   "createdAt": "2026-10-26T14:57:49.367Z",
+   "deps": [
+    "vnkmgkfqziv2rt4fq0e4",
+    "vih7tkmh63r5jl2km79i"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [],
+   "note": "Ноутбуки психологических курсов",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Наука и обучение",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Notebook PSY",
+   "updatedAt": "2026-10-27T10:28:38.458Z",
+   "x": 0.0639,
+   "y": -0.7345
+  },
+  "43lermcx12jjeefn6t9r": {
+   "createdAt": "2026-10-26T08:13:51.876Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Подключение площадок для торговли на бирже и анализа графов. Поиск и выбор (Binance Russia, LiveCoin, Garantex)",
+   "notion": "",
+   "spheres": [
+    "ИИ и технологии",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Платформы для трейдинга",
+   "updatedAt": "2026-10-27T09:42:52.208Z",
+   "x": -0.7886,
+   "y": 0.2908
+  },
+  "29mnt7uch4sasnl5k9gi": {
+   "createdAt": "2026-10-26T11:22:18.539Z",
+   "deps": [
+    "f6anvv9rv4rw7917d5jm"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Разбор почты",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "ИИ и технологии"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Чистка почты",
+   "updatedAt": "2026-10-26T11:22:38.449Z",
+   "x": 0.0323,
+   "y": 0.2251
+  },
+  "rfa87t780gw1t0tjz6ti": {
+   "createdAt": "2026-10-26T12:54:09.745Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Слой в существующие артефакты для работы с парами и дополнительный артефакты",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "ИИ и технологии"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Парный слой",
+   "updatedAt": "2026-10-27T07:05:01.460Z",
+   "x": -0.1426,
+   "y": -0.7653
+  },
+  "y5a2mp1exj2ki2xzt2tv": {
+   "createdAt": "2026-10-26T15:01:24.842Z",
+   "deps": [
+    "m9123u9ntnbp2m72gywr"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [],
+   "note": "Написание статей для Яндекс.Дзен",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "ИИ и технологии",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Яндекс.Дзен",
+   "updatedAt": "2026-10-26T15:04:15.395Z",
+   "x": -0.407,
+   "y": 0.8114
+  },
+  "gk3pxnbpyrip1nilxod9": {
+   "active": true,
+   "createdAt": "2026-10-26T10:34:15.132Z",
+   "deps": [
+    "bgpv2l0a4kc7k3sosqw0",
+    "88zwr0v2abn7fj6r1568",
+    "5zz9ocs4tj9pg2i5qxfm",
+    "sinapsy-artefakt"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "sinapsy-artefakt"
+   ],
+   "note": "Артефакт по сортировке задач в Notion: определение приоритетов в соответствии с артефактом Синапсы и распределение по календарю",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Меркор-ПРУФ",
+    "Творчество",
+    "ИИ и технологии",
+    "Наука и обучение",
+    "Контент",
+    "Финансы",
+    "Личное",
+    "Хобби"
+   ],
+   "startedAt": "2026-10-27",
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Дворник",
+   "touchedAt": "2026-10-27",
+   "updatedAt": "2026-10-27T12:42:24.514Z",
+   "x": 0.2823,
+   "y": -0.2067
+  },
+  "rr8yjs6p7ej1tucua25t": {
+   "active": false,
+   "createdAt": "2026-10-25T16:17:08.672Z",
+   "deps": [],
+   "doneAt": "2026-10-25",
+   "kind": "project",
+   "links": [
+    "88zwr0v2abn7fj6r1568"
+   ],
+   "note": "Проект по заботе о здоровье",
+   "notion": "https://app.notion.com/p/3b9ec455c4dc816da83ac5e972b34af3",
+   "spheres": [
+    "Личное"
+   ],
+   "status": "done",
+   "sync": "synced",
+   "syncNote": "В Notion уже закрыто (проект «Ассистент «Айболит»», 31.08.2026).",
+   "title": "Айболит",
+   "updatedAt": "2026-10-26T09:15:22.195Z",
+   "x": -0.6671,
+   "y": -0.2164
+  },
+  "v16tqw317p9dgf9r224u": {
+   "createdAt": "2026-10-27T07:13:03.060Z",
+   "deps": [
+    "h6mqa2g36d26p4ed433d"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Лэндинг или страница с медитациями",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Контент",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Лэндинг медитаций",
+   "updatedAt": "2026-10-27T07:14:59.843Z",
+   "x": -0.2146,
+   "y": -0.9964
+  },
+  "j2rpkymxywelwtlvkyvd": {
+   "createdAt": "2026-10-18T09:28:32.052Z",
+   "deps": [
+    "mc9x7ye83fqyyn1lv35j",
+    "652do1tbcksm8kil1xcd",
+    "iu0jecg4udvcxop7llmw"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "67vkqq03aew5zicvlqjw"
+   ],
+   "note": "Библиотека знаний по бизнесу и маркетингу",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Vault-biz",
+   "updatedAt": "2026-10-27T09:00:58.502Z",
+   "x": 0.2447,
+   "y": -0.3816
+  },
+  "50v1vd063ex568pzoipg": {
+   "active": false,
+   "createdAt": "2026-10-27T08:38:03.336Z",
+   "deps": [],
+   "doneAt": "2026-10-27",
+   "kind": "task",
+   "links": [],
+   "note": "Многослойный рассказ про Медузу, открывающий цикл",
+   "notion": "",
+   "spheres": [
+    "Творчество",
+    "Контент"
+   ],
+   "status": "done",
+   "sync": "pending",
+   "syncNote": "",
+   "title": "М.",
+   "updatedAt": "2026-10-27T08:46:05.839Z",
+   "x": 0.9821,
+   "y": 0.2758
+  },
+  "aopww2psod29euoio04h": {
+   "createdAt": "2026-10-26T11:35:13.664Z",
+   "deps": [
+    "pgzc275ykdyv3lacsc8e"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "vnmf3o3jrxqwhssg4g41"
+   ],
+   "note": "Распечатать прототип колоды для тестирования",
+   "notion": "",
+   "spheres": [
+    "Психопрактика"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Felt Sense print",
+   "updatedAt": "2026-10-27T08:06:58.258Z",
+   "x": 0.315,
+   "y": -0.9695
+  },
+  "9f00zummakiiyie1xpl5": {
+   "createdAt": "2026-10-27T08:42:01.347Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Рассказ про абъюз",
+   "notion": "",
+   "spheres": [
+    "Творчество",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Мужик",
+   "updatedAt": "2026-10-27T08:42:25.520Z",
+   "x": 0.9735,
+   "y": 0.3048
+  },
+  "xlbm1fw61gdxc2dl9dty": {
+   "createdAt": "2026-10-26T12:46:37.665Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Оформление завещания на своё имущество",
+   "notion": "",
+   "spheres": [
+    "Финансы",
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Завещание",
+   "updatedAt": "2026-10-26T17:08:21.024Z",
+   "x": -0.1489,
+   "y": 0.7635
+  },
+  "7xblgqrsxrodvw1j08wn": {
+   "createdAt": "2026-10-26T12:30:41.108Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Чистка телефона от лишних приложений, фото и прочего",
+   "notion": "",
+   "spheres": [
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Чистка мобильника",
+   "updatedAt": "2026-10-26T12:31:03.382Z",
+   "x": 0.0901,
+   "y": 0.2171
+  },
+  "hhn3f1qejeobpaed2rka": {
+   "createdAt": "2026-10-27T08:24:19.890Z",
+   "deps": [
+    "a2zf1vmxdg9h2wnb7enn",
+    "67vkqq03aew5zicvlqjw"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Разработка контент-плана для ТГ-канала \"Кабинет №5\"",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Контент-план Кабинет №5",
+   "updatedAt": "2026-10-27T08:24:41.033Z",
+   "x": -0.2993,
+   "y": 0.9213
+  },
+  "8c0q38cb2j6gq33e3qq3": {
+   "createdAt": "2026-10-27T07:26:39.039Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Чистка истории браузеров",
+   "notion": "",
+   "spheres": [
+    "ИИ и технологии",
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Браузеры",
+   "updatedAt": "2026-10-27T07:26:54.757Z",
+   "x": 0.5907,
+   "y": 0.5283
+  },
+  "f6anvv9rv4rw7917d5jm": {
+   "createdAt": "2026-10-17T16:00:53.732Z",
+   "deps": [
+    "inb17g1lsha7eraoakzn"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Артефакт по разбору почтовых завалов на механике Tinder (влево - удаление, вправо -прочесть)",
+   "notion": "",
+   "spheres": [
+    "ИИ и технологии",
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Mail-Tinder",
+   "updatedAt": "2026-10-26T09:42:12.267Z",
+   "x": 0.1085,
+   "y": 0.3324
+  },
+  "13qwz10qn0ua4oz0s9gr": {
+   "createdAt": "2026-10-27T08:56:28.541Z",
+   "deps": [
+    "iu0jecg4udvcxop7llmw"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Библиотека по различным хобби (кулинария, нумизматика и пр.)",
+   "notion": "",
+   "spheres": [
+    "Личное",
+    "Хобби"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "vault-hobby",
+   "updatedAt": "2026-10-27T08:59:53.160Z",
+   "x": -0.4216,
+   "y": -0.5592
+  },
+  "62yun62m764cfn80sb3u": {
+   "createdAt": "2026-10-25T16:19:00.029Z",
+   "deps": [
+    "ou4np4ylpyd7h0ljpejz"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Позвонить и записаться по выданному направлению",
+   "notion": "",
+   "spheres": [
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Запись на спермограмму",
+   "updatedAt": "2026-10-27T07:02:44.761Z",
+   "x": -0.664,
+   "y": -0.1365
+  },
+  "q9zo2v7uhjfol9l8in2b": {
+   "createdAt": "2026-10-26T10:26:36.318Z",
+   "deps": [
+    "mgf7ln2n6o1pwxi5fn87"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "y67dy9pc22r1nvphtgll",
+    "m5qylpgk1g9521ln6qm9",
+    "fosvi8ewilwnal0qzfmj",
+    "tnnsjqzthrtpnwybll95",
+    "1hincgym8ktafitvid13"
+   ],
+   "note": "Библиотека голосовых профилей для написания текстов на базе Ideolect",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Меркор-ПРУФ",
+    "Творчество",
+    "ИИ и технологии",
+    "Наука и обучение",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Ideolect",
+   "updatedAt": "2026-10-27T08:07:57.014Z",
+   "x": 0.303,
+   "y": 0.1763
+  },
+  "6e7fowmgss5fge795pkt": {
+   "createdAt": "2026-10-26T12:10:02.794Z",
+   "deps": [
+    "inb17g1lsha7eraoakzn"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Настройка VPN-маршрутизации на домашнем роутере",
+   "notion": "",
+   "spheres": [
+    "ИИ и технологии"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Настройка VPN-маршрутизации",
+   "updatedAt": "2026-10-26T12:10:19.089Z",
+   "x": 0.2735,
+   "y": 0.4796
+  },
+  "bgpv2l0a4kc7k3sosqw0": {
+   "active": false,
+   "createdAt": "2026-10-25T18:58:40.096Z",
+   "deps": [],
+   "doneAt": "2026-10-25",
+   "kind": "task",
+   "links": [
+    "88zwr0v2abn7fj6r1568"
+   ],
+   "note": "Ассистент по планированию выполнения регулярных задач и дисциплине",
+   "notion": "https://app.notion.com/p/3adec455c4dc801eb708fb9d675932f6",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Меркор-ПРУФ",
+    "Творчество",
+    "ИИ и технологии",
+    "Наука и обучение",
+    "Финансы"
+   ],
+   "status": "done",
+   "sync": "synced",
+   "syncNote": "В Notion уже закрыто (задача «Пересоздать “Диспетчерскую” в виде Проекта»).",
+   "title": "Диспетчерская",
+   "updatedAt": "2026-10-26T09:38:29.148Z",
+   "x": 0.2016,
+   "y": -0.2859
+  },
+  "2eiftoci7yqhrflwrwzk": {
+   "createdAt": "2026-10-27T07:36:16.966Z",
+   "deps": [
+    "25psyv23mew5qpfa7tmb",
+    "vew8n0p1g2ftzc89i745",
+    "vnlnv21wygo45cp3yl71"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "",
+   "notion": "",
+   "spheres": [
+    "Творчество",
+    "ИИ и технологии",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Создание персонажей",
+   "updatedAt": "2026-10-27T07:40:05.747Z",
+   "x": -0.5507,
+   "y": 0.6213
+  },
+  "dq5z0i46lcrjgpl02se8": {
+   "active": true,
+   "createdAt": "2026-10-18T09:29:59.458Z",
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Адаптация скиллов по маркетингу с GitHub coreyhaines31",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Финансы"
+   ],
+   "startedAt": "2026-10-27",
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Marketing Skills",
+   "touchedAt": "2026-10-27",
+   "updatedAt": "2026-10-27T12:43:35.369Z",
+   "x": 0.0683,
+   "y": -0.3245
+  },
+  "sbmdy9bnm3bbhd9r7wjl": {
+   "createdAt": "2026-10-26T09:07:38.077Z",
+   "deps": [
+    "ctx9w5i3nweoloichbo0",
+    "qbrmv1h0kb9d19kjkn2c",
+    "zcy1qu8au9y73lktzahj",
+    "q5cys5g0kpdwxdtlsy04"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [
+    "vh0ldhu8mtqkiljmwcp5"
+   ],
+   "note": "Создание печатного и электронного каталога МАК-карт центра Призма с системой бронировани",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Контент",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Каталог МАК-карт",
+   "updatedAt": "2026-10-27T08:14:25.896Z",
+   "x": 0.3775,
+   "y": -0.7616
+  },
+  "nmlujbaevakz45sp2kxy": {
+   "createdAt": "2026-10-26T11:30:51.441Z",
+   "deps": [
+    "t2vp4wvot049w99ywly1"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [
+    "s73w8lm1vavea324kfdg"
+   ],
+   "note": "Изучение курсов Life Practic",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Наука и обучение"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Life Practic",
+   "updatedAt": "2026-10-26T12:07:18.669Z",
+   "x": 0.0954,
+   "y": 0.8705
+  },
+  "0f2ybbcxmy74zwkc7vbb": {
+   "active": false,
+   "createdAt": "2026-10-26T10:19:12.302Z",
+   "deps": [
+    "iu0jecg4udvcxop7llmw"
+   ],
+   "doneAt": "2026-10-26",
+   "kind": "task",
+   "links": [],
+   "note": "Библиотека знаний по видео-монтажу и мультипликации",
+   "notion": "https://app.notion.com/p/3e1ec455c4dc813b9e84dc5bf1d386f2",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Творчество",
+    "ИИ и технологии",
+    "Контент",
+    "Личное",
+    "Хобби"
+   ],
+   "status": "done",
+   "sync": "synced",
+   "syncNote": "Отдельной задачи нет; привязал закрытую подзадачу «vault-vid: ingest канона ремесла».",
+   "title": "vault-vid",
+   "updatedAt": "2026-10-27T09:00:24.772Z",
+   "x": -0.4125,
+   "y": 0.566
+  },
+  "11ww2ouolttjfzvp3xhv": {
+   "createdAt": "2026-10-26T12:33:45.639Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "pivc1tb3ifba1nj8ge0c"
+   ],
+   "note": "Оформление налогового вычета",
+   "notion": "",
+   "spheres": [
+    "Финансы",
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Налоговый вычет",
+   "updatedAt": "2026-10-26T23:30:00.000Z",
+   "x": -0.836,
+   "y": 0.1185
+  },
+  "rh0polyx05yrw2i6g5qs": {
+   "createdAt": "2026-10-26T11:40:02.546Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "project",
+   "links": [],
+   "note": "Распродажа ненужного барахла (книг, техники, мебели и прочее) на AVITO и WB",
+   "notion": "",
+   "spheres": [
+    "Финансы",
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Продажа барахла",
+   "updatedAt": "2026-10-26T12:12:21.544Z",
+   "x": 0.0156,
+   "y": 0.1574
+  },
+  "ikhlljht48s4wmhpzq3p": {
+   "createdAt": "2026-10-18T09:32:39.986Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "rr8yjs6p7ej1tucua25t"
+   ],
+   "note": "Записаться на анализы по диспансеризации",
+   "notion": "",
+   "spheres": [
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Запись на анализы",
+   "updatedAt": "2026-10-27T07:03:00.608Z",
+   "x": -0.6464,
+   "y": -0.2309
+  },
+  "63175mn5x026f893zoih": {
+   "createdAt": "2026-10-26T10:05:29.837Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "project",
+   "links": [],
+   "note": "Освоение инструментов rea.tools для пересборки приложений\nhttps://www.youtube.com/watch?v=RSObwhB_8pc",
+   "notion": "",
+   "spheres": [
+    "Призма",
+    "ИИ и технологии"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "REA",
+   "updatedAt": "2026-10-27T08:20:07.740Z",
+   "x": 0.3194,
+   "y": 0.1448
+  },
+  "nfnbxrd9ndwj41boel1a": {
+   "active": false,
+   "createdAt": "2026-10-26T10:21:15.597Z",
+   "deps": [],
+   "doneAt": "2026-10-26",
+   "kind": "task",
+   "links": [],
+   "note": "Библиотека знаний по гейм-дизайну и игровой механике",
+   "notion": "https://app.notion.com/p/3e9ec455c4dc8132b4c3dfca6b0604e8",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Творчество",
+    "ИИ и технологии",
+    "Контент",
+    "Финансы",
+    "Хобби"
+   ],
+   "status": "done",
+   "sync": "synced",
+   "syncNote": "Отдельной задачи нет; привязал закрытую подзадачу «Лудум Ф0–Ф2: …схема vault-game».",
+   "title": "vault-game",
+   "updatedAt": "2026-10-26T10:21:26.977Z",
+   "x": -0.5079,
+   "y": -0.4874
+  },
+  "bofs1wpi1fpkskzrzk26": {
+   "createdAt": "2026-10-26T10:37:36.599Z",
+   "deps": [
+    "oon1fxm40a54827z0lii",
+    "wka9hp5203esdlkm3g50",
+    "imcwcix0ukw2sd8r9ka5",
+    "l8fkskvq8hv84040p22k",
+    "epgu5hef50olel822bz1",
+    "ozrswy2ltw5mc28nijw7"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [],
+   "note": "База данных по учёту затрат в Notion",
+   "notion": "",
+   "spheres": [
+    "Призма",
+    "Финансы",
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Учёт затрат",
+   "updatedAt": "2026-10-26T23:30:00.000Z",
+   "x": -0.4764,
+   "y": 0.1162
+  },
+  "1v0ofmagx5dnrhqbk0c1": {
+   "createdAt": "2026-10-26T09:29:12.629Z",
+   "deps": [
+    "fosvi8ewilwnal0qzfmj",
+    "67vkqq03aew5zicvlqjw",
+    "vh0ldhu8mtqkiljmwcp5"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Серия постов про МАК-колоды и техники из применения",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "МАК-посты",
+   "updatedAt": "2026-10-27T07:35:32.132Z",
+   "x": -0.7726,
+   "y": 0.6682
+  },
+  "pivc1tb3ifba1nj8ge0c": {
+   "createdAt": "2026-10-18T09:43:13.296Z",
+   "deps": [
+    "k3tk1bqs9757b2v6rsqi",
+    "fa13ie7fqq8ag0cqdgbl",
+    "bofs1wpi1fpkskzrzk26"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [
+    "j2rpkymxywelwtlvkyvd",
+    "88zwr0v2abn7fj6r1568",
+    "1p72dyhx8rc4h1rgotr2"
+   ],
+   "note": "Финансовый ассистент по учёту личных финансов, погашению кредитов, инвестированию и трейдингу",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "ИИ и технологии",
+    "Финансы",
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Драйзер",
+   "updatedAt": "2026-10-26T23:30:00.000Z",
+   "x": -0.6713,
+   "y": 0.2041
+  },
+  "9e3i5xozcp4ku0efeqr1": {
+   "createdAt": "2026-10-26T13:21:22.121Z",
+   "deps": [
+    "rkcktu4258568f9isduc"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Обновление и вёрстка тех.паспортов на продукцию",
+   "notion": "",
+   "spheres": [
+    "Меркор-ПРУФ"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Обновление ТЭД",
+   "updatedAt": "2026-10-27T08:17:37.654Z",
+   "x": 0.8271,
+   "y": -0.2382
+  },
+  "u0e3linrjxyacl5hq89g": {
+   "createdAt": "2026-10-25T15:50:50.476Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Собрать рекомендованные курсы по маркетингу и загрузить в ноутбуки",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Курсы для EVA",
+   "updatedAt": "2026-10-26T09:38:19.330Z",
+   "x": 0.131,
+   "y": -0.3702
+  },
+  "ozrswy2ltw5mc28nijw7": {
+   "createdAt": "2026-10-26T10:57:28.375Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Собрать расходы по Призме (ежемесячные закупки по складу)",
+   "notion": "",
+   "spheres": [
+    "Призма",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Расходы Призмы",
+   "updatedAt": "2026-10-26T10:57:49.567Z",
+   "x": -0.4566,
+   "y": 0.137
+  },
+  "pgzc275ykdyv3lacsc8e": {
+   "active": false,
+   "createdAt": "2026-10-27T08:06:44.623Z",
+   "deps": [],
+   "doneAt": "2026-10-27",
+   "kind": "task",
+   "links": [],
+   "note": "",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Творчество",
+    "ИИ и технологии"
+   ],
+   "status": "done",
+   "sync": "pending",
+   "syncNote": "",
+   "title": "Генерация Felt Sense",
+   "updatedAt": "2026-10-27T08:07:06.574Z",
+   "x": 0.2865,
+   "y": -0.9485
+  },
+  "8ucp2ikg0ht9bqqasa40": {
+   "createdAt": "2026-10-27T07:14:29.213Z",
+   "deps": [
+    "iol9iaxu1szuvpd3uzvg"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Разработка методики тестирования медитаций",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Наука и обучение"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Методика тестирования медитаций",
+   "updatedAt": "2026-10-27T07:14:51.083Z",
+   "x": -0.1985,
+   "y": -0.9324
+  },
+  "91n5gvw8eg3fgo4tvlje": {
+   "createdAt": "2026-10-26T13:17:51.029Z",
+   "deps": [
+    "tnnsjqzthrtpnwybll95",
+    "9e3i5xozcp4ku0efeqr1",
+    "acg1coivmqnn16jgiwzb",
+    "2pxu90zyf0y6j6j0t49i"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [],
+   "note": "Проекты отдела Естественного дымоудаления и вентиляции",
+   "notion": "",
+   "spheres": [
+    "Меркор-ПРУФ"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Люки и фонари",
+   "updatedAt": "2026-10-26T13:31:01.770Z",
+   "x": 0.8317,
+   "y": -0.1758
+  },
+  "9a74tb7y8aryxfuyap74": {
+   "createdAt": "2026-10-26T08:37:18.014Z",
+   "deps": [
+    "m5qylpgk1g9521ln6qm9",
+    "sinapsy-artefakt"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Статья в Вестник НЛП про модель \"Синапсы\"",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "ИИ и технологии",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Модель \"Синапсы\"",
+   "updatedAt": "2026-10-26T12:06:48.561Z",
+   "x": 0.311,
+   "y": 0.9738
+  },
+  "482qv2fsyoic3o04z8xf": {
+   "createdAt": "2026-10-26T07:28:56.631Z",
+   "deps": [
+    "67vkqq03aew5zicvlqjw",
+    "zdjzo33oft9cr0xopi5g",
+    "ccr0becigh7rz6r4pbi1",
+    "q0v3uozb0m2ffm182kvt",
+    "iccx5wqeejhew8qllx78",
+    "tpb5cq03c3b096w5qmpt",
+    "c5kkn65iohutea2emsm0"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [],
+   "note": "Комплекс задач по продвижения бизнеса по аренде кабинетов",
+   "notion": "",
+   "spheres": [
+    "Призма",
+    "Контент",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Призма (Продвижение)",
+   "updatedAt": "2026-10-27T09:41:15.400Z",
+   "x": 0.4924,
+   "y": -0.6956
+  },
+  "xrz2qry5y97dhw1cpl46": {
+   "createdAt": "2026-10-26T10:28:18.145Z",
+   "deps": [
+    "mgf7ln2n6o1pwxi5fn87",
+    "uahsp3fu0pv3jckhljjd",
+    "kgqphpdo02kwd4i6i1yp",
+    "hak3zd2did0pt6driqmf",
+    "50v1vd063ex568pzoipg",
+    "ecno6fmip97gzaa501z8",
+    "vw1ajikpy1qlh1n0fcnp",
+    "ce0hqdf8cloz32hng3g3",
+    "rfanov1h4v1nbkilnlky",
+    "9f00zummakiiyie1xpl5",
+    "g7g9xce7f03v7k52oowa",
+    "ww1e9hv2j5odnhicre97"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [],
+   "note": "Цикл рассказов о людях на грани",
+   "notion": "",
+   "spheres": [
+    "Творчество",
+    "Контент",
+    "Хобби"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "М.Маргиналы",
+   "updatedAt": "2026-10-27T08:44:49.121Z",
+   "x": 0.809,
+   "y": 0.2444
+  },
+  "cj1qdbj9ejo9wnusu5vi": {
+   "createdAt": "2026-10-26T13:18:37.075Z",
+   "deps": [
+    "tnnsjqzthrtpnwybll95",
+    "kxy8a30d7ro4h6w2w4a8"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [],
+   "note": "Проекты связанные с внедрением СМК",
+   "notion": "",
+   "spheres": [
+    "Меркор-ПРУФ"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "СМК",
+   "updatedAt": "2026-10-26T13:20:16.165Z",
+   "x": 0.8342,
+   "y": -0.0786
+  },
+  "2ucn0s40vbhtuskl6ckq": {
+   "createdAt": "2026-10-27T08:01:07.724Z",
+   "deps": [
+    "iu43mqv2ckdxxkn0pkml"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Печать прототипа МАК \"Пороги\"",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Контент",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Пороги-print",
+   "updatedAt": "2026-10-27T08:05:21.341Z",
+   "x": 0.222,
+   "y": -0.9958
+  },
+  "2fn216yaw74e00n2u6l4": {
+   "active": false,
+   "createdAt": "2026-10-25T16:22:49.003Z",
+   "deps": [],
+   "doneAt": "2026-10-25",
+   "kind": "task",
+   "links": [],
+   "note": "Сходить к окулисту и проверить зрение",
+   "notion": "https://app.notion.com/p/3c3ec455c4dc81879c66d7c9bda91a6d",
+   "spheres": [
+    "Личное"
+   ],
+   "status": "done",
+   "sync": "synced",
+   "syncNote": "В Notion уже закрыто (задача «Здоровье: записаться к офтальмологу на обследование глазного дна»).",
+   "title": "Окулист",
+   "updatedAt": "2026-10-27T07:02:39.167Z",
+   "x": -0.695,
+   "y": -0.1576
+  },
+  "ylztnr75c0bioux1s2sl": {
+   "createdAt": "2026-10-26T08:12:14.054Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Курсы по обучению трейдингу и финансам",
+   "notion": "",
+   "spheres": [
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Курсы по финансам и трейдингу",
+   "updatedAt": "2026-10-27T09:13:36.059Z",
+   "x": -0.7803,
+   "y": 0.1584
+  },
+  "ce0hqdf8cloz32hng3g3": {
+   "createdAt": "2026-10-27T08:40:37.219Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Рассказ про мошенника",
+   "notion": "",
+   "spheres": [
+    "Творчество",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Молдаванин",
+   "updatedAt": "2026-10-27T08:44:44.021Z",
+   "x": 0.9946,
+   "y": 0.2232
+  },
+  "qd7mk8dee7rnq6a2xms8": {
+   "createdAt": "2026-10-26T14:52:21.497Z",
+   "deps": [
+    "iu0jecg4udvcxop7llmw"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "38vdq9mr48b3fdulm227"
+   ],
+   "note": "Библиотека знаний по телесным практикам",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Хобби"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "vault-body",
+   "updatedAt": "2026-10-27T08:59:45.810Z",
+   "x": -0.217,
+   "y": -0.6644
+  },
+  "zcy1qu8au9y73lktzahj": {
+   "createdAt": "2026-10-26T08:50:25.749Z",
+   "deps": [
+    "4vw1c07a8azf00z8fvzz"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Переработка загруженных в ноутбуки курсов по МАК в своды опыта vault-mak",
+   "notion": "https://app.notion.com/p/402ec455c4dc81bbbd6ce670496ff32a",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Notebook MAK 2 vault-mak",
+   "updatedAt": "2026-10-26T10:45:42.870Z",
+   "x": 0.1999,
+   "y": -0.7468
+  },
+  "vew8n0p1g2ftzc89i745": {
+   "createdAt": "2026-10-27T07:37:00.300Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Творчество",
+    "ИИ и технологии",
+    "Контент",
+    "Хобби"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Освоение Moho",
+   "updatedAt": "2026-10-27T07:40:10.232Z",
+   "x": -0.5464,
+   "y": 0.5881
+  },
+  "iu43mqv2ckdxxkn0pkml": {
+   "createdAt": "2026-10-27T08:04:59.473Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Генерация изображений карт МАК Пороги",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Творчество",
+    "ИИ и технологии",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Генерация Пороги",
+   "updatedAt": "2026-10-27T08:05:09.185Z",
+   "x": 0.1833,
+   "y": -0.9544
+  },
+  "eb55x7wgmua8fmahw9of": {
+   "createdAt": "2026-10-25T16:41:24.902Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "fxxt2uqy7wo3i8thd9xt"
+   ],
+   "note": "Сдать анализы на ЗППП",
+   "notion": "",
+   "spheres": [
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Анализы ЗППП",
+   "updatedAt": "2026-10-27T07:03:11.528Z",
+   "x": -0.7094,
+   "y": -0.1723
+  },
+  "xiogdlkz3t5dasfo9n79": {
+   "active": false,
+   "createdAt": "2026-10-26T13:53:43.182Z",
+   "deps": [
+    "5zz9ocs4tj9pg2i5qxfm"
+   ],
+   "doneAt": "2026-10-26",
+   "kind": "task",
+   "links": [],
+   "note": "Хаб для идей",
+   "notion": "https://app.notion.com/p/3ddec455c4dc80218042f385dff7b166",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Творчество",
+    "ИИ и технологии",
+    "Наука и обучение",
+    "Контент",
+    "Финансы",
+    "Личное",
+    "Хобби"
+   ],
+   "status": "done",
+   "sync": "synced",
+   "syncNote": "В Notion уже закрыто (задача «Создать в notion Банк идей»).",
+   "title": "Банк идей",
+   "updatedAt": "2026-10-26T13:54:31.868Z",
+   "x": -0.2305,
+   "y": 0.2671
+  },
+  "ijs38191n8f0g6bwujsc": {
+   "createdAt": "2026-10-26T12:12:03.500Z",
+   "deps": [
+    "mgf7ln2n6o1pwxi5fn87",
+    "ovzb31zmu1boyf0nxfj6"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Написание сценария стэндап-номера о психотерапии",
+   "notion": "",
+   "spheres": [
+    "Творчество",
+    "Контент",
+    "Хобби"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Стэндап-номер",
+   "updatedAt": "2026-10-26T12:12:42.898Z",
+   "x": 0.9234,
+   "y": 0.4486
+  },
+  "nq00untr6uvyafg6ux5y": {
+   "createdAt": "2026-10-25T10:12:13.599Z",
+   "deps": [
+    "ss0zvxamfcftzib2kg84",
+    "6mvrcr7qez6mcxione37"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "ku1kmhonb0uprvo8h1ow"
+   ],
+   "note": "Ретроспективный ввод клиентских проектов в Claude",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Ретроспектива",
+   "updatedAt": "2026-10-26T08:30:06.640Z",
+   "x": 0.032,
+   "y": -0.6022
+  },
+  "q5cys5g0kpdwxdtlsy04": {
+   "active": false,
+   "createdAt": "2026-10-27T08:13:19.400Z",
+   "deps": [],
+   "doneAt": "2026-10-27",
+   "kind": "task",
+   "links": [
+    "67vkqq03aew5zicvlqjw",
+    "rbaogxj16s2dy4riyfwl",
+    "fosvi8ewilwnal0qzfmj",
+    "sbmdy9bnm3bbhd9r7wjl"
+   ],
+   "note": "Дизайн-система центра Призма",
+   "notion": "",
+   "spheres": [
+    "Призма",
+    "Творчество",
+    "Контент"
+   ],
+   "status": "done",
+   "sync": "pending",
+   "syncNote": "",
+   "title": "DS Призма",
+   "updatedAt": "2026-10-27T08:14:31.360Z",
+   "x": 0.1576,
+   "y": -0.3252
+  },
+  "ku1kmhonb0uprvo8h1ow": {
+   "createdAt": "2026-10-18T09:31:28.488Z",
+   "deps": [
+    "nq00untr6uvyafg6ux5y"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Завершение перепарковки артефактов проекта Фрейд",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "ИИ и технологии"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Перепарковка артефактов",
+   "updatedAt": "2026-10-26T12:51:41.294Z",
+   "x": -0.1142,
+   "y": -0.634
+  },
+  "g7g9xce7f03v7k52oowa": {
+   "createdAt": "2026-10-27T08:43:09.689Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Фантастический рассказ про ИИ-зависимый мир",
+   "notion": "",
+   "spheres": [
+    "Творчество",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Муза",
+   "updatedAt": "2026-10-27T08:43:21.612Z",
+   "x": 0.9896,
+   "y": 0.2472
+  },
+  "s8m095mh5sro1ksuqzo1": {
+   "createdAt": "2026-10-26T14:54:52.622Z",
+   "deps": [
+    "vqcyzvwx7dyfq1wutyhb"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Услуга по распаковке личности",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Карта внутренних смыслов",
+   "updatedAt": "2026-10-27T07:11:08.010Z",
+   "x": -0.1176,
+   "y": -1.012
+  },
+  "vakixbjmd2r9xsvr2m9u": {
+   "createdAt": "2026-10-26T07:03:30.401Z",
+   "deps": [
+    "ovzb31zmu1boyf0nxfj6",
+    "93jxwgizg2vxhusitapp",
+    "cavqin4yftgv998y84yo",
+    "25psyv23mew5qpfa7tmb",
+    "inb17g1lsha7eraoakzn",
+    "s73w8lm1vavea324kfdg",
+    "5dir0jr8okfccjypyf8y",
+    "12hj3q3jjplth8qvdzqc"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [
+    "88zwr0v2abn7fj6r1568"
+   ],
+   "note": "Создание инфраструктуры вспомогательных помощников и интерконтекстных навыков",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Меркор-ПРУФ",
+    "Творчество",
+    "ИИ и технологии",
+    "Наука и обучение",
+    "Контент",
+    "Финансы",
+    "Личное",
+    "Хобби"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Флигель",
+   "updatedAt": "2026-10-26T13:56:31.334Z",
+   "x": -0.1357,
+   "y": -0.0961
+  },
+  "s73w8lm1vavea324kfdg": {
+   "active": false,
+   "createdAt": "2026-10-25T18:53:10.411Z",
+   "deps": [],
+   "doneAt": "2026-10-25",
+   "kind": "project",
+   "links": [
+    "inb17g1lsha7eraoakzn",
+    "pivc1tb3ifba1nj8ge0c",
+    "1qh91ugn370lchzn3z75",
+    "38vdq9mr48b3fdulm227",
+    "mgf7ln2n6o1pwxi5fn87"
+   ],
+   "note": "Транс-ассистентный скилл по освоению различных обучающих курсов",
+   "notion": "https://app.notion.com/p/3e0ec455c4dc8157af71e35bbcbf5e20",
+   "spheres": [
+    "Психопрактика",
+    "Творчество",
+    "ИИ и технологии",
+    "Наука и обучение",
+    "Контент",
+    "Финансы",
+    "Личное",
+    "Хобби"
+   ],
+   "status": "done",
+   "sync": "synced",
+   "syncNote": "В Notion уже закрыто (задача «узел «Академия»: навык course-tutor v0.1 собран и опубликован»).",
+   "title": "Академия",
+   "updatedAt": "2026-10-26T12:28:54.297Z",
+   "x": 0.0831,
+   "y": 0.6987
+  },
+  "63sb8lkifisistxkv8cd": {
+   "active": false,
+   "createdAt": "2026-10-26T08:45:44.846Z",
+   "deps": [],
+   "doneAt": "2026-10-26",
+   "kind": "task",
+   "links": [],
+   "note": "Библиотека традиций эзотерики и магии",
+   "notion": "https://app.notion.com/p/3cbec455c4dc81e7a2a6ddffee3c0bdf",
+   "spheres": [
+    "Хобби"
+   ],
+   "status": "done",
+   "sync": "synced",
+   "syncNote": "В Notion уже закрыто (задача «vault-mist: завести по схеме и начать укладку источников»).",
+   "title": "vault-mist",
+   "updatedAt": "2026-10-26T09:20:43.166Z",
+   "x": -0.3762,
+   "y": -0.5898
+  },
+  "bbxft79re6h054orfvhv": {
+   "createdAt": "2026-10-26T11:16:05.255Z",
+   "deps": [
+    "88zwr0v2abn7fj6r1568"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Разработка и освоение модов для оптимизации работы в Claude Code",
+   "notion": "",
+   "spheres": [
+    "ИИ и технологии"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Mods",
+   "updatedAt": "2026-10-26T11:16:26.240Z",
+   "x": 0.1628,
+   "y": 0.3091
+  },
+  "5dir0jr8okfccjypyf8y": {
+   "createdAt": "2026-10-26T08:22:02.750Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Интерпроектный навык по системному мышлению, ТРИЗ, анализу и прогнозированию",
+   "notion": "",
+   "spheres": [
+    "ИИ и технологии",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Брюс",
+   "updatedAt": "2026-10-26T09:35:26.844Z",
+   "x": -0.3355,
+   "y": 0.1176
+  },
+  "kgqphpdo02kwd4i6i1yp": {
+   "createdAt": "2026-10-27T08:35:42.186Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Рассказ про инфантильную молодящуюся женщину",
+   "notion": "",
+   "spheres": [
+    "Творчество",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Малышка",
+   "updatedAt": "2026-10-27T08:42:13.791Z",
+   "x": 0.9705,
+   "y": 0.3135
+  },
+  "6mwtjdg4fg07o2bwowbd": {
+   "createdAt": "2026-10-25T18:44:41.547Z",
+   "deps": [
+    "f6anvv9rv4rw7917d5jm",
+    "kiway6d7gh8chx9o0rz1",
+    "29mnt7uch4sasnl5k9gi",
+    "rh0polyx05yrw2i6g5qs",
+    "dqnw7i1v4o3f6tf7ciam",
+    "7xblgqrsxrodvw1j08wn"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [
+    "bofs1wpi1fpkskzrzk26"
+   ],
+   "note": "Расчистка информационного поля, наведение порядка в различных контекстах жизни",
+   "notion": "",
+   "spheres": [
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Авгиевы конюшни",
+   "updatedAt": "2026-10-26T12:31:06.794Z",
+   "x": 0.0529,
+   "y": 0.1771
+  },
+  "ubjhjly4uoh6rlqsekkg": {
+   "createdAt": "2026-10-26T14:53:24.849Z",
+   "deps": [
+    "qd7mk8dee7rnq6a2xms8"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Навык по Бодинамике для проекта Фрейд",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Хобби"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Body-skill",
+   "updatedAt": "2026-10-27T07:04:58.576Z",
+   "x": -0.1103,
+   "y": -0.751
+  },
+  "wka9hp5203esdlkm3g50": {
+   "createdAt": "2026-10-26T10:42:21.512Z",
+   "deps": [
+    "imcwcix0ukw2sd8r9ka5",
+    "l8fkskvq8hv84040p22k"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Сформировать категории трат",
+   "notion": "",
+   "spheres": [
+    "Призма",
+    "Финансы",
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Структура затрат",
+   "updatedAt": "2026-10-26T15:03:31.306Z",
+   "x": -0.4754,
+   "y": 0.1949
+  },
+  "5f6etxhukdculfj6kh0s": {
+   "createdAt": "2026-10-27T07:27:46.719Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Убрать лайки с неоднозначных видео",
+   "notion": "",
+   "spheres": [
+    "ИИ и технологии",
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Yotube-Like",
+   "updatedAt": "2026-10-27T07:27:55.697Z",
+   "x": 0.6013,
+   "y": 0.5442
+  },
+  "4vw1c07a8azf00z8fvzz": {
+   "active": false,
+   "createdAt": "2026-10-26T08:48:18.879Z",
+   "deps": [],
+   "doneAt": "2026-10-26",
+   "kind": "task",
+   "links": [
+    "qbrmv1h0kb9d19kjkn2c"
+   ],
+   "note": "Ноутбуки курсов по МАК",
+   "notion": "https://app.notion.com/p/3f2ec455c4dc81508289d2cb397174eb",
+   "spheres": [
+    "Психопрактика"
+   ],
+   "status": "done",
+   "sync": "synced",
+   "syncNote": "В Notion уже закрыто (задача «Академия × МАК: своды Буравцовой в raw/…», 07.10.2026).",
+   "title": "Notebook MAK",
+   "updatedAt": "2026-10-26T09:21:49.484Z",
+   "x": 0.1738,
+   "y": -0.7122
+  },
+  "c5hdqaiep4j6nqzngmn5": {
+   "createdAt": "2026-10-26T08:11:11.457Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Сбор источников для Библиотеки знаний финансового ассистента",
+   "notion": "",
+   "spheres": [
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Источники vault-fin",
+   "updatedAt": "2026-10-26T09:14:08.833Z",
+   "x": -0.6316,
+   "y": 0.2245
+  },
+  "fri5zsu0t9t9izsc3fvb": {
+   "createdAt": "2026-10-17T16:03:59.197Z",
+   "deps": [
+    "1qh91ugn370lchzn3z75"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "1qh91ugn370lchzn3z75"
+   ],
+   "note": "Список друзей и родственников в ноушн с приоритетами важности с отметками последних встреч и звонков, который напоминает, когда контакт давно не поддерживается и в конце дня отмечает социальную активность",
+   "notion": "",
+   "spheres": [
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Социальный будильник",
+   "updatedAt": "2026-10-26T09:18:07.111Z",
+   "x": -0.8242,
+   "y": -0.6004
+  },
+  "fa13ie7fqq8ag0cqdgbl": {
+   "createdAt": "2026-10-26T08:10:03.501Z",
+   "deps": [
+    "ylztnr75c0bioux1s2sl"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Ноутбуки курсов по трейдингу",
+   "notion": "",
+   "spheres": [
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Notebook LM FIN",
+   "updatedAt": "2026-10-26T09:15:09.594Z",
+   "x": -0.7394,
+   "y": 0.2196
+  },
+  "mjp2vnclmk0326nw5hj6": {
+   "createdAt": "2026-10-26T13:36:49.533Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Проведение рекламных кампаний в ВК",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "ВК-Реклама",
+   "updatedAt": "2026-10-26T13:37:25.220Z",
+   "x": 0.2777,
+   "y": -0.8565
+  },
+  "x39c32ijx567d86doy9v": {
+   "createdAt": "2026-10-26T10:17:19.307Z",
+   "deps": [
+    "mgf7ln2n6o1pwxi5fn87",
+    "cavqin4yftgv998y84yo",
+    "38vdq9mr48b3fdulm227"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Творчество",
+    "Контент",
+    "Финансы",
+    "Хобби"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Настолка \"Резня\"",
+   "updatedAt": "2026-10-27T08:53:53.599Z",
+   "x": -0.3173,
+   "y": -0.9682
+  },
+  "ctx9w5i3nweoloichbo0": {
+   "active": false,
+   "createdAt": "2026-10-26T09:28:04.457Z",
+   "deps": [],
+   "doneAt": "2026-10-26",
+   "kind": "task",
+   "links": [],
+   "note": "Создание печатной версии каталога для клиентов центра Призма",
+   "notion": "https://app.notion.com/p/3deec455c4dc81979c33cafc87432f09",
+   "spheres": [
+    "Психопрактика",
+    "Призма"
+   ],
+   "status": "done",
+   "sync": "synced",
+   "syncNote": "В Notion уже закрыто (проект «МАК · Каталог колод Призмы»).",
+   "title": "Каталог МАК (печать)",
+   "updatedAt": "2026-10-27T09:16:10.482Z",
+   "x": 0.4835,
+   "y": -0.8995
+  },
+  "ikqszk1lx60y1x0z4h7o": {
+   "createdAt": "2026-10-26T09:26:01.304Z",
+   "deps": [
+    "qbrmv1h0kb9d19kjkn2c"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Методическая основа исследования работы колоды Felt Sense на психологах и клиентах",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Методика Felt Sense",
+   "updatedAt": "2026-10-26T11:35:29.238Z",
+   "x": 0.275,
+   "y": -0.9161
+  },
+  "000po1iiu6qsz8kj1c55": {
+   "createdAt": "2026-10-26T12:32:01.883Z",
+   "deps": [
+    "inb17g1lsha7eraoakzn",
+    "7xblgqrsxrodvw1j08wn",
+    "ctbls9maslklp7tdu3m6",
+    "09d0dhpyi2ak4bt1bck8",
+    "rcgy1w3xc2g2dtekim5d",
+    "8c0q38cb2j6gq33e3qq3",
+    "5f6etxhukdculfj6kh0s",
+    "sjarrwt9a89u2p6ojyz8",
+    "6a1pe1mex5385om63f4q",
+    "k3if7cfkqva6uj677frh"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "7xblgqrsxrodvw1j08wn"
+   ],
+   "note": "Подготовка телефона к пересечению границы",
+   "notion": "",
+   "spheres": [
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Безопасность на границе",
+   "updatedAt": "2026-10-27T07:32:53.767Z",
+   "x": 0.577,
+   "y": 0.5558
+  },
+  "k3if7cfkqva6uj677frh": {
+   "createdAt": "2026-10-27T07:31:22.696Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Отключение альтернативных аккаунтов (ТГ, почта и прочее)",
+   "notion": "",
+   "spheres": [
+    "ИИ и технологии",
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Аккаунты",
+   "updatedAt": "2026-10-27T07:31:44.942Z",
+   "x": 0.5549,
+   "y": 0.5729
+  },
+  "tnnsjqzthrtpnwybll95": {
+   "active": false,
+   "createdAt": "2026-10-26T06:40:44.009Z",
+   "deps": [
+    "q9qxwjghxnfy0zgycprh"
+   ],
+   "doneAt": "2026-10-26",
+   "kind": "project",
+   "links": [
+    "88zwr0v2abn7fj6r1568"
+   ],
+   "note": "Ассистент по работе с задачами Меркор-ПРУФ",
+   "notion": "https://app.notion.com/p/3d7ec455c4dc81b68962d23294750386",
+   "spheres": [
+    "Меркор-ПРУФ"
+   ],
+   "status": "done",
+   "sync": "synced",
+   "syncNote": "В Notion уже закрыто (задача «Волна 0: архитектура и инструкции ассистентов техдиректора… + подключение vault-fire»).",
+   "title": "Технический директор",
+   "updatedAt": "2026-10-26T13:17:15.777Z",
+   "x": 0.6653,
+   "y": -0.2238
+  },
+  "hf0jhbm4e5q31xjkfkx2": {
+   "active": false,
+   "createdAt": "2026-10-26T07:20:39.559Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Поиск источников для наполнения Библиотеки vault-ai",
+   "notion": "",
+   "spheres": [
+    "ИИ и технологии"
+   ],
+   "startedAt": "2026-10-26",
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Источники для vault-ai",
+   "touchedAt": "2026-10-26",
+   "updatedAt": "2026-10-26T10:02:19.095Z",
+   "x": 0.4403,
+   "y": 0.5023
+  },
+  "2pxu90zyf0y6j6j0t49i": {
+   "createdAt": "2026-10-26T13:30:33.318Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "pcxaj1tggyih1yf35bu2",
+    "91n5gvw8eg3fgo4tvlje",
+    "iydskwoa2bh8vm0t6jdm"
+   ],
+   "note": "Подготовить для маркетолога перечень необходимых правок для сайта mercorproof.ru",
+   "notion": "",
+   "spheres": [
+    "Меркор-ПРУФ"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Правки на сайт",
+   "updatedAt": "2026-10-26T13:31:06.128Z",
+   "x": 0.8916,
+   "y": -0.2954
+  },
+  "ovzb31zmu1boyf0nxfj6": {
+   "active": false,
+   "createdAt": "2026-10-26T07:05:18.406Z",
+   "deps": [],
+   "doneAt": "2026-10-26",
+   "kind": "task",
+   "links": [
+    "mgf7ln2n6o1pwxi5fn87",
+    "fosvi8ewilwnal0qzfmj",
+    "y67dy9pc22r1nvphtgll",
+    "25psyv23mew5qpfa7tmb"
+   ],
+   "note": "Навык по русскому юмору для написания шуток, мемов, анекдотов и стендап-выступлений",
+   "notion": "https://app.notion.com/p/3ddec455c4dc811095b4c68af3ac1c02",
+   "spheres": [
+    "Творчество",
+    "Контент",
+    "Личное"
+   ],
+   "status": "done",
+   "sync": "synced",
+   "syncNote": "В Notion уже закрыто (задача «Флигель: Филогелос — навык юмора…»).",
+   "title": "Filogelos",
+   "updatedAt": "2026-10-26T09:35:36.472Z",
+   "x": 0.3364,
+   "y": 0.1122
+  },
+  "chpt7f2xnr4pangksv31": {
+   "createdAt": "2026-10-27T07:48:50.461Z",
+   "deps": [
+    "x10sbdoo0qasy0vofo3n"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Онлайн/облачная версия приложения \"Расклады\"",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "ИИ и технологии",
+    "Контент",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Online Расклады",
+   "updatedAt": "2026-10-27T07:49:06.323Z",
+   "x": 0.4172,
+   "y": -0.9316
+  },
+  "1sz5q7l6hpbf4mt2qb31": {
+   "createdAt": "2026-10-25T16:24:28.536Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "rr8yjs6p7ej1tucua25t",
+    "ikhlljht48s4wmhpzq3p"
+   ],
+   "note": "Пройти гастро и колоноскопию по диспансеризации",
+   "notion": "",
+   "spheres": [
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Гастро и колоноскопия",
+   "updatedAt": "2026-10-27T07:03:04.733Z",
+   "x": -0.6451,
+   "y": -0.1795
+  },
+  "e3cdx11b2mdgfbspq2ug": {
+   "createdAt": "2026-10-25T16:23:40.984Z",
+   "deps": [
+    "1sz5q7l6hpbf4mt2qb31"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Записаться на чекап к колопрактологу",
+   "notion": "",
+   "spheres": [
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Колопроктолог",
+   "updatedAt": "2026-10-27T00:00:00.000Z",
+   "x": -0.6432,
+   "y": -0.2
+  },
+  "vqcyzvwx7dyfq1wutyhb": {
+   "createdAt": "2026-10-26T14:55:42.830Z",
+   "deps": [
+    "rvcd3z77qlo37lifapta"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Новый навык для проекта Фрейд помогающий проводить распаковку личностного потенциала",
+   "notion": "",
+   "spheres": [
+    "Психопрактика"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Skill Распаковка",
+   "updatedAt": "2026-10-26T15:00:34.899Z",
+   "x": -0.0866,
+   "y": -0.8378
+  },
+  "lwou98yqjeoybei2kymh": {
+   "active": false,
+   "createdAt": "2026-10-26T11:41:02.002Z",
+   "deps": [
+    "88zwr0v2abn7fj6r1568"
+   ],
+   "doneAt": "2026-10-26",
+   "kind": "task",
+   "links": [],
+   "note": "Сторож и помощник Архитектора",
+   "notion": "https://app.notion.com/p/3f4ec455c4dc810691b4dc54c22004f0",
+   "spheres": [
+    "ИИ и технологии"
+   ],
+   "status": "done",
+   "sync": "synced",
+   "syncNote": "Отдельной задачи нет; привязал закрытую подзадачу «Лоцман: собрать регламент конвейера сводов…».",
+   "title": "Лоцман",
+   "updatedAt": "2026-10-26T11:42:14.272Z",
+   "x": -0.1087,
+   "y": -0.3329
+  },
+  "l8fkskvq8hv84040p22k": {
+   "createdAt": "2026-10-26T10:39:52.594Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Собрать выписки по кредитам и тратам",
+   "notion": "",
+   "spheres": [
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Банковские выписки",
+   "updatedAt": "2026-10-27T07:24:06.480Z",
+   "x": -0.4015,
+   "y": 0.0619
+  },
+  "k3tk1bqs9757b2v6rsqi": {
+   "createdAt": "2026-10-26T08:06:49.643Z",
+   "deps": [
+    "c5hdqaiep4j6nqzngmn5",
+    "iu0jecg4udvcxop7llmw"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Библиотека знаний по финансовым инструментам",
+   "notion": "",
+   "spheres": [
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "vault-fin",
+   "updatedAt": "2026-10-27T09:00:13.207Z",
+   "x": -0.6585,
+   "y": 0.2334
+  },
+  "cavqin4yftgv998y84yo": {
+   "active": false,
+   "createdAt": "2026-10-25T19:05:50.876Z",
+   "deps": [
+    "nfnbxrd9ndwj41boel1a"
+   ],
+   "doneAt": "2026-10-25",
+   "kind": "task",
+   "links": [
+    "38vdq9mr48b3fdulm227",
+    "25psyv23mew5qpfa7tmb",
+    "mgf7ln2n6o1pwxi5fn87",
+    "88zwr0v2abn7fj6r1568"
+   ],
+   "note": "Ассистент по игровой механике (создание и ведение видео, трансформационных, настольных, ролевых игр, разработка нарративов)",
+   "notion": "https://app.notion.com/p/3c0ec455c4dc815aa192c358ee64a3f9",
+   "spheres": [
+    "Психопрактика",
+    "Творчество",
+    "Личное",
+    "Хобби"
+   ],
+   "status": "done",
+   "sync": "synced",
+   "syncNote": "Ассистент построен в рамках «Демиурга»; проект «Лудум» действующий, в Notion оставлен In progress.",
+   "title": "Лудум",
+   "updatedAt": "2026-10-27T08:52:27.858Z",
+   "x": -0.4682,
+   "y": -0.5255
+  },
+  "kxy8a30d7ro4h6w2w4a8": {
+   "createdAt": "2026-10-26T13:20:00.974Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Регламент создания и обновления технико-эксплуатационной документации",
+   "notion": "",
+   "spheres": [
+    "Меркор-ПРУФ"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Регламент паспортов",
+   "updatedAt": "2026-10-26T13:20:08.509Z",
+   "x": 0.86,
+   "y": -0.0789
+  },
+  "hak3zd2did0pt6driqmf": {
+   "createdAt": "2026-10-27T08:36:56.436Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Рассказ про немотивированное убийство",
+   "notion": "",
+   "spheres": [
+    "Творчество",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Маркетплейс",
+   "updatedAt": "2026-10-27T08:40:56.517Z",
+   "x": 0.9867,
+   "y": 0.2584
+  },
+  "sjfjtpix2dohqobca1vt": {
+   "createdAt": "2026-10-26T13:24:07.492Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Разновысотные люки: двустворчатые (уменьшение нагрузки) и со стеклом (водоотвод)",
+   "notion": "",
+   "spheres": [
+    "Меркор-ПРУФ"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Разновысотные люки",
+   "updatedAt": "2026-10-26T13:24:13.903Z",
+   "x": 0.7625,
+   "y": -0.3695
+  },
+  "a8e8cxh9acd2k8o1zh6z": {
+   "createdAt": "2026-10-27T08:51:39.613Z",
+   "deps": [
+    "1qh91ugn370lchzn3z75",
+    "cavqin4yftgv998y84yo",
+    "25psyv23mew5qpfa7tmb",
+    "38vdq9mr48b3fdulm227",
+    "mgf7ln2n6o1pwxi5fn87"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [
+    "334vmfgbnv7iowbesvrx",
+    "f6anvv9rv4rw7917d5jm",
+    "0we9jcpndzenh68f6v5r"
+   ],
+   "note": "Создание психологической игры-симулятора знакомств по аналогии с Тиндером, помогающая осваивать навыки социализации",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Творчество",
+    "ИИ и технологии",
+    "Контент",
+    "Финансы",
+    "Хобби"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Игра PsyDating",
+   "updatedAt": "2026-10-27T08:54:11.516Z",
+   "x": -0.4803,
+   "y": -0.891
+  },
+  "gqxx20q4ca8p8s9ayp69": {
+   "createdAt": "2026-10-26T10:16:27.323Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Таблица учёта арендаторов шкафчиков",
+   "notion": "",
+   "spheres": [
+    "Призма",
+    "ИИ и технологии"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Учёт шкафчиков",
+   "updatedAt": "2026-10-26T10:16:48.916Z",
+   "x": 0.5609,
+   "y": -0.6207
+  },
+  "b1ue8y5u4n84hg3mt6q7": {
+   "createdAt": "2026-10-26T10:58:43.552Z",
+   "deps": [
+    "bofs1wpi1fpkskzrzk26",
+    "bgpv2l0a4kc7k3sosqw0",
+    "5zz9ocs4tj9pg2i5qxfm"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Артефакт по учёту ежедневных трат для внесения в Notion",
+   "notion": "",
+   "spheres": [
+    "Призма",
+    "Финансы",
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Ежедневные траты",
+   "updatedAt": "2026-10-27T08:58:03.121Z",
+   "x": -0.3494,
+   "y": 0.0005
+  },
+  "1x2s084zxkaibl3ynoov": {
+   "createdAt": "2026-10-26T13:29:01.954Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Разослать письма-распоряжения всем заинтересованным лицам для получения недостающей информации для финализации калькулятора",
+   "notion": "",
+   "spheres": [
+    "Меркор-ПРУФ"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Сбор данных",
+   "updatedAt": "2026-10-27T08:46:40.309Z",
+   "x": 0.9117,
+   "y": -0.3671
+  },
+  "q9qxwjghxnfy0zgycprh": {
+   "active": false,
+   "createdAt": "2026-10-26T08:42:53.083Z",
+   "deps": [
+    "iu0jecg4udvcxop7llmw"
+   ],
+   "doneAt": "2026-10-26",
+   "kind": "task",
+   "links": [],
+   "note": "Библиотека нормативных знаний для технического директора",
+   "notion": "https://app.notion.com/p/3a6ec455c4dc80098932cd1d25f9b8d5",
+   "spheres": [
+    "Меркор-ПРУФ"
+   ],
+   "status": "done",
+   "sync": "synced",
+   "syncNote": "В Notion уже закрыто (задача «vault-fire: наполнение vault и вики…»).",
+   "title": "vault-fire",
+   "updatedAt": "2026-10-27T09:00:45.104Z",
+   "x": 0.6501,
+   "y": -0.2611
+  },
+  "iu0jecg4udvcxop7llmw": {
+   "active": false,
+   "createdAt": "2026-10-26T13:01:46.920Z",
+   "deps": [],
+   "doneAt": "2026-10-26",
+   "kind": "task",
+   "links": [],
+   "note": "Организация библиотек знаний через Obsidian по методу Карпатого",
+   "notion": "https://app.notion.com/p/3c7ec455c4dc8162ae6fd2b22cdc5ae7",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Меркор-ПРУФ",
+    "Творчество",
+    "ИИ и технологии",
+    "Наука и обучение",
+    "Контент",
+    "Финансы",
+    "Личное",
+    "Хобби"
+   ],
+   "status": "done",
+   "sync": "synced",
+   "syncNote": "В Notion уже закрыто (задача «Связка: пройти руками сценарии 3 и 4 и дописать памятку» — обкатка связки с Obsidian).",
+   "title": "Obsidian",
+   "updatedAt": "2026-10-27T08:19:11.876Z",
+   "x": 0.1016,
+   "y": 0.1827
+  },
+  "ww1e9hv2j5odnhicre97": {
+   "createdAt": "2026-10-27T08:44:26.637Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Рассказ про каннибала",
+   "notion": "",
+   "spheres": [
+    "Творчество",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Ми пьяче",
+   "updatedAt": "2026-10-27T08:44:42.401Z",
+   "x": 0.9926,
+   "y": 0.236
+  },
+  "nnuiil4kb3kuim2tpwvj": {
+   "createdAt": "2026-10-25T16:12:07.272Z",
+   "deps": [
+    "sl2b4vs90fg80lynehbw"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "xexj8rb3zpe6v0n8flev"
+   ],
+   "note": "Переработка загруженных в ноутбуки курсов по развитию социальных навыков в своды опыта Vault-soc",
+   "notion": "",
+   "spheres": [
+    "Наука и обучение",
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Notebook SOC 2 Vauly-soc",
+   "updatedAt": "2026-10-26T09:20:18.651Z",
+   "x": -0.6469,
+   "y": -0.3728
+  },
+  "c9ozmp82s4qs1kru9li2": {
+   "active": false,
+   "createdAt": "2026-10-26T08:44:31.517Z",
+   "deps": [
+    "iu0jecg4udvcxop7llmw"
+   ],
+   "doneAt": "2026-10-26",
+   "kind": "task",
+   "links": [],
+   "note": "Библиотека литературных форм и приёмов",
+   "notion": "https://app.notion.com/p/3cbec455c4dc8154905bcee12f055d6e",
+   "spheres": [
+    "Психопрактика",
+    "Творчество",
+    "Контент"
+   ],
+   "status": "done",
+   "sync": "synced",
+   "syncNote": "Отдельной задачи нет; привязал закрытую подзадачу «vault-lit: репертуар эмоций…».",
+   "title": "vault-lit",
+   "updatedAt": "2026-10-27T09:00:40.124Z",
+   "x": 0.6811,
+   "y": 0.1634
+  },
+  "vw1ajikpy1qlh1n0fcnp": {
+   "createdAt": "2026-10-27T08:39:59.164Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Рассказ про паразитизм на доброте и зависимость",
+   "notion": "",
+   "spheres": [
+    "Творчество",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Милосердие",
+   "updatedAt": "2026-10-27T08:42:12.125Z",
+   "x": 0.9669,
+   "y": 0.3236
+  },
+  "6a1pe1mex5385om63f4q": {
+   "createdAt": "2026-10-27T07:29:52.239Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Убрать из облаков и с телефона сомнительные документы",
+   "notion": "",
+   "spheres": [
+    "ИИ и технологии",
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Docs",
+   "updatedAt": "2026-10-27T07:30:10.477Z",
+   "x": 0.5906,
+   "y": 0.5754
+  },
+  "2k56zb0r6hakawbwrple": {
+   "createdAt": "2026-10-26T10:45:26.181Z",
+   "deps": [
+    "67vkqq03aew5zicvlqjw",
+    "mjp2vnclmk0326nw5hj6",
+    "iccx5wqeejhew8qllx78",
+    "c5kkn65iohutea2emsm0"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [
+    "z3kaz7eo5q4e1ripfhzq",
+    "482qv2fsyoic3o04z8xf"
+   ],
+   "note": "Проведение рекламных кампаний услуг психопрактики и центра Призма",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Контент",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Реклама",
+   "updatedAt": "2026-10-27T09:41:23.948Z",
+   "x": 0.2678,
+   "y": -0.8283
+  },
+  "0dqox5jm8ex9rkezubcu": {
+   "createdAt": "2026-10-26T07:19:45.758Z",
+   "deps": [
+    "hf0jhbm4e5q31xjkfkx2",
+    "iu0jecg4udvcxop7llmw"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Библиотека знаний для ассистента-инженера",
+   "notion": "",
+   "spheres": [
+    "ИИ и технологии"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "vault-ai",
+   "updatedAt": "2026-10-27T09:00:35.378Z",
+   "x": 0.4617,
+   "y": 0.5257
+  },
+  "xexj8rb3zpe6v0n8flev": {
+   "createdAt": "2026-10-17T16:04:32.674Z",
+   "deps": [
+    "nnuiil4kb3kuim2tpwvj",
+    "iu0jecg4udvcxop7llmw"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "1qh91ugn370lchzn3z75"
+   ],
+   "note": "Библиотека знаний о развитии социальных навыков, умении заводить и поддерживать социальные связи и получать от них удовольствие",
+   "notion": "",
+   "spheres": [
+    "ИИ и технологии",
+    "Наука и обучение",
+    "Контент",
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Vault-soc",
+   "updatedAt": "2026-10-27T09:00:02.527Z",
+   "x": -0.6029,
+   "y": -0.3567
+  },
+  "ecno6fmip97gzaa501z8": {
+   "active": false,
+   "createdAt": "2026-10-27T08:38:58.257Z",
+   "deps": [],
+   "doneAt": "2026-10-27",
+   "kind": "task",
+   "links": [],
+   "note": "Рассказ про алкоголика",
+   "notion": "",
+   "spheres": [
+    "Творчество",
+    "Контент"
+   ],
+   "status": "done",
+   "sync": "pending",
+   "syncNote": "",
+   "title": "Могила",
+   "updatedAt": "2026-10-27T08:46:11.892Z",
+   "x": 0.9805,
+   "y": 0.2851
+  },
+  "fosvi8ewilwnal0qzfmj": {
+   "createdAt": "2026-10-26T06:48:31.483Z",
+   "deps": [
+    "67vkqq03aew5zicvlqjw",
+    "q5cys5g0kpdwxdtlsy04"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [
+    "88zwr0v2abn7fj6r1568",
+    "67vkqq03aew5zicvlqjw",
+    "vh0ldhu8mtqkiljmwcp5",
+    "25psyv23mew5qpfa7tmb"
+   ],
+   "note": "Контент-помощник по ведению канала центра аренды кабинетов \"Призма\"",
+   "notion": "",
+   "spheres": [
+    "Призма",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "ТГ \"Призма\"",
+   "updatedAt": "2026-10-27T08:14:49.646Z",
+   "x": -0.6821,
+   "y": 0.564
+  },
+  "dqnw7i1v4o3f6tf7ciam": {
+   "active": false,
+   "createdAt": "2026-10-26T11:55:45.622Z",
+   "deps": [],
+   "doneAt": "2026-10-26",
+   "kind": "task",
+   "links": [],
+   "note": "Разобрать бумажки с заметками по задачам",
+   "notion": "https://app.notion.com/p/404ec455c4dc81c49f00c35b3346a491",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Меркор-ПРУФ",
+    "Творчество",
+    "ИИ и технологии",
+    "Наука и обучение",
+    "Контент",
+    "Финансы",
+    "Личное",
+    "Хобби"
+   ],
+   "startedAt": "2026-10-26",
+   "status": "done",
+   "sync": "synced",
+   "syncNote": "Закрыл задачу «Заполнение синапсов актуальными задачами и проектами» в Notion (26.10.2026).",
+   "title": "Бумажки с задачами",
+   "touchedAt": "2026-10-26",
+   "updatedAt": "2026-10-27T10:02:24.803Z",
+   "x": 0.0734,
+   "y": 0.1758
+  },
+  "hu1b0q96z0yxsywpnula": {
+   "createdAt": "2026-10-26T11:38:45.101Z",
+   "deps": [
+    "mgf7ln2n6o1pwxi5fn87"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Писательский клуб для чтения собственных рассказов",
+   "notion": "",
+   "spheres": [
+    "Творчество",
+    "Личное",
+    "Хобби"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Клуб \"Бэта\"",
+   "updatedAt": "2026-10-27T09:04:18.351Z",
+   "x": 1.0183,
+   "y": 0.0288
+  },
+  "12hj3q3jjplth8qvdzqc": {
+   "createdAt": "2026-10-26T13:56:17.516Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Интерконтекстный ассистент-юрист",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Творчество",
+    "ИИ и технологии",
+    "Наука и обучение",
+    "Контент",
+    "Финансы",
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Фемида",
+   "updatedAt": "2026-10-27T09:02:42.961Z",
+   "x": -0.6973,
+   "y": -0.0037
+  },
+  "uyvgkpe638ieq991dl3a": {
+   "createdAt": "2026-10-27T10:00:30.347Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "project",
+   "links": [
+    "pivc1tb3ifba1nj8ge0c",
+    "inb17g1lsha7eraoakzn",
+    "mgf7ln2n6o1pwxi5fn87",
+    "25psyv23mew5qpfa7tmb",
+    "67vkqq03aew5zicvlqjw"
+   ],
+   "note": "Рассмотреть альтернативные возможности заработка на фрилансе (Биржи: Upwork, Fiverr, Kwork, Text.ru, ETXT, Advego, Gumroad)",
+   "notion": "",
+   "spheres": [
+    "ИИ и технологии",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Фриланс-проекты",
+   "updatedAt": "2026-10-27T10:03:21.278Z",
+   "x": -0.775,
+   "y": 0.3878
+  },
+  "kyhksphbiujssemp0xx8": {
+   "createdAt": "2026-10-26T12:45:09.636Z",
+   "deps": [
+    "inb17g1lsha7eraoakzn",
+    "000po1iiu6qsz8kj1c55",
+    "xlbm1fw61gdxc2dl9dty",
+    "8dlu7ek56z8sp2u8kdzx",
+    "xab631sk5okzanzx7olt"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [],
+   "note": "Организация безопасного пространства жизни в условиях изменяющегося мира",
+   "notion": "",
+   "spheres": [
+    "Финансы",
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Безопасность",
+   "updatedAt": "2026-10-26T12:58:55.125Z",
+   "x": 0.5738,
+   "y": 0.5829
+  },
+  "5zz9ocs4tj9pg2i5qxfm": {
+   "active": false,
+   "createdAt": "2026-10-26T11:15:01.428Z",
+   "deps": [],
+   "doneAt": "2026-10-26",
+   "kind": "task",
+   "links": [],
+   "note": "Организация структуры баз знаний в Notion",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Меркор-ПРУФ",
+    "Творчество",
+    "ИИ и технологии",
+    "Наука и обучение",
+    "Контент",
+    "Финансы",
+    "Личное",
+    "Хобби"
+   ],
+   "status": "done",
+   "sync": "synced",
+   "syncNote": "Задачи в Notion не было и не могло быть: установка Notion предшествовала его задачам.",
+   "title": "Notion",
+   "updatedAt": "2026-10-27T08:58:37.080Z",
+   "x": 0.1029,
+   "y": 0.1462
+  },
+  "1p72dyhx8rc4h1rgotr2": {
+   "active": false,
+   "createdAt": "2026-10-25T14:26:05.660Z",
+   "deps": [
+    "j2rpkymxywelwtlvkyvd"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [
+    "rbaogxj16s2dy4riyfwl"
+   ],
+   "note": "Ассистент по управлению и анализу бизнеса центра аренды кабинетов \"Призма\"",
+   "notion": "",
+   "spheres": [
+    "Призма",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Призмолог",
+   "updatedAt": "2026-10-26T10:14:46.575Z",
+   "x": 0.4038,
+   "y": -0.5758
+  },
+  "sl2b4vs90fg80lynehbw": {
+   "createdAt": "2026-10-25T16:10:38.879Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Ноутбуки курсов по развитию социальных навыков",
+   "notion": "",
+   "spheres": [
+    "Наука и обучение",
+    "Личное",
+    "Хобби"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Notebook SOC",
+   "updatedAt": "2026-10-26T09:20:11.353Z",
+   "x": -0.6225,
+   "y": -0.4204
+  },
+  "rfanov1h4v1nbkilnlky": {
+   "active": false,
+   "createdAt": "2026-10-27T08:41:20.232Z",
+   "deps": [],
+   "doneAt": "2026-10-27",
+   "kind": "task",
+   "links": [],
+   "note": "Рассказ про нарциссическое самоубийство",
+   "notion": "",
+   "spheres": [
+    "Творчество",
+    "Контент"
+   ],
+   "status": "done",
+   "sync": "pending",
+   "syncNote": "",
+   "title": "Мощи",
+   "updatedAt": "2026-10-27T08:41:39.064Z",
+   "x": 0.9851,
+   "y": 0.2679
+  },
+  "uahsp3fu0pv3jckhljjd": {
+   "createdAt": "2026-10-27T08:34:53.436Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Рассказ про аутиста",
+   "notion": "",
+   "spheres": [
+    "Творчество",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Ма",
+   "updatedAt": "2026-10-27T08:46:15.267Z",
+   "x": 0.9769,
+   "y": 0.2941
+  },
+  "1hincgym8ktafitvid13": {
+   "createdAt": "2026-10-26T11:13:39.131Z",
+   "deps": [
+    "cobwip2oudikpz9qnba4",
+    "9rhh26zgwy3itvioqdq0",
+    "5zz9ocs4tj9pg2i5qxfm",
+    "bbxft79re6h054orfvhv",
+    "4a8sjtgjw58b1qcojjbe",
+    "lwou98yqjeoybei2kymh",
+    "d2ih876frtuphfj3ovv4",
+    "fqzqx70idqzcsstosvcy",
+    "iu0jecg4udvcxop7llmw",
+    "xiogdlkz3t5dasfo9n79",
+    "63175mn5x026f893zoih"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [],
+   "note": "Разворачивание инфраструктуры работы через ИИ",
+   "notion": "",
+   "spheres": [
+    "ИИ и технологии"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "ИИ-инфраструктура",
+   "updatedAt": "2026-10-27T08:19:54.736Z",
+   "x": 0.1347,
+   "y": 0.1791
+  },
+  "o3hb6e4tlo8kbvgifqnf": {
+   "createdAt": "2026-10-27T08:21:59.470Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Дизайн-система ТГ-канала \"Кабинет №5\"",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Творчество",
+    "ИИ и технологии",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "DS \"Кабинет №5\"",
+   "updatedAt": "2026-10-27T08:22:07.134Z",
+   "x": 0.1653,
+   "y": -0.2884
+  },
+  "9rhh26zgwy3itvioqdq0": {
+   "createdAt": "2026-10-26T11:12:10.351Z",
+   "deps": [
+    "88zwr0v2abn7fj6r1568"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Подключение ИИ-моделей быстрых решений для экономии лимитов на больших оркестрациях",
+   "notion": "",
+   "spheres": [
+    "ИИ и технологии"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "JEV",
+   "updatedAt": "2026-10-26T11:17:38.305Z",
+   "x": 0.2448,
+   "y": 0.2497
+  },
+  "jma0q9h8cn5vudzt3c7s": {
+   "createdAt": "2026-10-26T08:23:24.726Z",
+   "deps": [
+    "43lermcx12jjeefn6t9r",
+    "k3tk1bqs9757b2v6rsqi",
+    "2ut3w110ebelo2b6jb7b",
+    "5dir0jr8okfccjypyf8y",
+    "ddu6jhxl65q58hbv0e6v",
+    "9fpqt5uketakf8vwpf55"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [
+    "pivc1tb3ifba1nj8ge0c"
+   ],
+   "note": "Проект по освоению торговли на интернет-биржах",
+   "notion": "",
+   "spheres": [
+    "ИИ и технологии",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Трейдинг",
+   "updatedAt": "2026-10-26T09:12:29.303Z",
+   "x": -0.7905,
+   "y": 0.2611
+  },
+  "x0ced8fum5rejjc3bzhx": {
+   "createdAt": "2026-10-26T11:33:04.510Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Распечатать правила центра, правила кабинетов, объявления на стэнд о канале и акциях",
+   "notion": "",
+   "spheres": [
+    "Призма"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Объявления Призмы",
+   "updatedAt": "2026-10-26T11:33:09.344Z",
+   "x": 0.5867,
+   "y": -0.6412
+  },
+  "084mo2tryfoth0tl6lbj": {
+   "active": false,
+   "createdAt": "2026-10-26T13:49:46.344Z",
+   "deps": [
+    "d2ih876frtuphfj3ovv4",
+    "5zz9ocs4tj9pg2i5qxfm"
+   ],
+   "doneAt": "2026-10-26",
+   "kind": "task",
+   "links": [
+    "bgpv2l0a4kc7k3sosqw0"
+   ],
+   "note": "Отслеживание внедрения полезных привычек",
+   "notion": "https://app.notion.com/p/e6d26731fbb64afaba933406bfcebfa8",
+   "spheres": [
+    "Личное"
+   ],
+   "status": "done",
+   "sync": "synced",
+   "syncNote": "Задачи в Notion нет — результат живёт базой «Привычки» (Командный центр / Личное); привязал к ней.",
+   "title": "Трекер привычек",
+   "updatedAt": "2026-10-27T08:58:21.128Z",
+   "x": -0.3282,
+   "y": -0.1242
+  },
+  "lwrq586bm70onhzczubs": {
+   "createdAt": "2026-10-26T12:05:43.437Z",
+   "deps": [
+    "38vdq9mr48b3fdulm227",
+    "mgf7ln2n6o1pwxi5fn87"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [
+    "s73w8lm1vavea324kfdg"
+   ],
+   "note": "Написание и публикация цикла научных статей о \"невозможной эмоции\"",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Наука и обучение"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Цикл \"Невозможная эмоция\"",
+   "updatedAt": "2026-10-26T12:28:47.883Z",
+   "x": -0.1146,
+   "y": 0.9236
+  },
+  "qbrmv1h0kb9d19kjkn2c": {
+   "createdAt": "2026-10-26T08:47:00.955Z",
+   "deps": [
+    "zcy1qu8au9y73lktzahj",
+    "iu0jecg4udvcxop7llmw"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Библиотека колод и техник по МАК",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "vault-mak",
+   "updatedAt": "2026-10-27T09:01:30.471Z",
+   "x": 0.1939,
+   "y": -0.6725
+  },
+  "4a8sjtgjw58b1qcojjbe": {
+   "createdAt": "2026-10-26T11:17:32.765Z",
+   "deps": [
+    "88zwr0v2abn7fj6r1568",
+    "bgpv2l0a4kc7k3sosqw0"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Изучение и подключение ассистента Hermess",
+   "notion": "",
+   "spheres": [
+    "ИИ и технологии"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Hermess",
+   "updatedAt": "2026-10-26T11:17:51.680Z",
+   "x": 0.2766,
+   "y": 0.2133
+  },
+  "09d0dhpyi2ak4bt1bck8": {
+   "createdAt": "2026-10-27T07:24:53.984Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Чистка Телеграм-групп",
+   "notion": "",
+   "spheres": [
+    "ИИ и технологии",
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Telegram",
+   "updatedAt": "2026-10-27T07:25:17.617Z",
+   "x": 0.5516,
+   "y": 0.5391
+  },
+  "93jxwgizg2vxhusitapp": {
+   "active": false,
+   "createdAt": "2026-10-25T19:00:04.007Z",
+   "deps": [
+    "63sb8lkifisistxkv8cd"
+   ],
+   "doneAt": "2026-10-25",
+   "kind": "project",
+   "links": [
+    "mgf7ln2n6o1pwxi5fn87",
+    "88zwr0v2abn7fj6r1568"
+   ],
+   "note": "Ассистент по хобби в сфере магии и эзотерики",
+   "notion": "https://app.notion.com/p/3c0ec455c4dc815aa192c358ee64a3f9",
+   "spheres": [
+    "Хобби"
+   ],
+   "status": "done",
+   "sync": "synced",
+   "syncNote": "Ассистент построен в рамках «Демиурга»; проект «Ассистент «Фамильяр»» действующий, в Notion оставлен In progress.",
+   "title": "Фамильяр",
+   "updatedAt": "2026-10-26T09:10:02.465Z",
+   "x": -0.3449,
+   "y": -0.6127
+  },
+  "x10sbdoo0qasy0vofo3n": {
+   "createdAt": "2026-10-26T09:56:29.124Z",
+   "deps": [
+    "sbmdy9bnm3bbhd9r7wjl",
+    "63175mn5x026f893zoih"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [],
+   "note": "Проект по созданию десктопного и интернет-приложения для МАК-раскладов",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Контент",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Расклады",
+   "updatedAt": "2026-10-27T08:02:15.710Z",
+   "x": 0.3659,
+   "y": -0.8794
+  },
+  "25psyv23mew5qpfa7tmb": {
+   "active": false,
+   "createdAt": "2026-10-25T19:01:34.862Z",
+   "deps": [
+    "0f2ybbcxmy74zwkc7vbb"
+   ],
+   "doneAt": "2026-10-26",
+   "kind": "project",
+   "links": [
+    "88zwr0v2abn7fj6r1568",
+    "mgf7ln2n6o1pwxi5fn87"
+   ],
+   "note": "Фабрика по производству видео-контента и анимации",
+   "notion": "https://app.notion.com/p/3c0ec455c4dc815aa192c358ee64a3f9",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Творчество",
+    "ИИ и технологии",
+    "Наука и обучение",
+    "Контент",
+    "Хобби"
+   ],
+   "status": "done",
+   "sync": "synced",
+   "syncNote": "Ассистент построен в рамках «Демиурга»; проект «Студия видеоконтента» действующий, в Notion оставлен In progress.",
+   "title": "Студия",
+   "updatedAt": "2026-10-26T10:19:57.812Z",
+   "x": -0.439,
+   "y": 0.547
+  },
+  "ss0zvxamfcftzib2kg84": {
+   "active": true,
+   "createdAt": "2026-10-25T16:50:49.264Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Ретроспективный ввод клиента с небольшим количеством сессий",
+   "notion": "",
+   "spheres": [
+    "Психопрактика"
+   ],
+   "startedAt": "2026-10-27",
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Лира",
+   "touchedAt": "2026-10-27",
+   "updatedAt": "2026-10-27T11:39:29.362Z",
+   "x": 0.0038,
+   "y": -0.5562
+  },
+  "wqzv2m6fw0pge6gnjm0b": {
+   "createdAt": "2026-10-25T10:14:14.444Z",
+   "deps": [
+    "38vdq9mr48b3fdulm227"
+   ],
+   "doneAt": "",
+   "links": [],
+   "note": "",
+   "notion": "",
+   "spheres": [
+    "Психопрактика"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Инструкция по работе с Фрейдом",
+   "updatedAt": "2026-10-26T12:51:50.371Z",
+   "x": -0.0176,
+   "y": -0.7272
+  },
+  "1qh91ugn370lchzn3z75": {
+   "createdAt": "2026-10-17T16:03:33.327Z",
+   "deps": [
+    "xexj8rb3zpe6v0n8flev"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [],
+   "note": "Проект в Notion и Claude по созданию кластера для социализации",
+   "notion": "",
+   "spheres": [
+    "Личное",
+    "Хобби"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "ExtraVert",
+   "updatedAt": "2026-10-26T10:24:38.373Z",
+   "x": -0.5643,
+   "y": -0.4107
+  },
+  "o42dl1jdnbb5myljlsj3": {
+   "createdAt": "2026-10-26T11:30:07.240Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "project",
+   "links": [
+    "s73w8lm1vavea324kfdg"
+   ],
+   "note": "Изучение курсов Zerocoder",
+   "notion": "",
+   "spheres": [
+    "ИИ и технологии",
+    "Наука и обучение"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "ZeroCoder",
+   "updatedAt": "2026-10-26T11:31:23.524Z",
+   "x": 0.2644,
+   "y": 0.8144
+  },
+  "xbqdllzs0zo5el83b48y": {
+   "createdAt": "2026-10-26T11:57:50.235Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "imcwcix0ukw2sd8r9ka5",
+    "rh0polyx05yrw2i6g5qs"
+   ],
+   "note": "Завести в Notion БД по имущественным пассивам",
+   "notion": "",
+   "spheres": [
+    "Финансы",
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Опись имущества",
+   "updatedAt": "2026-10-26T15:03:47.041Z",
+   "x": -0.5108,
+   "y": 0.0007
+  },
+  "epgu5hef50olel822bz1": {
+   "createdAt": "2026-10-26T10:55:46.421Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Внести в базу оплаты за подписки на сервисы (Gemini, Nano Banana, Amnezia)",
+   "notion": "",
+   "spheres": [
+    "ИИ и технологии",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Подписки на сервисы",
+   "updatedAt": "2026-10-26T10:55:54.768Z",
+   "x": -0.4363,
+   "y": 0.1097
+  },
+  "zdjzo33oft9cr0xopi5g": {
+   "createdAt": "2026-10-25T18:48:02.538Z",
+   "deps": [
+    "inb17g1lsha7eraoakzn",
+    "67vkqq03aew5zicvlqjw"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "inb17g1lsha7eraoakzn"
+   ],
+   "note": "SEO-аудит сайта личной практики и Призмы",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "SEO-аудит сайтов",
+   "updatedAt": "2026-10-26T10:03:16.214Z",
+   "x": 0.261,
+   "y": -0.4602
+  },
+  "imcwcix0ukw2sd8r9ka5": {
+   "createdAt": "2026-10-26T10:41:34.151Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Собрать затраты на маркетплейсах",
+   "notion": "",
+   "spheres": [
+    "Призма",
+    "Финансы",
+    "Личное",
+    "Хобби"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Маркет-плейсы",
+   "updatedAt": "2026-10-26T11:58:03.389Z",
+   "x": -0.4926,
+   "y": 0.0665
+  },
+  "z3kaz7eo5q4e1ripfhzq": {
+   "createdAt": "2026-10-26T07:27:19.419Z",
+   "deps": [
+    "67vkqq03aew5zicvlqjw",
+    "zdjzo33oft9cr0xopi5g",
+    "ccr0becigh7rz6r4pbi1",
+    "6w4fci27911hl9t5ouwi",
+    "y5a2mp1exj2ki2xzt2tv"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [],
+   "note": "Комплекс задач по продвижению психологической практики",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Психопрактика (Продвижение)",
+   "updatedAt": "2026-10-26T15:02:27.377Z",
+   "x": 0.0111,
+   "y": -0.8676
+  },
+  "pcxaj1tggyih1yf35bu2": {
+   "createdAt": "2026-10-26T13:17:02.736Z",
+   "deps": [
+    "tnnsjqzthrtpnwybll95",
+    "9e3i5xozcp4ku0efeqr1",
+    "ya33i2bmc011z1ff9chr",
+    "2pxu90zyf0y6j6j0t49i",
+    "ftmtl9k0v5e31v9ilrg6"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [],
+   "note": "Проекты отдела пожарной вентиляции",
+   "notion": "",
+   "spheres": [
+    "Меркор-ПРУФ"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Клапаны",
+   "updatedAt": "2026-10-27T08:47:39.603Z",
+   "x": 0.8092,
+   "y": -0.2868
+  },
+  "d3bxaoeovwk0http4gex": {
+   "createdAt": "2026-10-27T07:42:52.171Z",
+   "deps": [
+    "vh0ldhu8mtqkiljmwcp5",
+    "ls1ebwgqm4oi44co43cg",
+    "qa9g4fn9hj9upgi397og"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [
+    "x10sbdoo0qasy0vofo3n",
+    "sbmdy9bnm3bbhd9r7wjl"
+   ],
+   "note": "Создание авторской ресурсной колоды",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Творчество",
+    "Контент",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "МАК \"Талисманы\"",
+   "updatedAt": "2026-10-27T08:06:17.494Z",
+   "x": 0.2415,
+   "y": -0.9097
+  },
+  "pvftu7kew94n7796y4tb": {
+   "createdAt": "2026-10-26T13:22:32.039Z",
+   "deps": [
+    "tnnsjqzthrtpnwybll95",
+    "sjfjtpix2dohqobca1vt"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [],
+   "note": "Задачи и проекты в сфере инноваций и новаций Меркор-ПРУФ",
+   "notion": "",
+   "spheres": [
+    "Меркор-ПРУФ"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "R&B",
+   "updatedAt": "2026-10-26T13:24:16.778Z",
+   "x": 0.7732,
+   "y": -0.35
+  },
+  "rbaogxj16s2dy4riyfwl": {
+   "createdAt": "2026-10-26T10:14:21.333Z",
+   "deps": [
+    "ctx9w5i3nweoloichbo0",
+    "vtqzpwcfj2w9rdplnf8f",
+    "gqxx20q4ca8p8s9ayp69",
+    "x0ced8fum5rejjc3bzhx",
+    "q5cys5g0kpdwxdtlsy04"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [],
+   "note": "Проект по автоматизации работы администраторов Призмы",
+   "notion": "",
+   "spheres": [
+    "Призма",
+    "ИИ и технологии"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Admin-Tools",
+   "updatedAt": "2026-10-27T08:14:42.475Z",
+   "x": 0.5506,
+   "y": -0.6425
+  },
+  "tgt1sjc27in00dj5yg9f": {
+   "createdAt": "2026-10-27T09:04:58.799Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "project",
+   "links": [
+    "mgf7ln2n6o1pwxi5fn87",
+    "38vdq9mr48b3fdulm227",
+    "93jxwgizg2vxhusitapp"
+   ],
+   "note": "Психологический роман-одиссея про погружение во внутренний Ад",
+   "notion": "",
+   "spheres": [
+    "Творчество",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Роман \"9 сеансов в Аду\"",
+   "updatedAt": "2026-10-27T09:05:56.520Z",
+   "x": 1.0118,
+   "y": 0.1352
+  },
+  "2le2trn4mt0gpcuwv9hi": {
+   "createdAt": "2026-10-26T13:51:52.085Z",
+   "deps": [
+    "084mo2tryfoth0tl6lbj",
+    "s73w8lm1vavea324kfdg"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Изучение английского на регулярной основе",
+   "notion": "",
+   "spheres": [
+    "Наука и обучение",
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Английский язык",
+   "updatedAt": "2026-10-26T13:52:48.007Z",
+   "x": -0.1962,
+   "y": 0.7788
+  },
+  "q14wwrmqs77mzz580mah": {
+   "active": false,
+   "createdAt": "2026-10-26T10:22:59.749Z",
+   "deps": [
+    "iu0jecg4udvcxop7llmw"
+   ],
+   "doneAt": "2026-10-26",
+   "kind": "task",
+   "links": [
+    "38vdq9mr48b3fdulm227",
+    "s73w8lm1vavea324kfdg"
+   ],
+   "note": "Библиотека знаний по психологии и психотерапии",
+   "notion": "https://app.notion.com/p/3c7ec455c4dc8102b90ee91b0fa98ce2",
+   "spheres": [
+    "Психопрактика",
+    "Наука и обучение",
+    "Контент"
+   ],
+   "status": "done",
+   "sync": "synced",
+   "syncNote": "Отдельной задачи нет; привязал закрытую подзадачу «vault-psy: доложить схему «замочная скважина»».",
+   "title": "vault-psy",
+   "updatedAt": "2026-10-27T09:01:05.249Z",
+   "x": 0.0625,
+   "y": -0.6978
+  },
+  "mgf7ln2n6o1pwxi5fn87": {
+   "active": false,
+   "createdAt": "2026-10-25T18:23:44.702Z",
+   "deps": [
+    "c9ozmp82s4qs1kru9li2"
+   ],
+   "doneAt": "2026-10-25",
+   "kind": "project",
+   "links": [
+    "88zwr0v2abn7fj6r1568"
+   ],
+   "note": "Творческая мастерская по созданию художественных произведений и эссеистике",
+   "notion": "https://app.notion.com/p/3cbec455c4dc8122ad65f16f690f616a",
+   "spheres": [
+    "Творчество",
+    "Наука и обучение",
+    "Контент"
+   ],
+   "status": "done",
+   "sync": "synced",
+   "syncNote": "Отдельной задачи нет; привязал закрытую подзадачу «FORGE: залить промт v2.1 в проект «Мастерская»».",
+   "title": "Forge",
+   "updatedAt": "2026-10-27T10:01:03.144Z",
+   "x": 0.668,
+   "y": 0.2115
+  },
+  "9fpqt5uketakf8vwpf55": {
+   "createdAt": "2026-10-26T08:28:40.841Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "k3tk1bqs9757b2v6rsqi"
+   ],
+   "note": "Скачать в ТГ-канале трейдера сборник стратегий по трейдингу",
+   "notion": "",
+   "spheres": [
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Стратегии трейдинга",
+   "updatedAt": "2026-10-26T09:14:51.620Z",
+   "x": -0.8159,
+   "y": 0.2545
+  },
+  "xab631sk5okzanzx7olt": {
+   "createdAt": "2026-10-26T12:58:43.098Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "1p72dyhx8rc4h1rgotr2"
+   ],
+   "note": "Регистрация права на логотип призмы и маскота",
+   "notion": "",
+   "spheres": [
+    "Призма",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Товарный знак",
+   "updatedAt": "2026-10-27T07:31:35.470Z",
+   "x": 0.6034,
+   "y": 0.6368
+  },
+  "m5qylpgk1g9521ln6qm9": {
+   "createdAt": "2026-10-26T08:34:59.452Z",
+   "deps": [
+    "38vdq9mr48b3fdulm227"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [
+    "mgf7ln2n6o1pwxi5fn87"
+   ],
+   "note": "Проект по научной работе (написание статей)",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "ИИ и технологии",
+    "Наука и обучение",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Кафедра",
+   "updatedAt": "2026-10-26T09:32:03.426Z",
+   "x": -0.1099,
+   "y": 0.6925
+  },
+  "iol9iaxu1szuvpd3uzvg": {
+   "createdAt": "2026-10-27T07:12:05.708Z",
+   "deps": [
+    "8dykyvlux2cg0uv2pgqt"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [],
+   "note": "",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Контент",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Запись медитаций",
+   "updatedAt": "2026-10-27T07:12:25.035Z",
+   "x": -0.1897,
+   "y": -0.9006
+  },
+  "w1160dg6gxuotsrao14o": {
+   "createdAt": "2026-10-27T09:13:28.125Z",
+   "deps": [
+    "38vdq9mr48b3fdulm227",
+    "cavqin4yftgv998y84yo",
+    "93jxwgizg2vxhusitapp",
+    "25psyv23mew5qpfa7tmb",
+    "mgf7ln2n6o1pwxi5fn87",
+    "vh0ldhu8mtqkiljmwcp5"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "tgt1sjc27in00dj5yg9f"
+   ],
+   "note": "Настольная/компьютерная/карточная психологическая игра по типу RPG/DnD: создание персонажа с определённым психотипом и уровнем организации личности, набор защитных механизмов (артефакты). \nПриключения: детские травмы, родовые сценарии, кризисы и т.д.\nЦель: просвещение в психотерапии, лучшее понимание других, Т-игра, если выбирает свои качества",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Творчество",
+    "ИИ и технологии",
+    "Наука и обучение",
+    "Контент",
+    "Финансы",
+    "Личное",
+    "Хобби"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "RPG \"Ад - это другие\"",
+   "updatedAt": "2026-10-27T09:15:42.164Z",
+   "x": -0.6579,
+   "y": -0.7873
+  },
+  "y9g1l4cclw5q390jndxs": {
+   "createdAt": "2026-10-26T12:25:19.236Z",
+   "deps": [
+    "tnnsjqzthrtpnwybll95",
+    "22txb5uch44i9yo5l1kg"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [],
+   "note": "Проект направления пожаротушения тонкораспылённой водой",
+   "notion": "",
+   "spheres": [
+    "Меркор-ПРУФ"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "АПТ ТРВ",
+   "updatedAt": "2026-10-26T13:18:42.147Z",
+   "x": 0.7466,
+   "y": -0.4071
+  },
+  "o575mh0mdw8rqh0ekuxe": {
+   "createdAt": "2026-10-26T23:24:37.500Z",
+   "deps": [
+    "eb55x7wgmua8fmahw9of",
+    "1sz5q7l6hpbf4mt2qb31",
+    "qac240wfhmnmldfv6dtu",
+    "ikhlljht48s4wmhpzq3p",
+    "62yun62m764cfn80sb3u",
+    "4wb708dhdkkpsxwlntcu",
+    "fxxt2uqy7wo3i8thd9xt",
+    "e3cdx11b2mdgfbspq2ug",
+    "2fn216yaw74e00n2u6l4",
+    "douapf57ujewui422b1l",
+    "ou4np4ylpyd7h0ljpejz"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [
+    "rr8yjs6p7ej1tucua25t"
+   ],
+   "note": "Плановые проверки здоровья по плану Айболита",
+   "notion": "",
+   "spheres": [
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Чекапы",
+   "updatedAt": "2026-10-27T00:00:00.000Z",
+   "x": -0.6739,
+   "y": -0.1871
+  },
+  "ya33i2bmc011z1ff9chr": {
+   "createdAt": "2026-10-26T13:27:37.792Z",
+   "deps": [
+    "1x2s084zxkaibl3ynoov"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [
+    "iydskwoa2bh8vm0t6jdm"
+   ],
+   "note": "Калькулятор расчёта себестоимости клапанов",
+   "notion": "",
+   "spheres": [
+    "Меркор-ПРУФ"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Калькулятор себестоимости",
+   "updatedAt": "2026-10-27T08:46:37.693Z",
+   "x": 0.9563,
+   "y": -0.3676
+  },
+  "qac240wfhmnmldfv6dtu": {
+   "createdAt": "2026-10-25T16:25:57.025Z",
+   "deps": [
+    "1sz5q7l6hpbf4mt2qb31"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "rr8yjs6p7ej1tucua25t"
+   ],
+   "note": "Записаться на чекап к гастроэнтерологу",
+   "notion": "",
+   "spheres": [
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Гастроэнтеролог",
+   "updatedAt": "2026-10-27T07:02:36.294Z",
+   "x": -0.649,
+   "y": -0.1568
+  },
+  "sjarrwt9a89u2p6ojyz8": {
+   "createdAt": "2026-10-27T07:28:48.098Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Удаление/скрытие dating-приложений и VPN",
+   "notion": "",
+   "spheres": [
+    "ИИ и технологии",
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Apps",
+   "updatedAt": "2026-10-27T07:28:58.361Z",
+   "x": 0.6051,
+   "y": 0.568
+  },
+  "vnlnv21wygo45cp3yl71": {
+   "createdAt": "2026-10-27T07:38:12.248Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Отрисовка персонажей и анимируемых элементов",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Творчество",
+    "ИИ и технологии",
+    "Контент",
+    "Хобби"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Библиотека элементов",
+   "updatedAt": "2026-10-27T07:40:07.914Z",
+   "x": -0.512,
+   "y": 0.6331
+  },
+  "rcgy1w3xc2g2dtekim5d": {
+   "createdAt": "2026-10-27T07:25:57.674Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Бэкап и чистка фотогаллереи",
+   "notion": "",
+   "spheres": [
+    "ИИ и технологии",
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Фотогаллерея",
+   "updatedAt": "2026-10-27T07:26:05.326Z",
+   "x": 0.5695,
+   "y": 0.5259
+  },
+  "8dlu7ek56z8sp2u8kdzx": {
+   "createdAt": "2026-10-26T12:47:33.437Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Оформление генеральных доверенностей на случай отъезда",
+   "notion": "",
+   "spheres": [
+    "Финансы",
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Доверенность",
+   "updatedAt": "2026-10-27T07:31:32.341Z",
+   "x": 0.5439,
+   "y": 0.6095
+  },
+  "mc9x7ye83fqyyn1lv35j": {
+   "active": false,
+   "createdAt": "2026-10-26T07:39:56.653Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Сбор источников для библиотеки маркетолога",
+   "notion": "",
+   "spheres": [
+    "ИИ и технологии"
+   ],
+   "startedAt": "2026-10-26",
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Источники vault-biz",
+   "touchedAt": "2026-10-26",
+   "updatedAt": "2026-10-27T12:43:35.037Z",
+   "x": 0.2208,
+   "y": -0.4068
+  },
+  "kiway6d7gh8chx9o0rz1": {
+   "active": false,
+   "createdAt": "2026-10-25T18:46:04.787Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "000po1iiu6qsz8kj1c55"
+   ],
+   "note": "Расчистка старых паролей в 1Password",
+   "notion": "",
+   "spheres": [
+    "Личное"
+   ],
+   "startedAt": "2026-10-25",
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "1Password",
+   "touchedAt": "2026-10-25",
+   "updatedAt": "2026-10-27T07:32:55.253Z",
+   "x": 0.1077,
+   "y": 0.2687
+  },
+  "rvcd3z77qlo37lifapta": {
+   "createdAt": "2026-10-26T14:59:47.155Z",
+   "deps": [
+    "8uedn9qwh1rtxtyr3j2r"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "q14wwrmqs77mzz580mah"
+   ],
+   "note": "Обработка ноутбуков по психологии для загрузки в vault-psy",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "ИИ и технологии"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Notebook PSY 2 vault-psy",
+   "updatedAt": "2026-10-27T07:11:23.625Z",
+   "x": 0.0624,
+   "y": -0.7162
+  },
+  "a2zf1vmxdg9h2wnb7enn": {
+   "createdAt": "2026-10-26T06:52:41.417Z",
+   "deps": [
+    "o3hb6e4tlo8kbvgifqnf"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [
+    "38vdq9mr48b3fdulm227",
+    "88zwr0v2abn7fj6r1568",
+    "s73w8lm1vavea324kfdg"
+   ],
+   "note": "Контент-помощник по ведению канала для коллег-психологов \"Кабинет №5\"",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Наука и обучение",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "ТГ \"Кабинет №5\"",
+   "updatedAt": "2026-10-27T08:22:37.043Z",
+   "x": -0.2814,
+   "y": 0.8707
+  },
+  "o1a72hnz1w32pmf4d6rj": {
+   "createdAt": "2026-10-27T08:00:05.586Z",
+   "deps": [
+    "vh0ldhu8mtqkiljmwcp5",
+    "2ucn0s40vbhtuskl6ckq",
+    "iu43mqv2ckdxxkn0pkml"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [
+    "x10sbdoo0qasy0vofo3n",
+    "sbmdy9bnm3bbhd9r7wjl"
+   ],
+   "note": "Создание авторской универсальной колоды МАК",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Творчество",
+    "Контент",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "МАК \"Пороги\"",
+   "updatedAt": "2026-10-27T08:05:17.352Z",
+   "x": 0.2064,
+   "y": -0.9179
+  },
+  "0we9jcpndzenh68f6v5r": {
+   "createdAt": "2026-10-25T16:15:49.010Z",
+   "deps": [
+    "1qh91ugn370lchzn3z75"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Регистрация анкеты на сайте знакомств и поиск партнёра",
+   "notion": "",
+   "spheres": [
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Partner",
+   "updatedAt": "2026-10-27T08:48:34.803Z",
+   "x": -0.9781,
+   "y": -0.3089
+  },
+  "qa9g4fn9hj9upgi397og": {
+   "createdAt": "2026-10-27T08:06:03.313Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Генерация изображений для МАК Талисманы",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Творчество",
+    "ИИ и технологии"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Генерация Талисманы",
+   "updatedAt": "2026-10-27T08:06:12.170Z",
+   "x": 0.233,
+   "y": -0.9544
+  },
+  "m9123u9ntnbp2m72gywr": {
+   "createdAt": "2026-10-26T15:03:22.563Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "88zwr0v2abn7fj6r1568",
+    "38vdq9mr48b3fdulm227"
+   ],
+   "note": "Статья сравнивающая механизмы работы мозга человека и принципы работы с нейросетями",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Мозг человека vs ИИ",
+   "updatedAt": "2026-10-26T15:04:32.631Z",
+   "x": -0.4077,
+   "y": 0.9351
+  },
+  "lk4ckwo3qptf7hxl47vv": {
+   "createdAt": "2026-10-27T08:11:08.916Z",
+   "deps": [
+    "q5cys5g0kpdwxdtlsy04",
+    "rkcktu4258568f9isduc",
+    "8xjaw13fe1x4lvlgaw9t",
+    "o3hb6e4tlo8kbvgifqnf"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [
+    "67vkqq03aew5zicvlqjw"
+   ],
+   "note": "Создание дизайн-систем в Claude Design",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Меркор-ПРУФ",
+    "Творчество",
+    "ИИ и технологии",
+    "Контент",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Дизайн-системы",
+   "updatedAt": "2026-10-27T08:22:19.202Z",
+   "x": 0.163,
+   "y": -0.3093
+  },
+  "sinapsy-artefakt": {
+   "active": false,
+   "createdAt": "2026-10-25T15:30:00.000Z",
+   "deps": [
+    "88zwr0v2abn7fj6r1568",
+    "sinapsy-zapolnenie"
+   ],
+   "doneAt": "2026-10-27",
+   "kind": "project",
+   "links": [],
+   "note": "Внедрение технологии богатого контекста",
+   "notion": "https://app.notion.com/p/404ec455c4dc816d9715cffcde223538",
+   "spheres": [
+    "ИИ и технологии"
+   ],
+   "startedAt": "2026-10-27",
+   "status": "done",
+   "sync": "pending",
+   "syncNote": "",
+   "title": "Артефакт Синапсы",
+   "touchedAt": "2026-10-27",
+   "updatedAt": "2026-10-27T12:42:19.993Z",
+   "x": 0.3497,
+   "y": 0.0014
+  },
+  "acg1coivmqnn16jgiwzb": {
+   "createdAt": "2026-10-26T13:25:32.784Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "project",
+   "links": [
+    "9e3i5xozcp4ku0efeqr1"
+   ],
+   "note": "Документальное обеспечение нового продукта - вертикальные жалюзийные люки mcr LAM: сайт, каталог, паспорт, сертификат",
+   "notion": "",
+   "spheres": [
+    "Меркор-ПРУФ"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "mcr LAM",
+   "updatedAt": "2026-10-26T13:26:03.117Z",
+   "x": 1.0021,
+   "y": -0.1916
+  },
+  "h6mqa2g36d26p4ed433d": {
+   "createdAt": "2026-10-27T07:13:42.270Z",
+   "deps": [
+    "8ucp2ikg0ht9bqqasa40"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Тестирование эффекта от медитаций на добровольцах",
+   "notion": "",
+   "spheres": [
+    "Психопрактика"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Тестирование медитаций",
+   "updatedAt": "2026-10-27T07:15:44.092Z",
+   "x": -0.2078,
+   "y": -0.9661
+  },
+  "d2ih876frtuphfj3ovv4": {
+   "active": false,
+   "createdAt": "2026-10-26T11:48:42.806Z",
+   "deps": [],
+   "doneAt": "2026-10-26",
+   "kind": "task",
+   "links": [],
+   "note": "Подключение Notebook Gemini для освоения различных навыков",
+   "notion": "https://app.notion.com/p/3ddec455c4dc8070a96ce12478529281",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Меркор-ПРУФ",
+    "Творчество",
+    "ИИ и технологии",
+    "Наука и обучение",
+    "Контент",
+    "Финансы",
+    "Личное",
+    "Хобби"
+   ],
+   "status": "done",
+   "sync": "synced",
+   "syncNote": "В Notion уже закрыто (задача «Настроить связку с Google Notebook LM»).",
+   "title": "Notebook LM",
+   "updatedAt": "2026-10-26T13:50:11.124Z",
+   "x": 0.1376,
+   "y": 0.1367
+  },
+  "7nmiidvo7amlzaonh0dz": {
+   "createdAt": "2026-10-26T10:35:43.199Z",
+   "deps": [
+    "mgf7ln2n6o1pwxi5fn87"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "38vdq9mr48b3fdulm227"
+   ],
+   "note": "Эссе о психологии создателя",
+   "notion": "",
+   "spheres": [
+    "Творчество",
+    "ИИ и технологии",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Зеркало для Бога",
+   "updatedAt": "2026-10-26T10:36:16.021Z",
+   "x": 0.8245,
+   "y": 0.6008
+  },
+  "6xtvq7p8hdowp336ll4d": {
+   "createdAt": "2026-10-26T13:39:42.159Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "c9ozmp82s4qs1kru9li2"
+   ],
+   "note": "Разобрать писательскую модель Старобинец",
+   "notion": "",
+   "spheres": [
+    "Творчество"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Старобинец",
+   "updatedAt": "2026-10-27T11:41:26.007Z",
+   "x": 0.7255,
+   "y": 0.1713
+  },
+  "sinapsy-zapolnenie": {
+   "active": true,
+   "createdAt": "2026-10-25T15:30:00.000Z",
+   "deps": [
+    "dqnw7i1v4o3f6tf7ciam"
+   ],
+   "doneAt": "2026-10-26",
+   "kind": "task",
+   "links": [],
+   "note": "Заполнение синапсов актуальными задачами и проектами",
+   "notion": "https://app.notion.com/p/404ec455c4dc81c49f00c35b3346a491",
+   "spheres": [
+    "ИИ и технологии"
+   ],
+   "startedAt": "2026-10-25",
+   "status": "done",
+   "sync": "synced",
+   "syncNote": "Закрыл задачу в Notion по слову Игоря: обкатка прошла успешно (26.10.2026).",
+   "title": "Обкатка синапсов",
+   "touchedAt": "2026-10-25",
+   "updatedAt": "2026-10-27T10:02:29.347Z",
+   "x": 0.3276,
+   "y": 0.0227
+  },
+  "2yili64ncw19sp5holk3": {
+   "createdAt": "2026-10-26T12:28:33.993Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "project",
+   "links": [
+    "s73w8lm1vavea324kfdg",
+    "z3kaz7eo5q4e1ripfhzq"
+   ],
+   "note": "Изучение курсов Япсихолог",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Наука и обучение"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Япсихолог",
+   "updatedAt": "2026-10-26T12:29:01.061Z",
+   "x": -0.1247,
+   "y": 0.8358
+  },
+  "w1thgq1msjoa5zxscgz8": {
+   "createdAt": "2026-10-26T13:42:09.304Z",
+   "deps": [
+    "vakixbjmd2r9xsvr2m9u"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Отправить в архив старые ассистентские проекты: Каллиопа, Нострадамус, Бог из машины, Пифия, Пигмалион, Соломон, Ментор, Сократ, Локи, Мнемозина",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Меркор-ПРУФ",
+    "Творчество",
+    "ИИ и технологии",
+    "Наука и обучение",
+    "Контент",
+    "Финансы",
+    "Личное",
+    "Хобби"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Кладбище ассистентов",
+   "updatedAt": "2026-10-27T07:39:51.617Z",
+   "x": -0.1572,
+   "y": -0.0677
+  },
+  "inb17g1lsha7eraoakzn": {
+   "active": false,
+   "createdAt": "2026-10-25T18:40:44.631Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "project",
+   "links": [
+    "88zwr0v2abn7fj6r1568",
+    "pivc1tb3ifba1nj8ge0c",
+    "0dqox5jm8ex9rkezubcu"
+   ],
+   "note": "Ассистент-инженер по кибербезопасности, информационным технологиям, IT и ИИ",
+   "notion": "",
+   "spheres": [
+    "ИИ и технологии",
+    "Контент"
+   ],
+   "startedAt": "2026-10-26",
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Sentinel",
+   "touchedAt": "2026-10-26",
+   "updatedAt": "2026-10-26T23:30:00.000Z",
+   "x": 0.4339,
+   "y": 0.5521
+  },
+  "72swidjhsbwvg0bln9ii": {
+   "createdAt": "2026-10-26T11:08:50.561Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "y67dy9pc22r1nvphtgll"
+   ],
+   "note": "Исследование поппулярных клиентских запросов по психологии в сети для формирования контент-плана",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Рынок запросов",
+   "updatedAt": "2026-10-27T07:35:41.522Z",
+   "x": -0.5327,
+   "y": 0.7002
+  },
+  "tpb5cq03c3b096w5qmpt": {
+   "createdAt": "2026-10-26T13:47:16.228Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "2k56zb0r6hakawbwrple"
+   ],
+   "note": "Редактирование карточки Призмы на 2GIS",
+   "notion": "",
+   "spheres": [
+    "Призма",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "2ГИС",
+   "updatedAt": "2026-10-26T13:47:35.508Z",
+   "x": 0.5158,
+   "y": -0.7203
+  },
+  "iydskwoa2bh8vm0t6jdm": {
+   "createdAt": "2026-10-26T13:26:41.563Z",
+   "deps": [
+    "rkcktu4258568f9isduc"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [
+    "pcxaj1tggyih1yf35bu2",
+    "91n5gvw8eg3fgo4tvlje"
+   ],
+   "note": "Обновление технических каталогов",
+   "notion": "",
+   "spheres": [
+    "Меркор-ПРУФ"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Технические каталоги",
+   "updatedAt": "2026-10-27T08:17:25.592Z",
+   "x": 0.9042,
+   "y": -0.2498
+  },
+  "ou4np4ylpyd7h0ljpejz": {
+   "active": false,
+   "createdAt": "2026-10-25T16:19:18.944Z",
+   "deps": [],
+   "doneAt": "2026-10-25",
+   "kind": "task",
+   "links": [],
+   "note": "Сходить на приём к урологу",
+   "notion": "https://app.notion.com/p/3c3ec455c4dc8168975fc9b577c879a0",
+   "spheres": [
+    "Личное"
+   ],
+   "status": "done",
+   "sync": "synced",
+   "syncNote": "В Notion уже закрыто (задача «Здоровье: записаться к урологу — эпизод D40.1 и простата»).",
+   "title": "Уролог",
+   "updatedAt": "2026-10-27T07:02:40.883Z",
+   "x": -0.6672,
+   "y": -0.1522
+  },
+  "8xjaw13fe1x4lvlgaw9t": {
+   "createdAt": "2026-10-27T08:21:10.119Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Дизайн-система ТГ-канала \"Психо и точка\"",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Творчество",
+    "ИИ и технологии",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "DS \"Психо и точка\"",
+   "updatedAt": "2026-10-27T08:22:11.207Z",
+   "x": 0.1376,
+   "y": -0.3001
+  },
+  "ddu6jhxl65q58hbv0e6v": {
+   "createdAt": "2026-10-26T08:27:32.610Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Отработка ИИ-навыков по трейдингу в песочнице",
+   "notion": "",
+   "spheres": [
+    "ИИ и технологии",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Песочница трейдера",
+   "updatedAt": "2026-10-26T09:14:37.726Z",
+   "x": -0.8117,
+   "y": 0.2767
+  },
+  "6mvrcr7qez6mcxione37": {
+   "createdAt": "2026-10-25T16:51:42.036Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Ретроспективный ввод клиента с долгой историей",
+   "notion": "",
+   "spheres": [
+    "Психопрактика"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Прометей",
+   "updatedAt": "2026-10-26T08:30:33.367Z",
+   "x": 0.0504,
+   "y": -0.5589
+  },
+  "iccx5wqeejhew8qllx78": {
+   "createdAt": "2026-10-26T13:35:27.700Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "2k56zb0r6hakawbwrple"
+   ],
+   "note": "Оформление рекламных объявлений о кабинетах на сайте Б17 и анализ кампании",
+   "notion": "",
+   "spheres": [
+    "Призма",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Б17 - Кабинеты",
+   "updatedAt": "2026-10-26T13:35:56.163Z",
+   "x": 0.448,
+   "y": -0.7105
+  },
+  "ctbls9maslklp7tdu3m6": {
+   "createdAt": "2026-10-27T07:23:48.788Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Чистка и бэкап контактов",
+   "notion": "",
+   "spheres": [
+    "ИИ и технологии",
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Контакты",
+   "updatedAt": "2026-10-27T07:25:15.339Z",
+   "x": 0.5489,
+   "y": 0.5563
+  },
+  "cobwip2oudikpz9qnba4": {
+   "createdAt": "2026-10-17T15:53:36.913Z",
+   "deps": [
+    "88zwr0v2abn7fj6r1568",
+    "wo80x2zzhx2t5jwk4mik"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [],
+   "note": "Проект по работе с локальными ИИ",
+   "notion": "",
+   "spheres": [
+    "ИИ и технологии"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Локальный AI",
+   "updatedAt": "2026-10-26T11:16:32.291Z",
+   "x": 0.2131,
+   "y": 0.2816
+  },
+  "4gr5lvkavsa5mo4v3jo4": {
+   "createdAt": "2026-10-26T09:55:39.124Z",
+   "deps": [
+    "vtqzpwcfj2w9rdplnf8f"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Сборник техник (электронная версия и печатная книга)",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Сборник техник",
+   "updatedAt": "2026-10-27T09:16:03.312Z",
+   "x": 0.7271,
+   "y": -0.7275
+  },
+  "8dykyvlux2cg0uv2pgqt": {
+   "createdAt": "2026-10-27T07:10:42.653Z",
+   "deps": [
+    "rvcd3z77qlo37lifapta"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "vih7tkmh63r5jl2km79i"
+   ],
+   "note": "Создать навык, помогающий создавать авторские медитации под запрос (текст, подбор музыки, монтаж) на базе Эриксоновского гипноза и терапевтических метафор Гордона",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Контент",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Skill Медитации",
+   "updatedAt": "2026-10-27T07:11:28.695Z",
+   "x": -0.1224,
+   "y": -0.8212
+  },
+  "6w4fci27911hl9t5ouwi": {
+   "createdAt": "2026-10-26T13:48:15.036Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "67vkqq03aew5zicvlqjw"
+   ],
+   "note": "Оформление анкеты на сайте КЦП-сообщества",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Анкета КЦП",
+   "updatedAt": "2026-10-26T23:30:00.000Z",
+   "x": 0.045,
+   "y": -0.8979
+  },
+  "vih7tkmh63r5jl2km79i": {
+   "createdAt": "2026-10-27T07:07:40.757Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Закачать курсы по Эриксоновскому гипнозу и терапевтическим метафорам в Staging для последующей загрузки в ноутбуки",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Курсы по ЭГ",
+   "updatedAt": "2026-10-27T07:07:55.283Z",
+   "x": 0.0928,
+   "y": -0.7502
+  },
+  "vh0ldhu8mtqkiljmwcp5": {
+   "createdAt": "2026-10-25T18:56:03.111Z",
+   "deps": [
+    "qbrmv1h0kb9d19kjkn2c",
+    "sbmdy9bnm3bbhd9r7wjl"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [
+    "38vdq9mr48b3fdulm227",
+    "88zwr0v2abn7fj6r1568",
+    "s73w8lm1vavea324kfdg",
+    "bgpv2l0a4kc7k3sosqw0"
+   ],
+   "note": "Проект по использованию МАК-карт",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Наука и обучение",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "МАК",
+   "updatedAt": "2026-10-26T11:36:59.326Z",
+   "x": 0.2177,
+   "y": -0.6662
+  },
+  "c2tbc51s6wjszu9fvt0v": {
+   "createdAt": "2026-10-26T10:47:18.868Z",
+   "deps": [
+    "bgpv2l0a4kc7k3sosqw0",
+    "13qwz10qn0ua4oz0s9gr",
+    "5zz9ocs4tj9pg2i5qxfm"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Артефакт помогающий определять и учитывать вид отдыха (сериалы, фильмы, готовка, Roombox, компьютерные игры и прочее)",
+   "notion": "",
+   "spheres": [
+    "ИИ и технологии",
+    "Личное",
+    "Хобби"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Рулетка досуга",
+   "updatedAt": "2026-10-27T08:58:38.033Z",
+   "x": -0.1925,
+   "y": -0.2882
+  },
+  "wmhosxyif4zz3218d3xx": {
+   "createdAt": "2026-10-27T08:12:11.068Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "s73w8lm1vavea324kfdg",
+    "lk4ckwo3qptf7hxl47vv"
+   ],
+   "note": "Просмотреть курсы по Claude Design",
+   "notion": "",
+   "spheres": [
+    "ИИ и технологии",
+    "Наука и обучение",
+    "Контент",
+    "Хобби"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Изучение Claude Design",
+   "updatedAt": "2026-10-27T08:12:36.485Z",
+   "x": 0.0111,
+   "y": 0.5514
+  },
+  "ftmtl9k0v5e31v9ilrg6": {
+   "active": false,
+   "createdAt": "2026-10-27T08:47:21.214Z",
+   "deps": [],
+   "doneAt": "2026-10-27",
+   "kind": "task",
+   "links": [],
+   "note": "Конвертер КП конкурентов в офферы Меркор",
+   "notion": "",
+   "spheres": [
+    "Меркор-ПРУФ"
+   ],
+   "status": "done",
+   "sync": "pending",
+   "syncNote": "",
+   "title": "mcr Converter",
+   "updatedAt": "2026-10-27T08:47:45.723Z",
+   "x": 0.9147,
+   "y": -0.4552
+  },
+  "2ut3w110ebelo2b6jb7b": {
+   "createdAt": "2026-10-26T08:08:14.556Z",
+   "deps": [
+    "fa13ie7fqq8ag0cqdgbl",
+    "k3tk1bqs9757b2v6rsqi",
+    "9fpqt5uketakf8vwpf55"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Набор навыков по трейдингу",
+   "notion": "",
+   "spheres": [
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Trading-skills",
+   "updatedAt": "2026-10-26T09:14:54.502Z",
+   "x": -0.7953,
+   "y": 0.2329
+  },
+  "q3psd2cv2yk91k37m6t1": {
+   "createdAt": "2026-10-26T11:36:44.193Z",
+   "deps": [
+    "vh0ldhu8mtqkiljmwcp5",
+    "4gr5lvkavsa5mo4v3jo4"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Клуб для психологов в Призме по освоению МАК-карт",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "МАК-клуб",
+   "updatedAt": "2026-10-27T12:25:53.534Z",
+   "x": 0.8156,
+   "y": -0.6201
+  },
+  "vtqzpwcfj2w9rdplnf8f": {
+   "createdAt": "2026-10-26T09:48:34.227Z",
+   "deps": [
+    "sbmdy9bnm3bbhd9r7wjl"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [
+    "ctx9w5i3nweoloichbo0",
+    "x10sbdoo0qasy0vofo3n",
+    "chpt7f2xnr4pangksv31"
+   ],
+   "note": "Интернет-платформа системы бронирования и учёта МАК-колод, с электронным каталогом колод и техник",
+   "notion": "",
+   "spheres": [
+    "Призма",
+    "ИИ и технологии"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Платформа МАК",
+   "updatedAt": "2026-10-27T09:16:05.998Z",
+   "x": 0.5877,
+   "y": -0.8392
+  },
+  "38vdq9mr48b3fdulm227": {
+   "createdAt": "2026-10-25T16:47:13.350Z",
+   "deps": [
+    "ku1kmhonb0uprvo8h1ow",
+    "q14wwrmqs77mzz580mah"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [
+    "88zwr0v2abn7fj6r1568",
+    "nq00untr6uvyafg6ux5y"
+   ],
+   "note": "Ассистент по психологической практике и психологическому контенту",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "ИИ и технологии",
+    "Наука и обучение",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Фрейд 4.0",
+   "updatedAt": "2026-10-26T23:30:00.000Z",
+   "x": 0.0101,
+   "y": -0.7002
+  },
+  "t2vp4wvot049w99ywly1": {
+   "createdAt": "2026-10-26T11:53:11.762Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Скачать курс и поставить на изучение",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Наука и обучение"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "\"Агрессия\" Станковской",
+   "updatedAt": "2026-10-26T12:07:23.191Z",
+   "x": 0.0089,
+   "y": 0.8689
+  },
+  "67vkqq03aew5zicvlqjw": {
+   "createdAt": "2026-10-17T16:02:38.020Z",
+   "deps": [
+    "tqp9aznbsc1tyqubosfs"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [
+    "88zwr0v2abn7fj6r1568",
+    "1p72dyhx8rc4h1rgotr2",
+    "inb17g1lsha7eraoakzn",
+    "38vdq9mr48b3fdulm227",
+    "vh0ldhu8mtqkiljmwcp5"
+   ],
+   "note": "Доработка ассистента-маркетолога по архитектуре Vault-biz - Notebook LM - Skills",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "ИИ и технологии",
+    "Контент",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "EVA",
+   "updatedAt": "2026-10-27T10:01:35.491Z",
+   "x": 0.109,
+   "y": -0.3324
+  },
+  "6fc1tvqou3m6af0g0jhj": {
+   "createdAt": "2026-10-27T07:39:46.029Z",
+   "deps": [
+    "2eiftoci7yqhrflwrwzk"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Отрисовка и запуск пилота",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Творчество",
+    "ИИ и технологии",
+    "Контент",
+    "Хобби"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Пилот",
+   "updatedAt": "2026-10-27T07:40:14.468Z",
+   "x": -0.6079,
+   "y": 0.6585
+  },
+  "22txb5uch44i9yo5l1kg": {
+   "createdAt": "2026-10-26T12:26:37.885Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Сравнительный анализ пожаротушения тонкораспылённой водой и обычного пожаротушения на примере конкретного проекта",
+   "notion": "",
+   "spheres": [
+    "Меркор-ПРУФ"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Сравнение ТРВ и СПТ",
+   "updatedAt": "2026-10-26T13:18:47.067Z",
+   "x": 0.7372,
+   "y": -0.4273
+  },
+  "88zwr0v2abn7fj6r1568": {
+   "active": false,
+   "createdAt": "2026-10-25T18:28:12.943Z",
+   "deps": [],
+   "doneAt": "2026-10-25",
+   "kind": "project",
+   "links": [
+    "ku1kmhonb0uprvo8h1ow",
+    "1qh91ugn370lchzn3z75",
+    "s73w8lm1vavea324kfdg"
+   ],
+   "note": "Ассистент по управлению всей инфраструктурой проектов и контекстов",
+   "notion": "https://app.notion.com/p/3c0ec455c4dc815aa192c358ee64a3f9",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Меркор-ПРУФ",
+    "Творчество",
+    "ИИ и технологии",
+    "Наука и обучение",
+    "Контент",
+    "Финансы",
+    "Личное",
+    "Хобби"
+   ],
+   "status": "done",
+   "sync": "synced",
+   "syncNote": "Связан с проектом «Демиург»: Архитектор готов, Демиург как контур живёт дальше — в Notion не закрывал.",
+   "title": "Архитектор",
+   "updatedAt": "2026-10-26T11:41:59.345Z",
+   "x": -0.0228,
+   "y": 0.0042
+  },
+  "334vmfgbnv7iowbesvrx": {
+   "active": false,
+   "createdAt": "2026-10-17T15:55:38.971Z",
+   "deps": [
+    "cavqin4yftgv998y84yo",
+    "25psyv23mew5qpfa7tmb"
+   ],
+   "doneAt": "2026-10-26",
+   "kind": "task",
+   "links": [
+    "cavqin4yftgv998y84yo"
+   ],
+   "note": "Создание компьютерной игры-подарка Ильнуру",
+   "notion": "https://app.notion.com/p/3e4ec455c4dc811dbe18f08244b16923",
+   "spheres": [
+    "Творчество",
+    "Контент",
+    "Финансы",
+    "Личное",
+    "Хобби"
+   ],
+   "status": "done",
+   "sync": "synced",
+   "syncNote": "В Notion уже закрыто (проект «Игра-подарок Ильнуру»).",
+   "title": "Игра И.И.25.0",
+   "updatedAt": "2026-10-27T08:54:01.512Z",
+   "x": -0.7708,
+   "y": -0.6649
+  },
+  "q0v3uozb0m2ffm182kvt": {
+   "createdAt": "2026-10-26T13:33:21.787Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "2k56zb0r6hakawbwrple"
+   ],
+   "note": "Правки на Яндекс.Картах",
+   "notion": "",
+   "spheres": [
+    "Призма",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Яндекс.Бизнес",
+   "updatedAt": "2026-10-26T13:34:12.330Z",
+   "x": 0.477,
+   "y": -0.7422
+  },
+  "4wb708dhdkkpsxwlntcu": {
+   "createdAt": "2026-10-25T16:45:07.913Z",
+   "deps": [
+    "douapf57ujewui422b1l"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Вставить имплант на место удалённого 1,5 года назад зуба",
+   "notion": "",
+   "spheres": [
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Имплант",
+   "updatedAt": "2026-10-27T07:02:56.618Z",
+   "x": -0.6901,
+   "y": -0.2251
+  },
+  "vnmf3o3jrxqwhssg4g41": {
+   "createdAt": "2026-10-26T08:56:32.133Z",
+   "deps": [
+    "vh0ldhu8mtqkiljmwcp5",
+    "ikqszk1lx60y1x0z4h7o",
+    "aopww2psod29euoio04h",
+    "pgzc275ykdyv3lacsc8e"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [
+    "x10sbdoo0qasy0vofo3n",
+    "sbmdy9bnm3bbhd9r7wjl"
+   ],
+   "note": "Создание и публикация авторской колоды по Фокусингу",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Контент",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "МАК Felt Sense",
+   "updatedAt": "2026-10-27T08:07:02.797Z",
+   "x": 0.2968,
+   "y": -0.9123
+  },
+  "a1rm0ohehwcie4lj7h2x": {
+   "createdAt": "2026-10-27T07:35:14.243Z",
+   "deps": [
+    "6fc1tvqou3m6af0g0jhj"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Анимационный сериал про маскота Гошу и его друзей для продвижения Призмы",
+   "notion": "",
+   "spheres": [
+    "Призма",
+    "Творчество",
+    "ИИ и технологии",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Мультсериал про маскота Гошу",
+   "updatedAt": "2026-10-27T07:40:19.178Z",
+   "x": -0.7168,
+   "y": 0.7239
+  },
+  "fxxt2uqy7wo3i8thd9xt": {
+   "createdAt": "2026-10-25T16:40:43.368Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "rr8yjs6p7ej1tucua25t"
+   ],
+   "note": "Записаться на приём в КВД",
+   "notion": "",
+   "spheres": [
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Инфекционист",
+   "updatedAt": "2026-10-27T07:03:09.248Z",
+   "x": -0.704,
+   "y": -0.2075
+  },
+  "i8lor1k0gud9ws8fg9jx": {
+   "createdAt": "2026-10-26T12:52:59.825Z",
+   "deps": [
+    "38vdq9mr48b3fdulm227",
+    "rfa87t780gw1t0tjz6ti",
+    "ubjhjly4uoh6rlqsekkg",
+    "vqcyzvwx7dyfq1wutyhb",
+    "8dykyvlux2cg0uv2pgqt"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [],
+   "note": "Разработка новых артефактов для Фрейда",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "ИИ и технологии"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Новые артефакты Фрейда",
+   "updatedAt": "2026-10-27T07:11:00.895Z",
+   "x": -0.1076,
+   "y": -0.7864
+  },
+  "c5kkn65iohutea2emsm0": {
+   "createdAt": "2026-10-27T09:40:55.533Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Поиск альтернативных вариантов продвижения кабинетов центра Призма (Авито, Яндекс.Недвижимость, Юла, Move.ru и прочее). Глубокий research",
+   "notion": "",
+   "spheres": [
+    "Призма",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Альтернативные площадки",
+   "updatedAt": "2026-10-27T09:41:10.217Z",
+   "x": 0.3392,
+   "y": -0.7214
+  },
+  "rkcktu4258568f9isduc": {
+   "active": false,
+   "createdAt": "2026-10-27T08:16:45.784Z",
+   "deps": [],
+   "doneAt": "2026-10-27",
+   "kind": "task",
+   "links": [],
+   "note": "Дизайн-система для оформления документов и презентаций Меркор-ПРУФ",
+   "notion": "",
+   "spheres": [
+    "Меркор-ПРУФ",
+    "ИИ и технологии",
+    "Контент"
+   ],
+   "status": "done",
+   "sync": "pending",
+   "syncNote": "",
+   "title": "DS Меркор-ПРУФ",
+   "updatedAt": "2026-10-27T08:17:11.892Z",
+   "x": 0.1787,
+   "y": -0.3188
+  },
+  "douapf57ujewui422b1l": {
+   "createdAt": "2026-10-25T16:44:13.327Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "rr8yjs6p7ej1tucua25t"
+   ],
+   "note": "Записаться на приём во \"Все свои\" к стоматологу",
+   "notion": "",
+   "spheres": [
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Стоматолог",
+   "updatedAt": "2026-10-27T07:02:51.901Z",
+   "x": -0.6729,
+   "y": -0.2383
+  },
+  "652do1tbcksm8kil1xcd": {
+   "createdAt": "2026-10-18T09:29:27.715Z",
+   "deps": [
+    "u0e3linrjxyacl5hq89g"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "67vkqq03aew5zicvlqjw"
+   ],
+   "note": "Переработка загруженных в ноутбуки курсов по маркетингу в своды опыта Vault-biz",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Notebook BIZ 2 vault-biz",
+   "updatedAt": "2026-10-27T08:17:59.043Z",
+   "x": 0.145,
+   "y": -0.3537
+  },
+  "srzgmm94s2ceaqo6vvvh": {
+   "createdAt": "2026-10-27T07:47:13.523Z",
+   "deps": [
+    "x10sbdoo0qasy0vofo3n"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Десктопная версия приложения Расклады",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "ИИ и технологии",
+    "Контент",
+    "Финансы"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Desktop Расклады",
+   "updatedAt": "2026-10-27T08:19:12.197Z",
+   "x": 0.3727,
+   "y": -0.95
+  },
+  "y67dy9pc22r1nvphtgll": {
+   "createdAt": "2026-10-25T18:17:09.865Z",
+   "deps": [
+    "38vdq9mr48b3fdulm227",
+    "67vkqq03aew5zicvlqjw",
+    "8xjaw13fe1x4lvlgaw9t"
+   ],
+   "doneAt": "",
+   "kind": "project",
+   "links": [
+    "mgf7ln2n6o1pwxi5fn87"
+   ],
+   "note": "Контент-помощник личного психологического канала \"Психо и точка\"",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "ТГ \"Психо и точка\"",
+   "updatedAt": "2026-10-27T08:22:56.303Z",
+   "x": -0.4953,
+   "y": 0.7323
+  },
+  "oon1fxm40a54827z0lii": {
+   "createdAt": "2026-10-26T10:38:57.910Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Посчитать сколько должен Вале",
+   "notion": "",
+   "spheres": [
+    "Финансы",
+    "Личное"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Долг Вале",
+   "updatedAt": "2026-10-26T10:41:41.527Z",
+   "x": -0.5336,
+   "y": 0.0814
+  },
+  "ccr0becigh7rz6r4pbi1": {
+   "active": false,
+   "createdAt": "2026-10-26T10:01:16.237Z",
+   "deps": [
+    "88zwr0v2abn7fj6r1568"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Аудит сайтов на соответствие законодательству РФ",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Призма",
+    "ИИ и технологии",
+    "Финансы"
+   ],
+   "startedAt": "2026-10-26",
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Аудит демиурга",
+   "touchedAt": "2026-10-26",
+   "updatedAt": "2026-10-27T11:39:29.046Z",
+   "x": 0.1561,
+   "y": -0.4926
+  },
+  "8e8un9v9ndenocx2c4wp": {
+   "createdAt": "2026-10-26T11:24:03.075Z",
+   "deps": [
+    "fosvi8ewilwnal0qzfmj",
+    "67vkqq03aew5zicvlqjw"
+   ],
+   "doneAt": "",
+   "kind": "task",
+   "links": [],
+   "note": "Выложить написанные для Призмы посты",
+   "notion": "",
+   "spheres": [
+    "Призма",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Отложка Призмы",
+   "updatedAt": "2026-10-27T07:35:34.238Z",
+   "x": -0.8105,
+   "y": 0.6267
+  },
+  "vnkmgkfqziv2rt4fq0e4": {
+   "createdAt": "2026-10-26T14:56:59.265Z",
+   "deps": [],
+   "doneAt": "",
+   "kind": "task",
+   "links": [
+    "vqcyzvwx7dyfq1wutyhb"
+   ],
+   "note": "Курсы для загрузки в ноутбуки для создания навыка распаковки",
+   "notion": "",
+   "spheres": [
+    "Психопрактика",
+    "Контент"
+   ],
+   "status": "open",
+   "sync": "none",
+   "syncNote": "",
+   "title": "Курсы по распаковке",
+   "updatedAt": "2026-10-27T07:07:53.530Z",
+   "x": 0.0923,
+   "y": -0.7345
+  }
+ }
+}
