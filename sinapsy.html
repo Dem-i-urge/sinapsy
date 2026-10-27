@@ -1,4 +1,4 @@
-<!-- Синапсы v0.9-draft · 25.10.2026 (своя карта владельца; памятка «?» внутри карты; типы точек «Проект» и «Задача»; сверка с Notion — кнопкой или по пятницам задачей «Пятничная сверка»; «Позвать Архитектора» — аудит связей задачей «Архитектор по карте Синапсы», правки принимает владелец; зависимости и путь сигнала; заколдованные круги и их разрезание; «в работе» с остыванием и мягким лимитом; крепнущие связи; охват и связность; оформление «нейронная ночь») · дом: Dem-i-urge/sinapsy (C:\Users\ivasi\dev\sinapsy) · артефакт claude.ai — проекция, не дом -->
+<!-- Синапсы v0.10-draft · 27.10.2026 (своя карта владельца; поиск с приближением; место новой точки — по уровню и сфере или там, куда смотришь; фильтры состояний и уровней; критическая цепь и узкие места; осиротевшие сферы; памятка «?» внутри карты; типы точек «Проект» и «Задача»; сверка с Notion — кнопкой или по пятницам задачей «Пятничная сверка»; «Позвать Архитектора» — аудит связей задачей «Архитектор по карте Синапсы», правки принимает владелец; зависимости и путь сигнала; заколдованные круги и их разрезание; «в работе» с остыванием и мягким лимитом; крепнущие связи; охват и связность; оформление «нейронная ночь») · дом: Dem-i-urge/sinapsy (C:\Users\ivasi\dev\sinapsy) · артефакт claude.ai — проекция, не дом -->
 <title>Синапсы</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -113,6 +113,23 @@ a:hover{color:#fff;text-decoration-color:#fff}
 .edge.dep{stroke-width:1.7;opacity:.9}
 .edge.dep.wait{stroke-dasharray:3 5;opacity:.45}
 .edge.flow{stroke-width:2.4;opacity:1;stroke-dasharray:2 7}
+.edge.crit{stroke:#ffffff;stroke-width:3;opacity:1;stroke-dasharray:7 4}
+.arrow.crit path{stroke:#ffffff}
+.hotring{fill:none;stroke:#ffffff;stroke-width:1.6}
+.search{position:relative}
+.search input{width:min(240px,60vw);background:var(--field);border-radius:999px}
+.sresults{position:absolute;top:calc(100% + 4px);left:0;min-width:100%;width:max-content;max-width:min(380px,90vw);background:var(--surface);border:1px solid var(--line);border-radius:10px;z-index:6;padding:4px;display:flex;flex-direction:column}
+.sresults button{border:0;border-radius:6px;text-align:left;padding:6px 10px;font-weight:500;display:flex;gap:8px;align-items:center}
+.sresults[hidden]{display:none}
+.sresults .none{padding:6px 10px;color:var(--muted);font-size:13px}
+.filters{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;font-size:12px;color:var(--muted)}
+.fgroup{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.fgroup>span{margin-right:2px}
+.fchip{font-size:12px;padding:3px 11px;font-weight:500}
+.fchip[aria-pressed="true"]{background:var(--raise);border-color:var(--ink);color:var(--ink)}
+.fchip[aria-pressed="false"]{color:var(--muted)}
+.orph{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px}
+.orph select{border-radius:8px;padding:3px 8px;background:var(--field)}
 .arrow path{fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .reach.off{opacity:.35}
 .edge.assoc.strong{opacity:.8}
@@ -153,6 +170,7 @@ a:hover{color:#fff;text-decoration-color:#fff}
 @media (prefers-reduced-motion:no-preference){
   .edge.flow{animation:flow .9s linear infinite}
   .edge.loop{animation:flow 1.8s linear infinite}
+  .edge.crit{animation:flow .55s linear infinite}
   .spark{animation:spin 3.2s linear infinite}
   .spark.cool{animation-duration:8s}
   .reach.pulse{animation:pulse 2.6s ease-in-out infinite}
@@ -170,11 +188,11 @@ a:hover{color:#fff;text-decoration-color:#fff}
     <div class="sub" id="sub">Своя карта: крупные точки по сферам. Сигнал идёт по зависимостям, отметки сверяются с Notion.</div>
   </div>
   <div class="ctrl">
+    <div class="search"><input type="search" id="q" placeholder="Найти точку" autocomplete="off" aria-label="Найти точку по названию"><div class="sresults" id="sres" hidden></div></div>
     <button class="primary" id="bNew">+ Точка</button>
     <button id="bSpheres">Сферы</button>
     <button id="bSync" title="Сверить отметки «готово» с Notion">Сверка</button>
     <button id="bArch" title="Архитектор проверит зависимости и предложит правки">Позвать Архитектора</button>
-    <button id="hideDone" class="quiet" aria-pressed="false">Скрыть сделанное</button>
     <button id="bHelp" aria-label="Как это работает" title="Как это работает">?</button>
   </div>
 </header>
@@ -190,6 +208,8 @@ a:hover{color:#fff;text-decoration-color:#fff}
   <span class="dimmed"><b id="sDone">—</b>сделано</span>
   <span><b id="sPend">—</b>ждут сверки с Notion</span>
 </section>
+
+<section class="filters" id="filters" aria-label="Что показать на карте"></section>
 
 <main class="main">
   <div class="field" id="field">
@@ -217,12 +237,24 @@ a:hover{color:#fff;text-decoration-color:#fff}
 <script>
 const DEFAULT_SPHERES=["Психопрактика","Призма","Меркор-ПРУФ","Творчество","ИИ и технологии","Обучение","Контент","Финансы","Личное","Хобби"];
 const today=new Date(); const TODAY=today.getFullYear()+"-"+String(today.getMonth()+1).padStart(2,"0")+"-"+String(today.getDate()).padStart(2,"0");
-let db=null, nodes=[], spheres=DEFAULT_SPHERES.slice(), selected=null, mode=null, linkFrom=null, hideDone=false, flash=null, ready=false, readOnly=false, panel=null;
+let db=null, nodes=[], spheres=DEFAULT_SPHERES.slice(), selected=null, mode=null, linkFrom=null, flash=null, ready=false, readOnly=false, panel=null;
+/* что показать: состояния (вкл/выкл), уровень (кольцо по радиусу), режим «узкие места»; запоминается в браузере */
+let filt={done:true,work:true,wait:true,avail:true}, lvl="all", hot=false, searchQ="", posOf=new Map();
+try{const s=JSON.parse(localStorage.getItem("sinapsy-view")||"null");if(s){filt={...filt,...s.filt};lvl=s.lvl||"all";hot=!!s.hot}}catch(e){}
+const saveView=()=>{try{localStorage.setItem("sinapsy-view",JSON.stringify({filt,lvl,hot}))}catch(e){}};
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const fmt=d=>d?d.split("-").reverse().join("."):"—";
 const short=(s,n)=>{s=String(s||"");return s.length>n?s.slice(0,n-1)+"…":s};
-const byId=id=>nodes.find(n=>n.id===id);
+/* индекс графа: строится один раз на снимок данных (массив nodes заменяется целиком при каждом обновлении) */
+let IDX=null;
+const idx=()=>{ if(IDX&&IDX.src===nodes)return IDX;
+  const map=new Map(nodes.map(n=>[n.id,n])), dep=new Map(), lk=new Map();
+  const add=(m,k,v,set)=>{let x=m.get(k);if(!x){x=set?new Set():[];m.set(k,x)}set?x.add(v):x.push(v)};
+  nodes.forEach(n=>{ (n.deps||[]).forEach(d=>{if(d!==n.id)add(dep,d,n.id)});
+    (n.links||[]).forEach(l=>{if(l!==n.id){add(lk,n.id,l,1);add(lk,l,n.id,1)}}); });
+  IDX={src:nodes,map,dep,lk}; return IDX; };
+const byId=id=>idx().map.get(id);
 const hash=s=>{let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return (h>>>0)/4294967295};
 
 /* --- цвет: место сферы на кольце → оттенок кругового спектра --- */
@@ -232,9 +264,9 @@ const sphColor=s=>{const i=sphIdx(s);if(i<0)return"#8792ad";return d3.interpolat
 const nodeColor=n=>{const s=(n.spheres||[]).find(x=>sphIdx(x)>=0);return s?sphColor(s):"#8792ad"};
 
 /* --- граф: связи (ассоциации) и зависимости (deps у точки = что нужно сначала) --- */
-const linksOf=n=>{const out=new Set(n.links||[]);nodes.forEach(m=>{if((m.links||[]).includes(n.id))out.add(m.id)});out.delete(n.id);return [...out].filter(byId)};
+const linksOf=n=>[...(idx().lk.get(n.id)||[])].filter(byId);
 const prereqsOf=n=>(n.deps||[]).filter(id=>id!==n.id&&byId(id));
-const dependentsOf=n=>nodes.filter(m=>m.id!==n.id&&(m.deps||[]).includes(n.id)).map(m=>m.id);
+const dependentsOf=n=>(idx().dep.get(n.id)||[]).filter(byId);
 const walk=(id,next)=>{const seen=new Set(),st=[id];while(st.length){const c=byId(st.pop());if(!c)continue;for(const x of next(c))if(x!==id&&!seen.has(x)){seen.add(x);st.push(x)}}return seen};
 const upstream=n=>walk(n.id,prereqsOf);
 const downstream=n=>walk(n.id,dependentsOf);
@@ -248,6 +280,50 @@ const degree=n=>linksOf(n).length+prereqsOf(n).length+dependentsOf(n).length;
 /* типы: проект собирается из задач — его зависимости и есть его задачи (сигнал идёт от задач к проекту) */
 const isProject=n=>!!n&&n.kind==="project";
 const progressOf=n=>{const pre=prereqsOf(n).map(byId);return{done:pre.filter(m=>!isOpen(m)).length,total:pre.length}};
+/* уровни — это кольца: уровень точки следует из её места (радиуса), отдельного поля нет.
+   0 ядро · 1 фундамент (малый круг) · 2 контекст (средний) · 3 продукт (внешний); полоса перед кольцом — то, что к нему строится */
+const LEVELS=[{id:"core",name:"Ядро",r:.1},{id:"found",name:"Фундамент",r:.26},{id:"ctx",name:"Контекст",r:.55},{id:"prod",name:"Продукт",r:.86}];
+const rOf=n=>Math.hypot(+n.x||0,+n.y||0);
+const levelOf=n=>{const r=rOf(n);return r<.28?0:r<.42?1:r<.76?2:3};
+const LVLSETS={all:null,infra:[0,1],ctx:[2],prod:[3]};
+const stateOf=n=>!isOpen(n)?"done":isActive(n)?"work":isBlocked(n)?"wait":"avail";
+const shownByFilter=n=>filt[stateOf(n)]&&(!LVLSETS[lvl]||LVLSETS[lvl].includes(levelOf(n)));
+const norm=s=>String(s||"").toLowerCase().replace(/ё/g,"е");
+const matchQ=n=>!searchQ||norm(n.title).includes(searchQ);
+/* критическая цепь: самая длинная цепочка незакрытых шагов в точку и из неё (по числу шагов) */
+function critOf(id){
+  const mu=new Map(), md=new Map();
+  const up=(i,st)=>{ if(mu.has(i))return mu.get(i); if(st.has(i))return []; st.add(i); let b=[];
+    for(const p of prereqsOf(byId(i))){ if(!isOpen(byId(p)))continue; const c=up(p,st); if(c.length+1>b.length)b=[...c,p]; }
+    st.delete(i); mu.set(i,b); return b; };
+  const down=(i,st)=>{ if(md.has(i))return md.get(i); if(st.has(i))return []; st.add(i); let b=[];
+    for(const d of dependentsOf(byId(i))){ if(!isOpen(byId(d)))continue; const c=down(d,st); if(c.length+1>b.length)b=[d,...c]; }
+    st.delete(i); md.set(i,b); return b; };
+  return {up:up(id,new Set()),down:down(id,new Set())};
+}
+/* место новой точки: сохраняется сразу, чтобы точка не «гуляла» при перерисовке.
+   «Там, куда я смотрю» — центр экрана; уровень — полоса перед кольцом, угол — средний угол сфер точки */
+function sphAngle(sp){
+  const n=Math.max(1,spheres.length), idx=(sp||[]).map(sphIdx).filter(i=>i>=0);
+  if(!idx.length)return -Math.PI/2;
+  const a=i=>-Math.PI/2+i*2*Math.PI/n, sx=idx.reduce((s,i)=>s+Math.cos(a(i)),0), sy=idx.reduce((s,i)=>s+Math.sin(a(i)),0);
+  return Math.hypot(sx,sy)/idx.length<.35?a(idx[0]):Math.atan2(sy,sx);
+}
+function freeSpot(x0,y0,minD){
+  const pts=nodes.filter(m=>typeof m.x==="number"&&typeof m.y==="number");
+  for(let s=0;s<240;s++){ const a=s*2.39996, rr=s?minD*.55*Math.sqrt(s):0, x=x0+Math.cos(a)*rr, y=y0+Math.sin(a)*rr;
+    if(pts.every(p=>Math.hypot(p.x-x,p.y-y)>=minD))return{x:+x.toFixed(4),y:+y.toFixed(4)}; }
+  return{x:+x0.toFixed(4),y:+y0.toFixed(4)};
+}
+function placeNew(sp,choice){
+  if(!geo)return freeSpot(0,0,.07);
+  if(choice==="view"){ const t=d3.zoomTransform($("svg")), [ux,uy]=t.invert([geo.W/2,geo.H/2]);
+    return freeSpot((ux-geo.cx)/geo.R,(uy-geo.cy)/geo.R,.07/Math.max(1,t.k)); }
+  const L=LEVELS.find(x=>x.id===choice)||LEVELS[2], a=sphAngle(sp);
+  return freeSpot(Math.cos(a)*L.r,Math.sin(a)*L.r,.07);
+}
+/* узкие места: незакрытые точки, за которыми по цепочке ждёт больше всего незакрытого */
+const bottlenecks=k=>nodes.filter(isOpen).map(n=>({n,u:unlockCount(n)})).filter(x=>x.u>=3).sort((a,b)=>b.u-a.u).slice(0,k);
 const hexPath=r=>"M"+Array.from({length:6},(_,i)=>{const a=Math.PI/180*(60*i-90);return (r*Math.cos(a)).toFixed(2)+","+(r*Math.sin(a)).toFixed(2)}).join("L")+"Z";
 /* заколдованный круг — точки в пути, которые ждут друг друга (сильная компонента графа зависимостей, Тарьян).
    Сделанная точка круг разрывает: считаются только точки в пути. */
@@ -321,7 +397,7 @@ function render(){
   st("sRich",open.filter(isRich).length); st("sDone",nodes.length-open.length); st("sPend",nodes.filter(n=>n.sync==="pending").length);
   const svg=d3.select("#svg"); svg.selectAll("*").remove();
   const box=$("field").getBoundingClientRect(), W=Math.max(340,box.width), H=Math.max(480,box.height);
-  const cx=W/2, cy=H/2-10, R=W<640?Math.min(W*0.29,H*0.40):Math.min(W,H)*0.40; geo={cx,cy,R};
+  const cx=W/2, cy=H/2-10, R=W<640?Math.min(W*0.29,H*0.40):Math.min(W,H)*0.40; geo={cx,cy,R,W,H};
   svg.attr("viewBox",`0 0 ${W} ${H}`);
   const defs=svg.append("defs");
   const g=svg.append("g");
@@ -344,7 +420,7 @@ function render(){
     P.forEach(p=>{const [x,y]=t.apply([p.x,p.y]);p.sx=x;p.sy=y;rects.push({x:x-p.vr,y:y-p.vr,w:2*p.vr,h:2*p.vr})});
     if(sph)sph.each(function(){const b=this.getBoundingClientRect();if(b.width)rects.push({x:(b.left-sv.left)*f,y:(b.top-sv.top)*f,w:b.width*f,h:b.height*f})});
     const place=new Map();
-    [...P].sort((a,b)=>a.pri-b.pri).forEach(p=>{const o=p.vr+(p.pri===0?11:6), w=p.w||60;
+    [...P].sort((a,b)=>a.pri-b.pri).forEach(p=>{ if(p.dimmed&&p.pri>0){place.set(p.m.id,{i:-1,o:0});return} const o=p.vr+(p.pri===0?11:6), w=p.w||60;
       let pick=-1; for(let i=0;i<LBL.length;i++){const c=LBL[i], r={x:p.sx+c.bx(o,w)-2,y:p.sy+c.by(o),w:w+4,h:16};
         if(!hit(r)){pick=i;rects.push(r);break}}
       if(pick<0&&p.pri===0)pick=0;
@@ -366,7 +442,7 @@ function render(){
       .attr("text-anchor",Math.abs(Math.cos(a))<.25?"middle":(Math.cos(a)>0?"start":"end"))
       .call(t=>{t.append("tspan").attr("class","sph-num").text(sphNum(s)+" ");t.append("tspan").attr("fill",col).text(s)})});
   sph=sphG.selectAll("text.sph-name");
-  const visible=nodes.filter(m=>!(hideDone&&m.status==="done"));
+  const visible=nodes.filter(m=>shownByFilter(m)||m.id===selected||m.id===linkFrom);
   if(ready&&!nodes.length)g.append("g").attr("class","pin").datum({x:cx,y:cy}).append("text").attr("class","center-hint").attr("text-anchor","middle").text("Нажмите «+ Точка»");
   /* позиции: сохранённые — как есть, новые — в своём секторе */
   const anchor=s=>{const i=used.indexOf(s);if(i<0)return{x:cx,y:cy};return{x:cx+Math.cos(ang(i))*R*0.62,y:cy+Math.sin(ang(i))*R*0.62}};
@@ -386,7 +462,14 @@ function render(){
   const sel=byId(selected), pos=new Map(P.map(p=>[p.m.id,p]));
   let route=null, upS=new Set(), downS=new Set();
   if(sel&&pos.has(sel.id)){upS=upstream(sel);downS=downstream(sel);route=new Set([sel.id,...upS,...downS,...linksOf(sel)]);}
-  P.forEach(p=>{p.loop=loopOf(p.m.id); p.pri=p.m.id===selected||p.m.id===linkFrom?0:route&&route.has(p.m.id)?.5:!p.open?3:p.active?.8:p.loop?1:p.blocked?2.5:p.reach.length>=2?1:2});
+  /* критическая цепь выбранной точки и узкие места */
+  let crit=null, critKeys=new Set(), critSet=new Set();
+  if(sel&&pos.has(sel.id)&&isOpen(sel)){ crit=critOf(sel.id); const ch=[...crit.up,sel.id,...crit.down];
+    ch.forEach((x,i)=>{critSet.add(x); if(i)critKeys.add(ch[i-1]+"|"+x)}); }
+  const hotSet=new Set(hot?bottlenecks(10).map(x=>x.n.id):[]);
+  posOf=new Map(P.map(p=>[p.m.id,{x:p.x,y:p.y}]));
+  P.forEach(p=>{p.loop=loopOf(p.m.id); p.dimmed=(route&&!route.has(p.m.id))||(!route&&hot&&!hotSet.has(p.m.id))||(!!searchQ&&!matchQ(p.m)&&p.m.id!==selected);
+    p.hot=hotSet.has(p.m.id); p.pri=p.m.id===selected||p.m.id===linkFrom?0:critSet.has(p.m.id)?.3:route&&route.has(p.m.id)?.5:p.hot?.6:(searchQ&&matchQ(p.m))?.4:p.m.id===selected||p.m.id===linkFrom?0:route&&route.has(p.m.id)?.5:!p.open?3:p.active?.8:p.loop?1:p.blocked?2.5:p.reach.length>=2?1:2});
   /* рёбра */
   const E=[], seenA=new Set();
   visible.forEach(m=>{
@@ -396,7 +479,8 @@ function render(){
   const inUp=id=>id===selected||upS.has(id), inDown=id=>id===selected||downS.has(id);
   E.forEach((e,i)=>{e.id="eg"+i; const ia=e.a.m.id, ib=e.b.m.id;
     e.on=!route||(e.kind==="dep"?(inUp(ia)&&inUp(ib))||(inDown(ia)&&inDown(ib)):(ia===selected||ib===selected));
-    e.flow=!!route&&e.kind==="dep"&&e.on;});
+    e.flow=!!route&&e.kind==="dep"&&e.on; e.crit=e.kind==="dep"&&critKeys.has(ia+"|"+ib);
+    if(!route&&(hot||searchQ)&&(e.a.dimmed||e.b.dimmed))e.on=false; });
   const grad=defs.selectAll("linearGradient").data(E).join("linearGradient").attr("id",d=>d.id).attr("gradientUnits","userSpaceOnUse");
   grad.append("stop").attr("offset","0").attr("stop-color",d=>d.a.col);
   grad.append("stop").attr("offset","1").attr("stop-color",d=>d.b.col);
@@ -404,15 +488,15 @@ function render(){
   defs.selectAll("radialGradient").data(cols).join("radialGradient").attr("id",(c,i)=>"gl"+i)
     .call(r=>{r.append("stop").attr("offset","0").attr("stop-color",c=>c).attr("stop-opacity",.6);r.append("stop").attr("offset","1").attr("stop-color",c=>c).attr("stop-opacity",0)});
   const edges=g.append("g").selectAll("line").data(E).join("line")
-    .attr("class",d=>"edge "+d.kind+(d.loop?" loop":(d.kind==="dep"&&!d.live&&!d.flow?" wait":"")+(d.flow?" flow":""))+(d.w?" strong":"")+(route&&!d.on?" dim":""))
+    .attr("class",d=>"edge "+d.kind+(d.crit?" crit":d.loop?" loop":(d.kind==="dep"&&!d.live&&!d.flow?" wait":"")+(d.flow?" flow":""))+(d.w?" strong":"")+(!d.on?" dim":""))
     .attr("stroke",d=>`url(#${d.id})`).style("stroke-width",d=>d.w?(1+d.w*.9)+"px":null);
-  const arrows=g.append("g").selectAll("g").data(E.filter(e=>e.kind==="dep")).join("g").attr("class",d=>"pin arrow"+(d.loop?" loop":"")+(route&&!d.on?" dim":""));
+  const arrows=g.append("g").selectAll("g").data(E.filter(e=>e.kind==="dep")).join("g").attr("class",d=>"pin arrow"+(d.crit?" crit":d.loop?" loop":"")+(!d.on?" dim":""));
   arrows.append("path").attr("d","M-3.5,-4.5 L2.5,0 L-3.5,4.5").attr("stroke",d=>d.b.col);
   const updEdges=()=>{edges.attr("x1",d=>d.a.x).attr("y1",d=>d.a.y).attr("x2",d=>d.b.x).attr("y2",d=>d.b.y);
     grad.attr("x1",d=>d.a.x).attr("y1",d=>d.a.y).attr("x2",d=>d.b.x).attr("y2",d=>d.b.y); arrows.attr("transform",pinT);};
   updEdges();
   /* точки */
-  node=g.append("g").selectAll("g").data(P).join("g").attr("class",d=>"node pin"+(route&&!route.has(d.m.id)?" dim":"")).attr("transform",pinT)
+  node=g.append("g").selectAll("g").data(P).join("g").attr("class",d=>"node pin"+(d.dimmed?" dim":"")).attr("transform",pinT)
     .style("cursor",mode?"crosshair":"grab").attr("tabindex",0).attr("role","button").attr("aria-label",d=>d.m.title)
     .on("keydown",(e,d)=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();tap(d.m.id)}});
   node.append("title").text(d=>d.m.title+(d.proj?(d.open?` — проект, задачи ${d.prog.done} из ${d.prog.total}`:" — проект завершён"):!d.open?" — сделано":d.active?` — в работе, ${idleLabel(d.m)}`:d.loop?" — заколдованный круг":d.blocked?" — ждёт сигнала":" — доступна"));
@@ -433,6 +517,7 @@ function render(){
     .attr("fill-opacity",d=>!d.open||!d.blocked?1:.12+.75*(d.prog.total?d.prog.done/d.prog.total:0))
     .attr("stroke",d=>d.open?d.col:"none").attr("stroke-width",1.6);
   node.filter(d=>d.loop).append("circle").attr("class","loopring").attr("r",d=>d.vr+3);
+  node.filter(d=>d.hot).append("circle").attr("class","hotring").attr("r",d=>d.vr+4);
   node.filter(d=>d.active).each(function(d){const r=d.cr+7, gg=d3.select(this);
     gg.append("circle").attr("class","sparkorbit").attr("r",r).attr("opacity",.55*d.heat);
     const s=gg.append("g").attr("class","spark"+(d.heat<.5?" cool":"")).attr("opacity",d.heat);
@@ -495,9 +580,9 @@ const liNode=(m,rm,extra)=>`<li><button class="go" data-go="${esc(m.id)}"><span 
 function nodeCard(n){
   const pre=prereqsOf(n).map(byId), nxt=dependentsOf(n).map(byId), ls=linksOf(n).map(byId);
   const reach=reachOf(n), unl=unlockCount(n);
-  const up=[...upstream(n)].map(byId).filter(isOpen).sort((a,b)=>upstream(a).size-upstream(b).size);
   const lp=loopOf(n.id), inLoop=lp?pre.filter(m=>lp.includes(m.id)):[];
-  const deep=!lp&&up.some(m=>!pre.includes(m));
+  const cr=isOpen(n)&&!lp?critOf(n.id):null, showCrit=cr&&(cr.up.length>=2||cr.down.length>=2);
+  const goal=cr&&cr.down.length?byId(cr.down[cr.down.length-1]):null;
   const P_=isProject(n);
   return `<h2>${P_?"Проект":"Задача"}</h2><h3>${esc(n.title)}</h3>${sphChips(n.spheres)}
   <div class="chips">${stateChip(n,true)}${reach.length>=2?`<span class="chip rich">охват ${reach.length}</span>`:""}${unl?`<span class="chip">откроет ${unl}</span>`:""}</div>
@@ -509,7 +594,9 @@ function nodeCard(n){
     <div class="actions"><button class="primary" id="bCut">Разрезать круг</button></div></div>`:""}
   ${n.note?`<p class="note">${esc(n.note)}</p>`:""}
   ${n.notion?`<a href="${esc(n.notion)}" target="_blank" rel="noopener">Открыть в Notion</a>`:""}
-  ${isOpen(n)&&deep?`<h2>Путь сигнала сюда — по порядку</h2><ol class="path">${up.map(m=>liNode(m,"")).join("")}</ol>`:""}
+  ${showCrit?`<h2>Критическая цепь · ${cr.up.length} до · ${cr.down.length} после</h2>
+    <p class="note">Самая длинная цепочка незакрытых шагов через эту точку${goal?` — до «${esc(short(goal.title,32))}»`:""}. На карте она горит белым пунктиром.</p>
+    <ol class="path">${cr.up.map(id=>liNode(byId(id),"")).join("")}<li><button class="go" disabled><span class="dot" style="--c:#ffffff"></span><span class="tt"><b>${esc(n.title)}</b></span></button></li>${cr.down.map(id=>liNode(byId(id),"")).join("")}</ol>`:""}
   <h2>${P_?"Задачи проекта":"Нужна сначала"}</h2>${pre.length?`<ul class="list">${pre.map(m=>liNode(m,"pre")).join("")}</ul>`:`<p class="note">${P_?"Задач пока нет. «Добавить задачу…» — и кликните задачу на карте.":"Ни от чего не зависит."}</p>`}
   <h2>Открывает</h2>${nxt.length?`<ul class="list">${nxt.map(m=>liNode(m,"next")).join("")}</ul>`:'<p class="note">Пока ничто не ждёт эту точку.</p>'}
   <h2>Связи</h2>${ls.length?`<ul class="list">${ls.map(m=>liNode(m,"link",stateChip(m)+(hebb(n,m)?'<span class="chip rich">окрепла</span>':""))).join("")}</ul>`:'<p class="note">Связь с точкой из другой сферы расширяет охват.</p>'}
@@ -535,7 +622,13 @@ function overview(){
   const firstWait=m=>{const p=prereqsOf(m).map(byId).find(isOpen);return p?`<span class="sub2">ждёт: ${esc(short(p.title,22))}</span>`:""};
   const loops=LOOPS.length?`<h2>Заколдованные круги · ${LOOPS.length}</h2>${LOOPS.map(c=>`<ul class="list">${c.map(id=>liNode(byId(id),"")).join("")}</ul>`).join("")}
     <p class="note">Эти точки ждут друг друга, сигнал ходит по кругу и не выходит. Откройте любую и разрежьте круг первым шагом.</p>`:"";
-  return `${archPanel()}${loops}${back}<h2>Куда дальше</h2>${av.length?`<ul class="list">${av.slice(0,6).map(x=>liNode(x.n,"",tag(x))).join("")}</ul>
+  const orph=[...new Set(nodes.flatMap(n=>(n.spheres||[]).filter(s=>sphIdx(s)<0)))];
+  const orphBlock=orph.length?`<h2>Сферы, которых нет на круге</h2>${orph.map((s,i)=>{const cnt=nodes.filter(n=>(n.spheres||[]).includes(s)).length;
+      return`<div class="orph"><span>«${esc(s)}» — точек: ${cnt}. Перенести в</span><select id="orphTo${i}">${spheres.map(x=>`<option>${esc(x)}</option>`).join("")}</select><button data-orph="${i}" data-sph="${esc(s)}">Перенести</button></div>`}).join("")}
+    <p class="note">Сферу переименовали или убрали в «Сферы», а у точек осталось старое имя — такие точки теряют цвет и место в секторе.</p>`:"";
+  const hotBlock=hot?(()=>{const b=bottlenecks(8);return`<h2>Узкие места</h2>${b.length?`<ul class="list">${b.map(x=>liNode(x.n,"",`<span class="chip">держит ${x.u}</span>`)).join("")}</ul>
+    <p class="note">За этими точками по цепочке ждёт больше всего незакрытого. Доступная — рычаг: возьмите её; ждущая — смотрите, что держит её саму.</p>`:'<p class="note">Узких мест нет: ни одна точка не держит три и больше других.</p>'}`})():"";
+  return `${archPanel()}${orphBlock}${hotBlock}${loops}${back}<h2>Куда дальше</h2>${av.length?`<ul class="list">${av.slice(0,6).map(x=>liNode(x.n,"",tag(x))).join("")}</ul>
     <p class="note">Наверху — доступные точки, которые откроют больше всего других.</p>`:'<p class="note">Доступных точек нет. Самое время поставить новую.</p>'}
   ${projBlock}
   ${wait.length?`<h2>Ждут сигнала · ${wait.length}</h2><ul class="list">${wait.slice(0,6).map(m=>liNode(m,"",firstWait(m))).join("")}</ul>`:""}
@@ -553,7 +646,11 @@ function helpPanel(){
   const S=(pic,title,text)=>`<div class="sec">${ill(pic)}<div><h4>${title}</h4><p>${text}</p></div></div>`;
   return `<h2>Как это работает</h2><div class="help">
   <p class="lead">Карта — ваши крупные точки по сферам жизни. Всё, что ниже, видно на ней цветом, светом и линиями.</p>
-  ${S(lit(32,22,"#9fd4ff"),"Точка","<b>«+ Точка»</b> — название и одна или несколько сфер. Тяните точку куда удобно — место запомнится. Клик по точке открывает её карточку справа.")}
+  ${S(lit(32,22,"#9fd4ff"),"Точка","<b>«+ Точка»</b> — название, сферы, тип и где поставить. <b>«Там, куда я смотрю»</b> — в центр экрана (по умолчанию, если вы приблизились). Уровень — <b>Ядро, Фундамент, Контекст, Продукт</b>: точка встанет перед своим кольцом, в секторе своих сфер, на свободном месте. Тяните точку куда удобно — место запомнится. Клик открывает карточку.")}
+  ${S(`<circle cx="32" cy="22" r="4" fill="#e4f3ff"/><circle cx="32" cy="22" r="10" fill="none" stroke="var(--orbit)"/><circle cx="32" cy="22" r="17" fill="none" stroke="var(--orbit)"/><circle cx="32" cy="22" r="21" fill="none" stroke="var(--line)" stroke-dasharray="2 2"/>`,"Кольца — уровни","Центр — ядро (Архитектор и ближайшие помощники). Малый круг — фундамент: инструменты для всех контекстов. Средний — контекст: ассистенты, библиотеки, ноутбуки. Внешний — продукты. Между кольцами — то, что к кольцу строится. Уровень точки — её место: перетащили на другое кольцо — сменился уровень.")}
+  ${S(`<rect x="6" y="14" width="40" height="16" rx="8" fill="var(--field)" stroke="var(--line)"/><text x="12" y="25" font-size="9" fill="var(--muted)">ева</text>${lit(54,22,"#9fd4ff")}<circle cx="54" cy="22" r="13" fill="none" stroke="#fff" stroke-width="1.2"/>`,"Поиск","Строка «Найти точку» вверху: пока вы печатаете, совпадения горят, остальное гаснет. <b>Enter</b> или клик по варианту — карта приближается к точке и открывает её. <b>Esc</b> — очистить.")}
+  ${S(`<rect x="2" y="15" width="18" height="12" rx="6" fill="var(--raise)" stroke="var(--ink)"/><rect x="23" y="15" width="18" height="12" rx="6" fill="none" stroke="var(--line)"/><rect x="44" y="15" width="18" height="12" rx="6" fill="var(--raise)" stroke="var(--ink)"/>`,"Что показать","Над картой — фильтры. <b>Показать</b>: готовое, в работе, доступные, ждут сигнала — каждое включается отдельно. <b>Уровень</b>: все кольца, инфраструктура (ядро и малый круг), контекст или продукты. Выбор запоминается в этом браузере.")}
+  ${S(`<line x1="6" y1="22" x2="58" y2="22" stroke="#fff" stroke-width="2.4" stroke-dasharray="6 3"/>${wait(6,22,"#9fd4ff")}${wait(24,22,"#ffd36b")}${lit(42,22,"#ff7ad9")}${wait(58,22,"#6bd7ff")}`,"Критическая цепь и узкие места","Выберите незакрытую точку — белым пунктиром загорится <b>критическая цепь</b>: самая длинная цепочка незакрытых шагов до неё и после, до дальней цели; список — в карточке. Кнопка <b>«Узкие места»</b> обводит точки, за которыми ждёт больше всего незакрытого, и перечисляет их в обзоре.")}
   ${S(lit(12,22,"#9fd4ff")+wait(32,22,"#9fd4ff")+done(52,22),"Свет — это сигнал","<b>Горит</b> — точка доступна: всё, от чего она зависит, сделано. <b>Тёмная с контуром</b> — ждёт сигнала: зависимость ещё в пути. <b>Погасшая</b> — сделано.")}
   ${S(`<line x1="10" y1="14" x2="54" y2="14" stroke="var(--muted)" stroke-width="1.6"/>${arrow(33,14)}${lit(10,14,"#ffd36b")}${wait(54,14,"#6bd7ff")}<line x1="10" y1="34" x2="54" y2="34" stroke="var(--muted)" stroke-width="1" opacity=".6"/>${done(10,34)}${done(54,34)}`,"Зависимости и связи","<b>«Нужна сначала…»</b> и <b>«Открывает…»</b> — зависимость: без одной точки другая не сдвинется. Линия со стрелкой; пунктир — пока предшественница в пути. <b>«Связать»</b> — смысловая связь без порядка, тонкая линия. Снять любую — <b>×</b> в карточке.")}
   ${S(`<path d="${hexPath(11).replace(/(-?\d+\.\d+),(-?\d+\.\d+)/g,(m,a,b)=>(+a+44).toFixed(2)+","+(+b+22).toFixed(2))}" fill="#ffd36b" fill-opacity=".45" stroke="#ffd36b" stroke-width="1.6"/>${done(10,10)}${lit(10,34,"#ffd36b")}<line x1="14" y1="12" x2="34" y2="19" stroke="var(--muted)" stroke-width="1.4"/><line x1="15" y1="32" x2="34" y2="25" stroke="var(--muted)" stroke-width="1.4" stroke-dasharray="3 3"/>`,"Проект и задача","Тип выбирается при создании или в «Изменить». <b>Проект</b> (Ева, Драйзер, Призмолог) — шестиугольник, который собирается из задач: его зависимости и есть его задачи, стрелки идут от задач к проекту. Заливка растёт с долей сделанных, рядом счёт «2/5»; когда задачи сделаны, проект загорается. <b>«Добавить задачу…»</b> в карточке проекта — и кликните задачу на карте.")}
@@ -609,6 +706,10 @@ function nodeForm(n,cut){
   return `<form class="form" id="nodeForm"><h2>${n?"Изменить точку":cut?"Разрезать круг":"Новая точка"}</h2>
    ${cut?`<p class="note">Часть «${esc(short(cut.title,40))}», которую можно сделать уже сейчас. Она встанет первой и разорвёт круг.</p>`:""}
    <label class="t" for="fTitle">Что это</label><input type="text" id="fTitle" maxlength="140" value="${esc(n?n.title:"")}" placeholder="${cut?"Первый шаг: …":"Например: колода Felt Sense в печать"}">
+   ${n||cut?"":(()=>{const zoomed=kNow>1.3;return`<span class="t">Где поставить</span><div class="chips">
+     <label><input type="radio" id="fPlaceView" name="place" value="view" ${zoomed?"checked":""}>Там, куда я смотрю</label>
+     ${LEVELS.map(L=>`<label><input type="radio" id="fPlace_${L.id}" name="place" value="${L.id}" ${!zoomed&&L.id==="ctx"?"checked":""}>${L.name}</label>`).join("")}</div>
+     <span class="t">Уровень — кольцо, к которому точка строится: она встанет перед ним, в секторе своих сфер, на свободном месте. Готовый инструмент перетащите на само кольцо.</span>`})()}
    ${cut?"":`<span class="t">Тип</span><div class="chips"><label><input type="radio" id="fKindTask" name="kind" value="task" ${isProject(n)?"":"checked"}>Задача</label><label><input type="radio" id="fKindProj" name="kind" value="project" ${isProject(n)?"checked":""}>Проект — собирается из задач</label></div>`}
    <span class="t">Сферы (одна или несколько)</span>
    <div class="chips">${spheres.map((s,i)=>`<label><input type="checkbox" id="fSph${i}" name="sph" value="${esc(s)}" ${sel.has(s)?"checked":""}><span class="dot" style="--c:${sphColor(s)}"></span>${esc(s)}</label>`).join("")}</div>
@@ -636,6 +737,10 @@ function renderSide(){
 function wire(){
   const on=(id,f)=>{const el=$(id);if(el)el.onclick=f};
   document.querySelectorAll("#side [data-go]").forEach(b=>b.onclick=()=>{selected=b.dataset.go;panel=null;flash=null;render();renderSide()});
+  document.querySelectorAll("#side [data-orph]").forEach(b=>b.onclick=async()=>{const from=b.dataset.sph, to=$("orphTo"+b.dataset.orph).value; b.disabled=true;
+    const hit=nodes.filter(m=>(m.spheres||[]).includes(from));
+    for(const m of hit)await writeNode(m.id,{spheres:[...new Set(m.spheres.map(s=>s===from?to:s))]});
+    flash={ok:`Перенесено точек: ${hit.length} — из «${from}» в «${to}».`}; renderSide();});
   document.querySelectorAll("#side [data-arch]").forEach(b=>b.onclick=()=>{const [v,id]=b.dataset.arch.split(":");b.disabled=true;archDecide(id,v==="ok")});
   on("bBack",()=>{selected=null;panel=null;flash=null;render();renderSide()});
   const n=byId(selected);
@@ -686,7 +791,8 @@ function wire(){
       if(notion&&!/^https:\/\/(app\.notion\.com|www\.notion\.so|notion\.so)\//.test(notion)){$("fErr").textContent="Ссылка должна вести в Notion.";return}
       try{ if(panel==="edit"){await writeNode(selected,{title,spheres:sp,notion,note,kind});flash={ok:"Сохранено."}}
         else{const cut=panel==="cut"?byId(selected):null, place={};
-          if(cut&&typeof cut.x==="number"&&typeof cut.y==="number"){place.x=+(cut.x*0.9).toFixed(4);place.y=+(cut.y*0.9+0.06).toFixed(4)}
+          if(cut&&typeof cut.x==="number"&&typeof cut.y==="number")Object.assign(place,freeSpot(cut.x*0.9,cut.y*0.9+0.06,0.07));
+          else Object.assign(place,placeNew(sp,(f.querySelector("input[name=place]:checked")||{}).value||"ctx"));
           const ref=await db.collection("nodes").add({title,spheres:sp,notion,note,kind,status:"open",doneAt:"",links:[],deps:[],sync:"none",syncNote:"",...place,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()});
           if(cut){ /* то, что в круге ждало разрезаемую точку, теперь ждёт её первый шаг */
             for(const id of loopOf(cut.id)||[]){const d=byId(id);if(d&&(d.deps||[]).includes(cut.id))await writeNode(d.id,{deps:d.deps.map(x=>x===cut.id?ref.id:x)})}
@@ -704,7 +810,37 @@ function wire(){
 $("bNew").onclick=()=>{if(!db)return;panel="new";selected=null;renderSide();setTimeout(()=>{const t=$("fTitle");if(t)t.focus()},0)};
 $("bSpheres").onclick=()=>{if(!db)return;panel="spheres";renderSide()};
 $("bHelp").onclick=()=>{panel=panel==="help"?null:"help";flash=null;renderSide();$("side").scrollTop=0};
-$("hideDone").onclick=e=>{hideDone=!hideDone;e.currentTarget.setAttribute("aria-pressed",hideDone);render()};
+/* фильтры: состояния вкл/выкл, уровень — один из, «узкие места» — режим */
+function renderFilters(){
+  const ST=[["done","Готовое"],["work","В работе"],["avail","Доступные"],["wait","Ждут сигнала"]];
+  const LV=[["all","Все кольца"],["infra","Инфраструктура"],["ctx","Контекст"],["prod","Продукты"]];
+  $("filters").innerHTML=`<div class="fgroup"><span>Показать:</span>${ST.map(([k,t])=>`<button class="fchip" data-f="${k}" aria-pressed="${filt[k]}">${t}</button>`).join("")}</div>
+    <div class="fgroup"><span>Уровень:</span>${LV.map(([k,t])=>`<button class="fchip" data-l="${k}" aria-pressed="${lvl===k}">${t}</button>`).join("")}</div>
+    <div class="fgroup"><button class="fchip" id="fHot" aria-pressed="${hot}" title="Подсветить точки, за которыми ждёт больше всего">Узкие места</button></div>`;
+  document.querySelectorAll("#filters [data-f]").forEach(b=>b.onclick=()=>{filt[b.dataset.f]=!filt[b.dataset.f];saveView();renderFilters();render()});
+  document.querySelectorAll("#filters [data-l]").forEach(b=>b.onclick=()=>{lvl=b.dataset.l;saveView();renderFilters();render()});
+  $("fHot").onclick=()=>{hot=!hot;saveView();renderFilters();render();if(!panel&&!selected)renderSide()};
+}
+renderFilters();
+/* поиск: подсвечивает совпадения на карте, Enter или клик — приблизить к точке и открыть её */
+function goTo(id){
+  const q=$("q"); q.value=""; searchQ=""; $("sres").hidden=true;
+  selected=id; panel=null; flash=null; render(); renderSide();
+  const p=posOf.get(id); if(!p||!zoomB||!geo)return;
+  const k=Math.max(kNow,2.2), t=d3.zoomIdentity.translate(geo.W/2,geo.H/2).scale(k).translate(-p.x,-p.y);
+  d3.select("#svg").transition().duration(500).call(zoomB.transform,t);
+}
+let sq;
+$("q").addEventListener("input",e=>{ searchQ=norm(e.target.value.trim());
+  const hits=searchQ?nodes.filter(matchQ).sort((a,b)=>norm(a.title).indexOf(searchQ)-norm(b.title).indexOf(searchQ)||a.title.length-b.title.length).slice(0,8):[];
+  const box=$("sres"); box.hidden=!searchQ;
+  box.innerHTML=hits.length?hits.map(m=>`<button data-hit="${esc(m.id)}"><span class="dot" style="--c:${isOpen(m)?nodeColor(m):"var(--done)"}"></span>${esc(short(m.title,48))}</button>`).join(""):'<span class="none">Ничего не нашлось</span>';
+  box.querySelectorAll("[data-hit]").forEach(b=>b.onmousedown=ev=>{ev.preventDefault();goTo(b.dataset.hit)});
+  clearTimeout(sq); sq=setTimeout(render,120); });
+$("q").addEventListener("keydown",e=>{
+  if(e.key==="Enter"){const b=$("sres").querySelector("[data-hit]");if(b)goTo(b.dataset.hit)}
+  if(e.key==="Escape"){e.target.value="";searchQ="";$("sres").hidden=true;render()} });
+$("q").addEventListener("blur",()=>setTimeout(()=>{$("sres").hidden=true},150));
 /* общий разбор ошибок запуска задачи: fail — что не удалось, своими словами для каждой кнопки */
 function taskErr(e,fail){const c=e&&e.code;
   if(c==="needs_reauth")return fail+": переподключите Claude Code Remote в настройках claude.ai → Connectors.";
