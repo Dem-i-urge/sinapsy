@@ -1,4 +1,4 @@
-<!-- Синапсы v0.12-draft · 27.10.2026 (своя карта владельца; фильтры типа (проекты/задачи) и контекста (богатые/обычные); расчёты графа — общий файл graph.js, тот же у Дворника; ссылка на точку — адрес карты с #id; поиск с приближением; место новой точки — по уровню и сфере или там, куда смотришь; фильтры состояний и уровней; критическая цепь и узкие места; осиротевшие сферы; памятка «?» внутри карты; типы точек «Проект» и «Задача»; сверка с Notion — кнопкой или по пятницам задачей «Пятничная сверка»; «Позвать Архитектора» — аудит связей задачей «Архитектор по карте Синапсы», правки принимает владелец; зависимости и путь сигнала; заколдованные круги и их разрезание; «в работе» с остыванием и мягким лимитом; крепнущие связи; охват и связность; оформление «нейронная ночь») · дом: Dem-i-urge/sinapsy (C:\Users\ivasi\dev\sinapsy) · артефакт claude.ai — проекция, не дом -->
+<!-- Синапсы v0.13-draft · 29.10.2026 (своя карта владельца; блок «Заодно» — связи от захода Плигина, принимает владелец; фильтры типа (проекты/задачи) и контекста (богатые/обычные); расчёты графа — общий файл graph.js, тот же у Дворника; ссылка на точку — адрес карты с #id; поиск с приближением; место новой точки — по уровню и сфере или там, куда смотришь; фильтры состояний и уровней; критическая цепь и узкие места; осиротевшие сферы; памятка «?» внутри карты; типы точек «Проект» и «Задача»; сверка с Notion — кнопкой или по пятницам задачей «Пятничная сверка»; «Позвать Архитектора» — аудит связей задачей «Архитектор по карте Синапсы», правки принимает владелец; зависимости и путь сигнала; заколдованные круги и их разрезание; «в работе» с остыванием и мягким лимитом; крепнущие связи; охват и связность; оформление «нейронная ночь») · дом: Dem-i-urge/sinapsy (C:\Users\ivasi\dev\sinapsy) · артефакт claude.ai — проекция, не дом -->
 <title>Синапсы</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -326,6 +326,8 @@ let syncBusyUntil=0;
 /* Архитектор: кнопка запускает задачу аудита; она пишет предложения в meta/audit, принимает их владелец */
 const ARCH_TASK="trig_01Vq1MhNqyBg8dS28MpeLLnZ", ARCH_WAIT_MIN=15;
 let audit=null;
+/* Заодно: предложения связей от захода Плигина (пишет Архитектор на «да» владельца), документ meta/zaodno */
+let zaodno=null;
 const KIND={drop_dep:"снять зависимость",to_link:"сделать смысловой связью",reverse_dep:"развернуть зависимость",add_dep:"добавить зависимость",note:"наблюдение"};
 
 /* --- хранилище --- */
@@ -595,7 +597,7 @@ function overview(){
     <p class="note">Сферу переименовали или убрали в «Сферы», а у точек осталось старое имя — такие точки теряют цвет и место в секторе.</p>`:"";
   const hotBlock=hot?(()=>{const b=bottlenecks(8);return`<h2>Узкие места</h2>${b.length?`<ul class="list">${b.map(x=>liNode(x.n,"",`<span class="chip">держит ${x.u}</span>`)).join("")}</ul>
     <p class="note">За этими точками по цепочке ждёт больше всего незакрытого. Доступная — рычаг: возьмите её; ждущая — смотрите, что держит её саму.</p>`:'<p class="note">Узких мест нет: ни одна точка не держит три и больше других.</p>'}`})():"";
-  return `${archPanel()}${orphBlock}${hotBlock}${loops}${back}<h2>Куда дальше</h2>${av.length?`<ul class="list">${av.slice(0,6).map(x=>liNode(x.n,"",tag(x))).join("")}</ul>
+  return `${zaodnoPanel()}${archPanel()}${orphBlock}${hotBlock}${loops}${back}<h2>Куда дальше</h2>${av.length?`<ul class="list">${av.slice(0,6).map(x=>liNode(x.n,"",tag(x))).join("")}</ul>
     <p class="note">Наверху — доступные точки, которые откроют больше всего других.</p>`:'<p class="note">Доступных точек нет. Самое время поставить новую.</p>'}
   ${projBlock}
   ${wait.length?`<h2>Ждут сигнала · ${wait.length}</h2><ul class="list">${wait.slice(0,6).map(m=>liNode(m,"",firstWait(m))).join("")}</ul>`:""}
@@ -668,6 +670,28 @@ async function archDecide(itemId,accept){
   }catch(e){flash={err:dbErr(e)}}
   renderSide();
 }
+function zaodnoPanel(){
+  const items=zaodno&&Array.isArray(zaodno.items)?zaodno.items:[], open=items.filter(x=>x.state==="new");
+  if(!open.length)return"";
+  const t=id=>{const m=byId(id);return m?`<button data-go="${esc(m.id)}">${esc(short(m.title,40))}</button>`:"<i>точка удалена</i>"};
+  return`<h2>Заодно</h2><div class="arch"><p class="sum">Связи, которые нашёл заход Плигина: дело в одной точке может послужить и другой.</p>
+    ${open.map(x=>`<div class="item"><span class="kind">добавить связь${x.at?` · ${fmt(String(x.at).slice(0,10))}`:""}</span><span class="what">${t(x.from)} — ${t(x.to)}</span>${x.why?`<span class="why">${esc(x.why)}</span>`:""}
+      <div class="actions"><button class="primary" data-zao="ok:${esc(x.id)}">Принять</button><button class="quiet" data-zao="no:${esc(x.id)}">Отклонить</button></div></div>`).join("")}
+  </div>`;
+}
+async function zaodnoDecide(itemId,accept){
+  const items=((zaodno&&zaodno.items)||[]).map(x=>({...x})), it=items.find(x=>x.id===itemId); if(!it)return;
+  const a=byId(it.from), b=byId(it.to);
+  try{
+    if(accept){
+      if(!a||!b)it.state="stale";
+      else{ if(!linksOf(a).includes(b.id))await writeNode(a.id,{links:[...(a.links||[]),b.id]}); it.state="accepted"; }
+    }else it.state="rejected";
+    await db.doc("meta/zaodno").update({items});
+    flash={ok:it.state==="stale"?"Одной из точек уже нет — предложение снято.":accept?"Связь добавлена на карту.":"Отклонено. Карта не изменилась."};
+  }catch(e){flash={err:dbErr(e)}}
+  renderSide();
+}
 function nodeForm(n,cut){
   const sel=new Set(n?n.spheres||[]:cut?cut.spheres||[]:[]);
   return `<form class="form" id="nodeForm"><h2>${n?"Изменить точку":cut?"Разрезать круг":"Новая точка"}</h2>
@@ -709,6 +733,7 @@ function wire(){
     for(const m of hit)await writeNode(m.id,{spheres:[...new Set(m.spheres.map(s=>s===from?to:s))]});
     flash={ok:`Перенесено точек: ${hit.length} — из «${from}» в «${to}».`}; renderSide();});
   document.querySelectorAll("#side [data-arch]").forEach(b=>b.onclick=()=>{const [v,id]=b.dataset.arch.split(":");b.disabled=true;archDecide(id,v==="ok")});
+  document.querySelectorAll("#side [data-zao]").forEach(b=>b.onclick=()=>{const [v,id]=b.dataset.zao.split(":");b.disabled=true;zaodnoDecide(id,v==="ok")});
   on("bBack",()=>{selected=null;panel=null;flash=null;render();renderSide()});
   const n=byId(selected);
   document.querySelectorAll("#side [data-rm]").forEach(b=>b.onclick=()=>{const [kind,id]=b.dataset.rm.split(":"), m=byId(id); if(!n||!m)return;
@@ -867,6 +892,7 @@ render(); renderSide();
   try{db=window.claude?await window.claude.use("db"):null}catch(e){db=null}
   if(!db){ready=true;render();renderSide();["bNew","bSpheres","bArch"].forEach(id=>$(id).disabled=true);return}
   db.doc("meta/audit").onSnapshot(s=>{audit=s.exists?s.data():null;if(!panel&&!selected)renderSide()},()=>{});
+  db.doc("meta/zaodno").onSnapshot(s=>{zaodno=s.exists?s.data():null;if(!panel&&!selected)renderSide()},()=>{});
   db.doc("meta/spheres").onSnapshot(s=>{const l=s.exists&&s.data().list;spheres=Array.isArray(l)&&l.length?l.slice():DEFAULT_SPHERES.slice();render();if(panel!=="spheres")renderSide()},e=>{flash={err:dbErr(e)};renderSide()});
   db.collection("nodes").onSnapshot(s=>{nodes=s.docs.map(d=>({id:d.id,...d.data()}));ready=true;
       if(selected&&!byId(selected))selected=null; render(); if(!panel)renderSide();
