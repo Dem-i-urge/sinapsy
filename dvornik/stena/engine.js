@@ -1,4 +1,4 @@
-/* Дворник · engine.js v0.1.1-draft · 27.10.2026
+/* Дворник · engine.js v0.1.2-draft · 29.10.2026
    Планировщик стены: чистая функция plan(data, graph) → раскладка. Без сети, без DOM, без часов:
    «сегодня» приходит во входе. Спецификация — sinapsy/dvornik/SPEC.md §3–5; проверяет результат check.js.
    Дом — Dem-i-urge/sinapsy/dvornik/stena/engine.js; опубликованный файл стены — проекция.
@@ -6,7 +6,7 @@
    В браузере: глобальный DvornikEngine, граф — глобальный SinapsyGraph. */
 (function(root,factory){ if(typeof module==="object"&&module.exports)module.exports=factory(); else root.DvornikEngine=factory(); })(typeof self!=="undefined"?self:this,function(){
   "use strict";
-  const VERSION="0.1.1";
+  const VERSION="0.1.2";
 
   /* ---------- параметры по умолчанию (SPEC §3.1, §3.5, §4); meta/params стены их перекрывает ---------- */
   const DEFAULTS={
@@ -22,6 +22,7 @@
     months:24,                 // по месяцам — дальше, пока всё не разложено
     weights:{unlock:1,found:3,prod:2,reach:0.5,active:2},
     capFactor:1,               // поправка ёмкости по реальным закрытым часам (§3.4); ставит Архитектор
+    inherit:true,              // балл шага не ниже самой важной открытой точки, которая его ждёт (§3.1, калибровка 29.10)
     topN:10, proposalLimit:25
   };
   const merge=(a,b)=>{const o={...a};for(const k in b||{})o[k]=(b[k]&&typeof b[k]==="object"&&!Array.isArray(b[k])&&a[k]&&typeof a[k]==="object")?merge(a[k],b[k]):b[k];return o};
@@ -95,9 +96,20 @@
     for(const n of nodes){const h=hex(n.notion);if(h){if(!nodeByNotion.has(h))nodeByNotion.set(h,[]);nodeByNotion.get(h).push(n)}}
 
     /* --- балл точки (§3.1) --- */
-    const W=P.weights, scoreCache=new Map();
+    const W=P.weights, scoreCache=new Map(), ownCache=new Map();
+    // наследование: точка не ниже самой важной открытой точки, которая ждёт её по цепочке
+    // (сигнал идёт от цели к шагам — «снаружи внутрь»); own — собственный балл, from — откуда унаследован
     function nodeScore(n){
       if(scoreCache.has(n.id))return scoreCache.get(n.id);
+      const o=ownScore(n); let s=o;
+      if(P.inherit&&g.isOpen(n)){let best=null;
+        for(const id of g.downstream(n)){const m=g.byId(id);if(!g.isOpen(m))continue;const x=ownScore(m);
+          if(x.total>o.total&&(!best||x.total>best.total||(x.total===best.total&&m.id<best.id)))best={total:x.total,id:m.id,title:m.title}}
+        if(best)s={total:best.total,own:o.total,parts:o.parts,level:o.level,from:{node:best.id,title:best.title}}}
+      scoreCache.set(n.id,s); return s;
+    }
+    function ownScore(n){
+      if(ownCache.has(n.id))return ownCache.get(n.id);
       const lvl=g.levelOf(n);
       // закрытая точка дерево не держит: её зависимые её уже не ждут (isBlocked считает только открытых)
       const unlock=g.isOpen(n)?g.unlockCount(n):0;
@@ -107,7 +119,7 @@
       const active=n.active&&g.isOpen(n)?1:0;
       const parts={unlock,found,prod,reach,active};
       const s={total:r1(W.unlock*unlock+W.found*found+W.prod*prod+W.reach*reach+W.active*active),parts,level:lvl};
-      scoreCache.set(n.id,s); return s;
+      ownCache.set(n.id,s); return s;
     }
     for(const t of tasks){
       let n=null, how=null;

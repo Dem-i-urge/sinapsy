@@ -1,4 +1,4 @@
-/* Дворник · dvornik.js v0.1.1-draft · 27.10.2026
+/* Дворник · dvornik.js v0.1.2-draft · 29.10.2026
    Прогон: вход → engine.js → check.js → plan.json, wall.json (документ стены plan/current) и отчёт для треда.
    node dvornik.js <input.json> <graph.js> [out-dir] [--dry]   (--dry — сухой прогон: стена помечает, что в Notion не писалось)
    graph.js — тот, что опубликован рядом с картой (SPEC §5 п. 2), а не копия из git.
@@ -32,7 +32,7 @@ for(const o of plan.overloads)out.push(o.type==="день"?`  день ${o.date}
 if(!plan.overloads.length)out.push("  нет");
 out.push("");
 out.push("Верхние "+plan.top.length+" точек по баллу (калибровка весов):");
-plan.top.forEach((t,i)=>out.push(`  ${i+1}. ${t.title} — ${t.total} (держит ${t.parts.unlock}${t.parts.found?", фундамент":""}${t.parts.prod?", у продукта":""}, охват ${t.parts.reach}${t.parts.active?", в работе":""}) · шагов ${t.steps}`));
+plan.top.forEach((t,i)=>out.push(`  ${i+1}. ${t.title} — ${t.total} (держит ${t.parts.unlock}${t.parts.found?", фундамент":""}${t.parts.prod?", у продукта":""}, охват ${t.parts.reach}${t.parts.active?", в работе":""}${t.from?`; свой ${t.own}, от «${t.from.title}»`:""}) · шагов ${t.steps}`));
 out.push("");
 out.push("Дни:");
 for(const d of plan.days)out.push(`  ${d.date} ${DOW[d.dow]} ${d.office?"офис":"    "} · ёмкость ${d.cap.merkor}+${d.cap.own} · занято ${d.load.merkor}+${d.load.own} · ${d.route.join("→")} · ${d.bricks.map(b=>`«${T.get(b.task).title.slice(0,40)}» ${b.hours}${b.role==="шаг"?"":" ("+b.role+")"}`).join("; ")}`);
