@@ -1,4 +1,4 @@
-/* Дворник · engine.js v0.1.2-draft · 29.10.2026
+/* Дворник · engine.js v0.1.3-draft · 02.11.2026
    Планировщик стены: чистая функция plan(data, graph) → раскладка. Без сети, без DOM, без часов:
    «сегодня» приходит во входе. Спецификация — sinapsy/dvornik/SPEC.md §3–5; проверяет результат check.js.
    Дом — Dem-i-urge/sinapsy/dvornik/stena/engine.js; опубликованный файл стены — проекция.
@@ -6,7 +6,7 @@
    В браузере: глобальный DvornikEngine, граф — глобальный SinapsyGraph. */
 (function(root,factory){ if(typeof module==="object"&&module.exports)module.exports=factory(); else root.DvornikEngine=factory(); })(typeof self!=="undefined"?self:this,function(){
   "use strict";
-  const VERSION="0.1.2";
+  const VERSION="0.1.3";
 
   /* ---------- параметры по умолчанию (SPEC §3.1, §3.5, §4); meta/params стены их перекрывает ---------- */
   const DEFAULTS={
@@ -217,8 +217,9 @@
       let floor=start; for(const p of preTasks.get(t.id)){const s=slotStart(placed.get(p));if(s&&s>floor)floor=s}
       const D=t.deadline, pool=t.merkor?"merkor":"own";
       const okDay=d=>d.date>=floor&&(!t.merkor||d.office);
-      // 1) закреп владельца: будущая плановая дата в пределах дней
-      if(t.planned&&t.planned>=floor&&dayIx.has(t.planned)){const d=days[dayIx.get(t.planned)];
+      // 1) закреп владельца: будущая плановая дата в пределах дней и не позже дедлайна
+      //    (закреп мягкий, дедлайн жёсткий: закреп за дедлайном уходит в шаги 2–4 — там место до дедлайна или перегруз)
+      if(t.planned&&t.planned>=floor&&(!D||t.planned<=D)&&dayIx.has(t.planned)){const d=days[dayIx.get(t.planned)];
         if(okDay(d)&&fitsDay(d,t,pool)){putDay(d,t,pool);return}}
       // 2) первый подходящий день не позже дедлайна
       for(const d of days){if(D&&d.date>D)break;if(okDay(d)&&fitsDay(d,t,pool)){putDay(d,t,pool);return}}

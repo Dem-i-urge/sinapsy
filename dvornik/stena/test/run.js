@@ -10,6 +10,7 @@ const clone=x=>JSON.parse(JSON.stringify(x));
 const plan=E.plan(input,G);
 const newLog=[...prevLog,...plan.logAppend];
 const tid=n=>"t"+String(n).padStart(30,"0");
+const T2=(n,o)=>({id:tid(n),title:"Задача "+n,status:"Not started",spheres:["Личное"],projects:[],synapse:null,hours:null,priority:null,planned:null,deadline:null,created:"2026-10-01",...o});
 const brickOf=(p,id)=>{for(const d of p.days){const i=d.bricks.findIndex(b=>b.task===id&&b.role!=="приёмка");if(i>=0)return {d,i}}return null};
 const moveTo=(p,id,date)=>{const f=brickOf(p,id);const b=f.d.bricks.splice(f.i,1)[0];p.days.find(d=>d.date===date).bricks.push(b);p.placements[id]={...p.placements[id],date}};
 
@@ -30,6 +31,14 @@ run("задача потеряна","5",p=>{const id=tid(8);delete p.placements[
 run("предложение двигает дедлайн","6",p=>{p.proposals.all.push({task:tid(6),field:"Дедлайн",from:"2026-11-05",to:"2026-11-20"})});
 run("раскладка переписала дедлайн","6",p=>{p.tasks.find(t=>t.id===tid(6)).deadline="2026-11-20"});
 run("журнал переписан","7",(p,lg)=>{lg.newLog[0]={...lg.newLog[0],answer:"отклонил"}});
+// движок, а не мутация раскладки: закреп владельца за дедлайном (engine 0.1.3, прогон 02.11.2026)
+{const inp=clone(input);
+  inp.tasks.push(T2(31,{title:"Закреп после прошедшего дедлайна",hours:1,planned:"2026-11-02",deadline:"2026-10-30"}),
+                 T2(32,{title:"Закреп после будущего дедлайна",hours:1,planned:"2026-11-10",deadline:"2026-11-06"}));
+  const p=E.plan(inp,G), r=C.check(inp,p,{prevLog:clone(prevLog),newLog:[...clone(prevLog),...p.logAppend]});
+  const o31=p.overloads.some(o=>o.task===tid(31)), at32=(p.placements[tid(32)]||{}).date;
+  rows.push({name:"движок: закреп за дедлайном",expect:"чисто",pass:r.ok&&o31&&at32&&at32<="2026-11-06",
+    got:(r.violations.map(v=>v.inv.slice(0,1)+": "+v.msg).join(" | ")||"—")+` · 31 в перегрузах: ${o31} · 32 стоит ${at32}`,counts:r.counts})}
 
 for(const r of rows)console.log(`${r.pass?"да ":"НЕТ"} · ${r.name.padEnd(36)} · ждали: ${r.expect.padEnd(12)} · поймано: ${r.got}`);
 console.log("\nконтроль (заведомо ненулевые на наборе):",JSON.stringify(rows[0].counts));
