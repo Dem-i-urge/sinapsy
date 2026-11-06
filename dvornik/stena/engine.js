@@ -1,4 +1,4 @@
-/* Дворник · engine.js v0.1.3-draft · 02.11.2026
+/* Дворник · engine.js v0.1.4-draft · 06.11.2026 (причина раскладки why и проект задачи в документе стены — для карточки «к задаче»)
    Планировщик стены: чистая функция plan(data, graph) → раскладка. Без сети, без DOM, без часов:
    «сегодня» приходит во входе. Спецификация — sinapsy/dvornik/SPEC.md §3–5; проверяет результат check.js.
    Дом — Dem-i-urge/sinapsy/dvornik/stena/engine.js; опубликованный файл стены — проекция.
@@ -6,7 +6,7 @@
    В браузере: глобальный DvornikEngine, граф — глобальный SinapsyGraph. */
 (function(root,factory){ if(typeof module==="object"&&module.exports)module.exports=factory(); else root.DvornikEngine=factory(); })(typeof self!=="undefined"?self:this,function(){
   "use strict";
-  const VERSION="0.1.3";
+  const VERSION="0.1.4";
 
   /* ---------- параметры по умолчанию (SPEC §3.1, §3.5, §4); meta/params стены их перекрывает ---------- */
   const DEFAULTS={
@@ -213,18 +213,24 @@
     function putBucket(b,t,pool){b.tasks.push(t.id);b.load[pool]=r1(b.load[pool]+t.h);placed.set(t.id,{where:b.type,start:b.start,pool})}
 
     function place(t){
-      if(ownerUndated.has(t.id)&&!t.deadline){placed.set(t.id,{where:"none"});undated.push(t.id);return}
-      let floor=start; for(const p of preTasks.get(t.id)){const s=slotStart(placed.get(p));if(s&&s>floor)floor=s}
+      if(ownerUndated.has(t.id)&&!t.deadline){placed.set(t.id,{where:"none",why:"бэклог: без даты по вашему решению"});undated.push(t.id);return}
       const D=t.deadline, pool=t.merkor?"merkor":"own";
+      let floor=start, floorBy=null; for(const p of preTasks.get(t.id)){const s=slotStart(placed.get(p));if(s&&s>floor){floor=s;floorBy=p}}
+      // причина раскладки (why) — для карточки задачи на стене: почему она стоит именно здесь
+      const was=!t.planned?"даты не было":t.planned<start?"плановая дата "+t.planned+" прошла":floorBy&&t.planned<floor?"раньше предшественника нельзя":
+        D&&t.planned>D?"плановая дата позже дедлайна":dayIx.has(t.planned)?"в день "+t.planned+" нет места":"";
+      const after=floorBy?" после «"+((byTask.get(floorBy)||{}).title||floorBy)+"»":"";
+      const why=w=>{const x=placed.get(t.id);if(x)x.why=w};
       const okDay=d=>d.date>=floor&&(!t.merkor||d.office);
       // 1) закреп владельца: будущая плановая дата в пределах дней и не позже дедлайна
       //    (закреп мягкий, дедлайн жёсткий: закреп за дедлайном уходит в шаги 2–4 — там место до дедлайна или перегруз)
       if(t.planned&&t.planned>=floor&&(!D||t.planned<=D)&&dayIx.has(t.planned)){const d=days[dayIx.get(t.planned)];
-        if(okDay(d)&&fitsDay(d,t,pool)){putDay(d,t,pool);return}}
+        if(okDay(d)&&fitsDay(d,t,pool)){putDay(d,t,pool);why("ваша плановая дата");return}}
       // 2) первый подходящий день не позже дедлайна
-      for(const d of days){if(D&&d.date>D)break;if(okDay(d)&&fitsDay(d,t,pool)){putDay(d,t,pool);return}}
+      for(const d of days){if(D&&d.date>D)break;if(okDay(d)&&fitsDay(d,t,pool)){putDay(d,t,pool);
+        why((was?was+" → ":"")+"первый свободный день"+after+(D?" до дедлайна "+D:"")+(t.merkor?", офисный":""));return}}
       // 3) Меркор с дедлайном, не влезший в офисные дни до него — домой (исключение §3.2 п. 3)
-      if(t.merkor&&D)for(const d of days){if(d.date>D)break;if(d.date>=floor&&!d.office&&fitsDay(d,t,"own")){putDay(d,t,"own","Меркор дома: офисные дни до дедлайна заняты");return}}
+      if(t.merkor&&D)for(const d of days){if(d.date>D)break;if(d.date>=floor&&!d.office&&fitsDay(d,t,"own")){putDay(d,t,"own","Меркор дома: офисные дни до дедлайна заняты");why("Меркор дома: офисные дни до дедлайна "+D+" заняты");return}}
       // 4) дедлайн в пределах дней, но места нет — перегруз, ставим на последний допустимый день до дедлайна
       if(D&&D<=dayEnd){
         const cand=days.filter(d=>d.date<=D&&d.date>=start&&(!t.merkor||d.office));
@@ -232,14 +238,16 @@
         const forced={...t,bg:null}; putDay(d,forced,pool,D<start?"дедлайн уже прошёл":"дедлайн не помещается");
         const maxCap=Math.max(...days.filter(x=>!t.merkor||x.office).map(x=>x.cap[pool]),0);
         overloads.push({type:"дедлайн",task:t.id,deadline:D,placed:d.date,reason:D<start?"дедлайн уже прошёл":floor>D?"предшественники встают позже дедлайна":
-          t.h>maxCap?`задача (${t.h} ч) крупнее любого дня (${r1(maxCap)} ч) — разбить на шаги`:"до дедлайна нет места"});return}
+          t.h>maxCap?`задача (${t.h} ч) крупнее любого дня (${r1(maxCap)} ч) — разбить на шаги`:"до дедлайна нет места"});
+        why("перегруз: "+overloads[overloads.length-1].reason+" (дедлайн "+D+")");return}
       // 5) корзины недель и месяцев: сначала корзина закрепа владельца, затем по ёмкости — не раньше предшественников и не позже дедлайна
       if(t.planned&&t.planned>dayEnd&&t.planned>=floor){const b=buckets.find(b=>b.start<=t.planned&&t.planned<=b.end&&(!D||b.start<=D));
-        if(b&&b.load[pool]+t.h<=b.cap[pool]+1e-9){putBucket(b,t,pool);return}}
-      for(const b of buckets){if(b.end<floor)continue;if(D&&b.start>D)break;if(b.load[pool]+t.h<=b.cap[pool]+1e-9){putBucket(b,t,pool);return}}
+        if(b&&b.load[pool]+t.h<=b.cap[pool]+1e-9){putBucket(b,t,pool);why("ваша плановая дата — в этой "+(b.type==="week"?"неделе":"месяце"));return}}
+      for(const b of buckets){if(b.end<floor)continue;if(D&&b.start>D)break;if(b.load[pool]+t.h<=b.cap[pool]+1e-9){putBucket(b,t,pool);
+        why((was?was+" → ":"")+"дни заняты — первая "+(b.type==="week"?"неделя":"месяц")+" с местом"+after);return}}
       if(D){const cand=buckets.filter(b=>b.start<=D&&b.end>=floor);const b=cand[cand.length-1]||buckets[0];putBucket(b,t,pool);
-        overloads.push({type:"дедлайн",task:t.id,deadline:D,placed:b.start,reason:"до дедлайна нет места"});return}
-      const b=buckets[buckets.length-1];putBucket(b,t,pool);notes.push("горизонт месяцев исчерпан: "+t.id);
+        overloads.push({type:"дедлайн",task:t.id,deadline:D,placed:b.start,reason:"до дедлайна нет места"});why("перегруз: до дедлайна "+D+" нет места");return}
+      const b=buckets[buckets.length-1];putBucket(b,t,pool);why("горизонт месяцев исчерпан");notes.push("горизонт месяцев исчерпан: "+t.id);
     }
     while(ready.length){
       ready.sort(cmp); const t=ready.shift(); place(t);
@@ -308,7 +316,7 @@
       days:days.map(d=>({date:d.date,dow:d.dow,office:d.office,route:d.route,travel:d.travel,officeH:d.officeH,homeFree:d.homeFree,cap:d.cap,load:d.load,bricks:d.bricks})),
       buckets:buckets.filter(b=>b.tasks.length||b.type==="week").map(b=>({type:b.type,start:b.start,end:b.end,cap:b.cap,load:b.load,tasks:b.tasks,points:b.points})),
       placements:Object.fromEntries(placed), undated, overloads,
-      tasks:tasks.map(t=>({id:t.id,title:t.title,node:t.node,bind:t.bind,score:t.score,hours:t.h,hSrc:t.hSrc,deadline:t.deadline,planned:t.planned,merkor:t.merkor,spheres:t.spheres,bg:t.bg,pre:[...preTasks.get(t.id)]})),
+      tasks:tasks.map(t=>({id:t.id,title:t.title,node:t.node,bind:t.bind,project:(t.projects||[]).map(hex).find(Boolean)||null,score:t.score,hours:t.h,hSrc:t.hSrc,deadline:t.deadline,planned:t.planned,merkor:t.merkor,spheres:t.spheres,bg:t.bg,pre:[...preTasks.get(t.id)]})),
       proposals:{all,top:all.slice(0,P.proposalLimit)}, logAppend, notes
     };
   }
@@ -340,7 +348,8 @@
     for(const o of p.overloads)if(o.task)need.add(o.task);
     for(const x of p.proposals.top)if(x.task)need.add(x.task);
     const T={}; for(const t of p.tasks)if(need.has(t.id))T[t.id]={title:t.title,node:t.node,hours:t.hours,hSrc:t.hSrc,
-      deadline:t.deadline,planned:t.planned,merkor:t.merkor,sphere:(t.spheres||[])[0]||null,bg:t.bg?1:0,where:(p.placements[t.id]||{}).date||null};
+      deadline:t.deadline,planned:t.planned,merkor:t.merkor,sphere:(t.spheres||[])[0]||null,bg:t.bg?1:0,where:(p.placements[t.id]||{}).date||null,
+      why:(p.placements[t.id]||{}).why||null,project:t.project||null,bind:t.bind||null};
     const nodeTitle={}; for(const t of p.top)nodeTitle[t.node]=t.title;
     for(const b of p.buckets)for(const x of b.points)if(x.node)nodeTitle[x.node]=x.title;
     return {

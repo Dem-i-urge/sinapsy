@@ -1,10 +1,12 @@
 <title>Стена Дворника</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<!-- Дворник · стена (А3) · index.html v0.2.1-draft · 29.10.2026 — оформление «лофт»: кладка в цветах Призмы
+<!-- Дворник · стена (А3) · index.html v0.3-draft · 06.11.2026 — кнопки по клику на задачу: «к задаче», «отложить в бэклог», «оценить часы»
      Дом — Dem-i-urge/sinapsy/dvornik/stena/index.html; артефакт claude.ai — проекция.
      Рисует документ plan/current из хранилища стены (его пишет задача «Дворник»: engine.wall()).
      Рядом опубликованы engine.js, check.js, adapt.js, dvornik.js и stena-io.js — их берёт задача по расписанию (SPEC §5 п. 2;
-     ред. 29.10.2026). Страница ничего не пишет. -->
+     ред. 29.10.2026). Пишет страница только по кнопке владельца (v0.3): Notion — «Плановая дата» (снять или вернуть)
+     и «Трудоёмкость, ч» через его коннектор Notion; журнал стены — строка log/<задача>-<ГГГГММДД>-w<ЧЧММСС><d|h>
+     с mode «стена» (stena-io.js читает «без даты» как бэклог). «Обсудить» спрашивает Claude; ответ живёт только на странице. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
@@ -96,6 +98,28 @@ header{display:flex;flex-direction:column;gap:14px}
 .detail dd{margin:0;min-width:0;overflow-wrap:anywhere}
 .detail .links{display:flex;gap:16px;font-size:14px;flex-wrap:wrap}
 a{color:inherit;text-decoration-color:var(--b-orange);text-decoration-thickness:2px;text-underline-offset:3px}
+/* кнопки карточки (v0.3) */
+.acts{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;border-top:1px solid var(--line);padding-top:10px}
+.grp{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.grp>span{font:12px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-right:4px}
+.btn{font:600 13px/1 var(--f-body);padding:8px 11px;border-radius:2px;border:0;cursor:pointer;background:var(--steel);color:var(--steel-ink);min-height:32px}
+.btn.ghost{background:transparent;color:var(--ink);outline:2px solid var(--steel);outline-offset:-2px}
+.btn.on{background:var(--b-orange);color:#2a1704}
+.btn:disabled{opacity:.45;cursor:default}
+.btn:focus-visible{outline:3px solid var(--b-orange);outline-offset:1px}
+.status{font:12.5px var(--f-mono);color:var(--muted);min-height:1em}
+.status.bad{color:var(--alarm)}.status.ok{color:var(--ok)}
+.why{font-size:14px}
+.nonode{color:var(--alarm)}
+.chat{display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--line);padding-top:10px}
+.chat .msg{white-space:pre-wrap;font-size:14px;line-height:1.45;max-width:72ch}
+.chat .msg.me{color:var(--muted)}
+.chat form{display:flex;gap:6px}
+.chat textarea{flex:1;min-height:38px;font:14px var(--f-body);padding:7px 9px;border:2px solid var(--steel);border-radius:2px;background:var(--bg);color:var(--ink);resize:vertical}
+/* метки на кирпиче: выемка — задача без точки карты; штриховка — отложена в бэклог кнопкой */
+.brick.nonode::after{content:"";position:absolute;right:0;top:0;border-style:solid;border-width:0 9px 9px 0;border-color:transparent var(--bg) transparent transparent}
+.brick.gone{background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.55) 0 4px,transparent 4px 9px),var(--concrete);opacity:.55}
+.brick.gone span{text-decoration:line-through}
 
 /* дальний горизонт: ряд = курс кладки, кирпич = точка карты, длина — часы */
 .rows{display:flex;flex-direction:column}
@@ -163,7 +187,7 @@ footer code{font-family:var(--f-mono);font-size:12px}
   </div>
 
   <footer id="foot">
-    <span>Стена v0.2.1-draft · 29.10.2026 (наследование балла) · дом — <code>Dem-i-urge/sinapsy/dvornik/stena/</code>, спецификация — <code>dvornik/SPEC.md</code>.</span>
+    <span>Стена v0.3-draft · 06.11.2026 (кнопки карточки: бэклог, часы, «обсудить») · дом — <code>Dem-i-urge/sinapsy/dvornik/stena/</code>, спецификация — <code>dvornik/SPEC.md</code>.</span>
     <span>Рядом со страницей опубликованы <code>engine.js</code>, <code>check.js</code>, <code>adapt.js</code>, <code>dvornik.js</code> и <code>stena-io.js</code>: прогон берёт их отсюда, <code>graph.js</code> — со страницы карты.</span>
     <span id="dbinfo"></span>
   </footer>
@@ -198,14 +222,131 @@ const bondFor=px=>{const c=Math.max(8,px),w=100;
   return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`};
 
 let W=null, sel=null, logInfo=null, paramsDoc=null;
+// v0.3: возможности страницы и строки журнала, записанные кнопками стены
+let DB=null, MCP=null, SAMPLE=null, wallRows=[], chat=null, cardMsg=null, busy=false;
+const projName={};   // проект: id → название (читается из Notion по открытию карточки)
+const NS="Notion";
 const EMPTY=document.getElementById("empty");
 
 function kindOf(t,overIds){return overIds.has(t.id||"")?"late":t.merkor?"m":t.hSrc==="нет оценки"?"raw":""}
+
+/* ---------- v0.3: кнопки карточки ---------- */
+const mskNow=()=>new Date(Date.now()+3*3600e3);
+const todayMsk=()=>mskNow().toISOString().slice(0,10);
+// последнее действие стены по задаче — поверх раскладки, пока следующий прогон Дворника не перечитал Notion
+function mark(id){const r={backlog:null,hours:null};
+  for(const x of wallRows){if(x.task!==id)continue;
+    if(x.field==="Плановая дата")r.backlog=x.answer==="без даты"?x:null;
+    if(x.field==="Трудоёмкость, ч")r.hours=x}
+  return r}
+function errText(e){const c=e&&e.code;
+  return c==="needs_reauth"?"Notion: подключение истекло — переподключите Notion в claude.ai → Настройки → Коннекторы":
+    c==="server_not_connected"?"Notion не подключён к claude.ai (Настройки → Коннекторы)":
+    c==="not_in_manifest"||c==="approval_required"?"страница не получила разрешения на Notion — нажмите ещё раз и разрешите":
+    c==="blocked_by_policy"?"Notion для страницы закрыт политикой организации":
+    c==="server_unavailable"||c==="upstream_error"?"Notion не ответил — записалось или нет, неизвестно; проверьте задачу в Notion перед повтором":
+    c==="tool_error"?"Notion отказал: "+String(e.message||"").slice(0,160):
+    c==="not_granted"||c==="capability_disabled"?"в этом просмотре коннекторы недоступны":
+    "ошибка: "+(c||e&&e.message||"неизвестно")}
+async function notionSet(id,props){
+  if(!MCP)throw {code:"capability_disabled"};
+  return MCP.callTool(NS,"notion-update-page",{page_id:id,command:"update_properties",properties:props});
+}
+async function logRow(row,suffix){
+  if(!DB)throw {code:"no_db"};
+  const t=mskNow(), stamp=t.toISOString().slice(0,10).replace(/-/g,""), hms=t.toISOString().slice(11,19).replace(/:/g,"");
+  const id=`${row.task}-${stamp}-w${hms}${suffix}`;
+  const doc={...row,date:t.toISOString().slice(0,10),answeredAt:t.toISOString().slice(0,10),mode:"стена",src:"стена",at:new Date().toISOString()};
+  await DB.doc("log/"+id).set(doc);
+  wallRows.push({...doc,id});
+}
+async function act(kind,t,val){
+  if(busy)return; busy=true; cardMsg={cls:"",text:"записываю…"}; render();
+  const id=sel.task; let notion="не писалось";
+  try{
+    if(kind==="backlog"){
+      if(t.planned){await notionSet(id,{"date:Плановая дата:start":null});notion="дата снята"}
+      await logRow({task:id,field:"Плановая дата",proposed:null,was:t.planned||null,answer:"без даты",final:null,act:"бэклог",notion},"d");
+      cardMsg={cls:"ok",text:"В бэклоге. "+(t.planned?"В Notion плановая дата "+dShort(t.planned)+" снята.":"В Notion даты не было — запись только в журнал.")+" Следующий прогон Дворника её в дни не поставит."};
+    }else if(kind==="return"){
+      const was=val;
+      if(was){await notionSet(id,{"date:Плановая дата:start":was});notion="дата возвращена"}
+      await logRow({task:id,field:"Плановая дата",proposed:null,was:null,answer:"вернул",final:was||null,act:"из бэклога",notion},"d");
+      cardMsg={cls:"ok",text:was?"Вернул: в Notion снова "+dShort(was)+".":"Отметка бэклога снята; дату поставит следующий прогон Дворника."};
+    }else if(kind==="hours"){
+      await notionSet(id,{"Трудоёмкость, ч":val}); notion="записано";
+      await logRow({task:id,field:"Трудоёмкость, ч",proposed:null,was:t.hSrc==="владелец"?t.hours:null,answer:"оценил",final:val,act:"оценка часов",notion,placedHours:sel.hours},"h");
+      cardMsg={cls:"ok",text:"Записано: "+n(val)+" ч в «Трудоёмкость, ч». Кладка дня перестроится при следующем прогоне Дворника."};
+    }
+  }catch(e){cardMsg={cls:"bad",text:(notion!=="не писалось"?"Notion: "+notion+", но журнал стены не записался — "+(e&&e.code||e&&e.message||"ошибка"):errText(e))}}
+  busy=false; render();
+}
+function contextOf(t){
+  return [`Задача: «${t.title}»`,`Сфера: ${t.sphere||"—"}${t.merkor?" (Меркор — только офисный день)":""}`,
+    `Проект: ${t.project?(projName[t.project]||"есть, название не прочитано"):"нет"}`,
+    `Точка карты «Синапсы»: ${t.node?((W.nodeTitle&&W.nodeTitle[t.node])||t.node):"нет"}`,
+    `Плановая дата: ${t.planned||"нет"} · дедлайн: ${t.deadline||"нет"} · стена ставит на ${sel.date}`,
+    `Почему здесь (движок): ${t.why||"не записано этим прогоном"}`,
+    `Часы сейчас: ${n(sel.hours)} ч (${t.hSrc==="владелец"?"оценка владельца":t.hSrc==="Дворник"?"оценка Дворника":"оценки нет, стоит по умолчанию"})`].join("\n")}
+async function ask(text){
+  if(!SAMPLE||busy)return; busy=true;
+  const first=!chat; if(first)chat=[];
+  const intro="Ты помогаешь Игорю (клинический психолог, предприниматель, технический директор) оценить задачу на стене планировщика «Дворник». "+
+    "Трудоёмкость — часы его внимания при работе вместе с ИИ: постановка, диалог, приёмка, правка; время, пока агент работает сам, сюда не входит. "+
+    "Модели по умолчанию считают ручную работу и завышают — учитывай это. Отвечай по-русски, коротко, без вступлений.\n\n"+contextOf(T_(sel.task));
+  const userMsg=first?intro+"\n\n"+(text||"Предложи оценку одним числом из 0,5 · 1 · 2 · 4 (больше — если задача крупная, тогда скажи, на какие шаги её разбить) и объясни её в двух-трёх предложениях."):text;
+  chat.push({role:"user",content:userMsg,show:first?(text||"Оцени часы и объясни"):text});
+  const ans={role:"assistant",content:"",show:"…"}; chat.push(ans); render();
+  try{const r=await SAMPLE(chat.slice(0,-1).map(m=>({role:m.role,content:m.content})),{modelTier:"quick",cache:false,onText:({text})=>{ans.content=text;ans.show=text;renderChat()}});
+    ans.content=r.text;ans.show=r.text}
+  catch(e){chat.pop();chat.pop();cardMsg={cls:"bad",text:e&&e.code==="rate_limited"?"Claude просит подождать — попробуйте через минуту":e&&e.code==="not_granted"?"страница не получила разрешения спрашивать Claude":"Claude не ответил: "+(e&&e.code||"ошибка")};if(!chat.length)chat=null}
+  busy=false; render();
+}
+let T_=()=>({});
+function renderChat(){const box=document.getElementById("chatlog");if(!box||!chat)return;box.replaceChildren(...chat.map(m=>el("div",{class:"msg"+(m.role==="user"?" me":""),text:(m.role==="user"?"— ":"")+m.show})))}
+async function loadProject(pid){
+  if(!MCP||!pid||projName[pid]!==undefined)return; projName[pid]=null;
+  try{const r=await MCP.callTool(NS,"notion-fetch",{id:pid},{cache:{staleTime:864e5,gcTime:864e5}});
+    let p=r&&r.payload; if(typeof p==="string"){try{p=JSON.parse(p)}catch(e){const m=p.match(/"title":"([^"]+)"/);p=m?{title:m[1]}:null}}
+    projName[pid]=(p&&p.title)||"";}
+  catch(e){projName[pid]=""}
+  render();
+}
+function card(t,overIds){
+  const kind=kindOf(t,overIds), m=mark(sel.task), today=todayMsk();
+  if(t.project&&MCP&&projName[t.project]===undefined)setTimeout(()=>loadProject(t.project),0);
+  const pj=t.project?el("a",{href:NOTION+t.project,target:"_blank",rel:"noopener",text:projName[t.project]||(projName[t.project]===null?"читаю…":"открыть проект")}):"нет проекта";
+  const dl=el("dl",{},
+    el("dt",{text:"почему здесь"}),el("dd",{class:"why",text:t.why||"причина появится со следующего прогона Дворника (engine 0.1.4)"}),
+    el("dt",{text:"стоит"}),el("dd",{text:dShort(sel.date)+(sel.role&&sel.role!=="шаг"?" · "+sel.role:"")}),
+    el("dt",{text:"план"}),el("dd",{text:t.planned?dShort(t.planned)+(t.planned!==sel.date?" → предложено "+dShort(sel.date):" · совпадает"):"не стоит → предложено "+dShort(sel.date)}),
+    el("dt",{text:"дедлайн"}),el("dd",{text:t.deadline?dShort(t.deadline)+" (Дворник его не трогает)":"нет"}),
+    el("dt",{text:"часы"}),el("dd",{text:n(sel.hours)+" ч · "+(t.hSrc==="владелец"?"оценка владельца":t.hSrc==="Дворник"?"оценка Дворника":"оценки нет, стоит по умолчанию")+(m.hours?" · с этой страницы: "+n(m.hours.final)+" ч":"")}),
+    el("dt",{text:"проект"}),el("dd",{},pj),
+    el("dt",{text:"точка"}),t.node?el("dd",{},el("a",{href:MAP+t.node,target:"_blank",rel:"noopener",text:(W.nodeTitle&&W.nodeTitle[t.node])||t.node})):el("dd",{class:"nonode",text:"без точки карты — балл нейтральный; точку поставит разбор Дворника или вы в поле «Синапс»"}),
+    el("dt",{text:"сфера"}),el("dd",{text:(t.sphere||"—")+(t.merkor?" · только офисный день":"")}));
+  const noWrite=!MCP||!DB, why=!DB?"хранилище стены недоступно":!MCP?"коннекторы в этом просмотре недоступны":"";
+  const hours=el("div",{class:"grp"},el("span",{text:"часы"}),...[0.5,1,2,4].map(h=>el("button",{type:"button",class:"btn"+(m.hours&&+m.hours.final===h?" on":""),disabled:noWrite||busy,onclick:()=>act("hours",t,h),text:n(h)})),
+    el("button",{type:"button",class:"btn ghost",disabled:!SAMPLE||busy,title:SAMPLE?"":"вопрос Claude в этом просмотре недоступен",onclick:()=>ask(),text:"обсудить"}));
+  const back=m.backlog?el("button",{type:"button",class:"btn ghost",disabled:noWrite||busy,onclick:()=>act("return",t,m.backlog.was),text:m.backlog.was?"вернуть на "+dShort(m.backlog.was):"вернуть из бэклога"})
+    :el("button",{type:"button",class:"btn",disabled:noWrite||busy,onclick:()=>act("backlog",t),text:"отложить в бэклог"});
+  const acts=el("div",{class:"acts"},el("div",{class:"grp"},back),hours,
+    el("div",{class:"grp"},el("a",{href:NOTION+sel.task,target:"_blank",rel:"noopener",text:"задача в Notion"})));
+  const st=el("div",{class:"status"+(cardMsg&&cardMsg.cls?" "+cardMsg.cls:""),role:"status",text:cardMsg?cardMsg.text:(noWrite?"Кнопки записи выключены: "+why+".":m.backlog?"Отложена в бэклог "+dShort(m.backlog.date)+" — до прогона Дворника кирпич висит заштрихованным.":"")});
+  let chatBox=null;
+  if(chat){chatBox=el("div",{class:"chat"},el("div",{id:"chatlog"}),
+    el("form",{onsubmit:e=>{e.preventDefault();const ta=e.target.querySelector("textarea");const v=ta.value.trim();if(v){ta.value="";ask(v)}}},
+      el("textarea",{placeholder:"Уточнить: что входит, что уже сделано, на какие шаги разбить…","aria-label":"вопрос Claude"}),
+      el("button",{type:"submit",class:"btn",disabled:busy,text:"спросить"})));
+    setTimeout(renderChat,0)}
+  return el("div",{class:"detail"+(kind?" "+kind:""),id:"detail"},el("h3",{text:t.title}),dl,acts,st,chatBox);
+}
 
 function render(){
   const root=$("#root"); root.replaceChildren();
   if(!W){root.append(EMPTY);return}
   const T={}; for(const id in (W.tasks||{}))T[id]={...W.tasks[id],id};   // документ хранилища заморожен — копия
+  T_=id=>T[id]||{};
   const ov=W.overloads||[], overIds=new Set(ov.filter(o=>o.task).map(o=>o.task));
   // шапка
   const ch=$("#chips"); ch.replaceChildren();
@@ -214,7 +355,7 @@ function render(){
   if(W.check)ch.append(el("span",{class:"chip "+(W.check.ok?"ok":"bad"),text:W.check.ok?"проверка пройдена":"проверка не пройдена · "+W.check.nViolations}));
   ch.append(el("span",{class:"chip",text:W.engine+" · "+W.graph}));
   const P=W.passport;
-  $("#sub").textContent=`Открыто ${P.open} задач: по дням стоит ${P.placed.days}, по неделям ${P.placed.weeks}, по месяцам ${P.placed.months}. Часы оценены у ${P.hours.владелец+P.hours.Дворник} из ${P.open}; остальные лежат сырцом по ${n(W.params.defaultHours)} ч, поэтому кладка дней условна до оценок.`;
+  $("#sub").textContent=`Открыто ${P.open} задач: по дням стоит ${P.placed.days}, по неделям ${P.placed.weeks}, по месяцам ${P.placed.months}. Часы оценены у ${P.hours.владелец+P.hours.Дворник} из ${P.open}; остальные лежат сырцом по ${n(W.params.defaultHours)} ч, поэтому кладка дней условна до оценок. Без точки карты — ${P.noNode} из ${P.open} (на кирпиче — выемка).`;
 
   // 1. перегрузы
   const s1=el("section",{class:"sec"},el("div",{class:"sec-head"},el("h2",{text:"Сначала"}),el("span",{class:"hint",text:ov.length?ov.length+" "+plural(ov.length,"перегруз","перегруза","перегрузов"):"перегрузов нет"})));
@@ -234,7 +375,9 @@ function render(){
     li("background:var(--b-purple)","Меркор"),
     li("background:var(--b-magenta)","дедлайн прошёл или не помещается"),
     li("background:var(--steel);height:5px;vertical-align:3px","ёмкость дня"),
-    li("background:none;border-top:2px dashed var(--b-purple);height:0;box-shadow:none;vertical-align:3px","офисная доля Меркора")));
+    li("background:none;border-top:2px dashed var(--b-purple);height:0;box-shadow:none;vertical-align:3px","офисная доля Меркора"),
+    li("background:var(--b-orange);clip-path:polygon(0 0,70% 0,100% 45%,100% 100%,0 100%)","выемка — задача без точки карты"),
+    li("background:repeating-linear-gradient(135deg,#fff8 0 3px,transparent 3px 7px),var(--b-orange);opacity:.6","отложена в бэклог с этой страницы")));
   const days=W.days||[], byDate=new Map(days.map(d=>[d.date,d]));
   const maxCap=Math.max(6,...days.map(d=>Math.max(d.cap.total,d.load.total)));
   const PX=Math.max(14,Math.min(22,210/maxCap));
@@ -254,13 +397,13 @@ function render(){
         col.append(el("div",{class:"bed",style:`height:${capH}px`}));
         const mk=(pool,bottom)=>{const box=el("div",{class:"pool",style:`bottom:${bottom}px`});
           for(const b of d.bricks.filter(b=>b.pool===pool)){const t=T[b.task]||{title:b.task,id:b.task};
-            const kind=kindOf(t,overIds);
-            const cls="brick"+(kind?" "+kind:"")+(sel&&sel.task===b.task&&sel.date===d.date?" sel":"");
+            const kind=kindOf(t,overIds), mk2=mark(b.task);
+            const cls="brick"+(kind?" "+kind:"")+(t.node?"":" nonode")+(mk2.backlog?" gone":"")+(sel&&sel.task===b.task&&sel.date===d.date?" sel":"");
             const h=Math.max(8,b.hours*PX-3);
             const btn=el("button",{class:cls,type:"button",
               style:`height:${h}px;--bond:${BOND};--c2:${2*PX}px;filter:brightness(${tone(b.task).toFixed(3)})`,
-              title:`${t.title} · ${n(b.hours)} ч`,"aria-label":`${t.title}, ${n(b.hours)} ч`,
-              onclick:()=>{sel={task:b.task,date:d.date,role:b.role,hours:b.hours};render();const x=document.getElementById("detail");x&&x.scrollIntoView({block:"nearest",behavior:"smooth"})}},
+              title:`${t.title} · ${n(b.hours)} ч${t.node?"":" · без точки"}${mk2.backlog?" · отложена в бэклог":""}`,"aria-label":`${t.title}, ${n(b.hours)} ч${mk2.backlog?", отложена в бэклог":""}`,
+              onclick:()=>{if(!sel||sel.task!==b.task){chat=null;cardMsg=null}sel={task:b.task,date:d.date,role:b.role,hours:b.hours};render();const x=document.getElementById("detail");x&&x.scrollIntoView({block:"nearest",behavior:"smooth"})}},
               el("span",{text:(b.role&&b.role!=="шаг"&&b.role.length<12?b.role+": ":"")+t.title}));
             box.append(btn)}
           return box};
@@ -278,17 +421,8 @@ function render(){
     }
   }
   s2.append(weeks);
-  if(sel&&T[sel.task]){const t=T[sel.task], kind=kindOf(t,overIds);
-    const dl=el("dl",{},
-      el("dt",{text:"стоит"}),el("dd",{text:dShort(sel.date)+(sel.role&&sel.role!=="шаг"?" · "+sel.role:"")}),
-      el("dt",{text:"часы"}),el("dd",{text:n(sel.hours)+" ч · "+(t.hSrc==="владелец"?"оценка владельца":t.hSrc==="Дворник"?"оценка Дворника":"оценки нет, стоит по умолчанию")}),
-      el("dt",{text:"план"}),el("dd",{text:t.planned?dShort(t.planned)+(t.planned!==sel.date?" → предложено "+dShort(sel.date):" · совпадает"):"не стоит → предложено "+dShort(sel.date)}),
-      el("dt",{text:"дедлайн"}),el("dd",{text:t.deadline?dShort(t.deadline)+" (Дворник его не трогает)":"нет"}),
-      el("dt",{text:"сфера"}),el("dd",{text:(t.sphere||"—")+(t.merkor?" · только офисный день":"")}),
-      el("dt",{text:"точка"}),el("dd",{text:t.node?(W.nodeTitle&&W.nodeTitle[t.node])||t.node:"без точки — приоритет нейтральный"}));
-    s2.append(el("div",{class:"detail"+(kind?" "+kind:""),id:"detail"},el("h3",{text:t.title}),dl,
-      el("div",{class:"links"},el("a",{href:NOTION+sel.task,target:"_blank",rel:"noopener",text:"Задача в Notion"}),t.node?el("a",{href:MAP+t.node,target:"_blank",rel:"noopener",text:"Точка на карте"}):null)))}
-  else s2.append(el("div",{class:"hint",text:"Нажмите на кирпич — откроется задача: где стоит, откуда часы, что с плановой датой и дедлайном."}));
+  if(sel&&T[sel.task])s2.append(card(T[sel.task],overIds));
+  else s2.append(el("div",{class:"hint",text:"Нажмите на кирпич — откроется карточка задачи: почему она стоит здесь, проект и точка, а под ними кнопки «отложить в бэклог» и «оценить часы»."}));
   root.append(s2);
 
   // 3. дальний горизонт
@@ -359,7 +493,13 @@ async function start(){
   db.doc("plan/current").onSnapshot(s=>{W=s.exists?s.data():null;
     if(!W)$("#chips").replaceChildren(el("span",{class:"chip",text:"прогона ещё не было"}));render()},
     e=>{$("#chips").replaceChildren(el("span",{class:"chip bad",text:"хранилище: "+(e&&e.code||"ошибка")}))});
-  try{const q=await db.collection("log").get();logInfo={n:q.size,answered:q.docs.filter(d=>{const x=d.data();return x&&x.answer}).length}}catch(e){logInfo=null}
+  DB=db;
+  try{const q=await db.collection("log").get();const rows=q.docs.map(d=>({...d.data(),id:d.id}));
+    logInfo={n:q.size,answered:rows.filter(x=>x&&x.answer).length};
+    wallRows=rows.filter(x=>x&&x.mode==="стена").sort((a,b)=>String(a.date).localeCompare(String(b.date))||String(a.id).localeCompare(String(b.id)))}catch(e){logInfo=null}
+  // коннектор Notion и вопрос Claude — для кнопок карточки; null — кнопки записи выключены, раскладка видна как прежде
+  try{MCP=await window.claude?.use?.("mcp")}catch(e){MCP=null}
+  try{SAMPLE=await window.claude?.use?.("sample")}catch(e){SAMPLE=null}
   try{const m=await db.doc("meta/params").get();paramsDoc=m.exists?m.data():null}catch(e){paramsDoc=null}
   if(W)render();
 }
