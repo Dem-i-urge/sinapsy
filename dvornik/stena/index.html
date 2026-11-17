@@ -1,195 +1,229 @@
 <title>Стена Дворника</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<!-- Дворник · стена (А3) · index.html v0.3-draft · 06.11.2026 — кнопки по клику на задачу: «к задаче», «отложить в бэклог», «оценить часы»
+<!-- Дворник · стена (А3) · index.html v0.4-draft · 18.11.2026 — оформление «Двор до рассвета» и кнопка «к задаче».
      Дом — Dem-i-urge/sinapsy/dvornik/stena/index.html; артефакт claude.ai — проекция.
-     Рисует документ plan/current из хранилища стены (его пишет задача «Дворник»: engine.wall()).
-     Рядом опубликованы engine.js, check.js, adapt.js, dvornik.js и stena-io.js — их берёт задача по расписанию (SPEC §5 п. 2;
-     ред. 29.10.2026). Пишет страница только по кнопке владельца (v0.3): Notion — «Плановая дата» (снять или вернуть)
-     и «Трудоёмкость, ч» через его коннектор Notion; журнал стены — строка log/<задача>-<ГГГГММДД>-w<ЧЧММСС><d|h>
-     с mode «стена» (stena-io.js читает «без даты» как бэклог). «Обсудить» спрашивает Claude; ответ живёт только на странице. -->
+     Рисует документ plan/current из хранилища стены (его пишет задача «Дворник»: engine.wall()). Схема данных v0.3 не менялась.
+     Рядом опубликованы engine.js, check.js, adapt.js, dvornik.js и stena-io.js — их берёт задача по расписанию (SPEC §5 п. 2).
+     Пишет страница только по кнопке владельца: Notion — «Плановая дата» (снять или вернуть) и «Трудоёмкость, ч» через его
+     коннектор Notion; журнал стены — строка log/<задача>-<ГГГГММДД>-w<ЧЧММСС><d|h> с mode «стена». «Обсудить» спрашивает Claude,
+     ответ живёт только на странице. «К задаче» (v0.4) запускает пусковую задачу «Дворник: к задаче» (SPEC А9) через коннектор
+     Claude Code Remote: тред с объяснением раскладки и связями; страница при этом ничего не пишет.
+     Оформление: мир — двор до рассвета, цветная линогравюра (art/, промпты — art-prompts.md). Одна тёмная тема.
+     Картинки на чёрном (медальоны, печать, разделитель) кладутся режимом screen; шапка — без наложения. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Rubik:wght@400;500;600&family=Fira+Mono:wght@400;500&display=swap">
 <style>
-/* Лофт: бетонная стена цеха, на ней кладка — день = столб кирпичей в перевязку, курс = час, стальная балка = ёмкость дня.
-   Кирпич в цветах Призмы: оранжевый — свой с оценкой, жёлтый — сырец без оценки, пурпур — Меркор, малиновый — дедлайн горит. */
+/* Двор до рассвета: закопчённая штукатурка двора, фонарь, кирпичная стена. Кладка — день = столб кирпичей в перевязку,
+   курс = час, меловая балка = ёмкость дня. Кирпич в цветах Призмы — тех же, что рассветная полоса на шапке:
+   оранжевый — свой с оценкой, жёлтый — сырец без оценки, слива — Меркор, маджента — дедлайн горит. */
 :root{
-  --bg:#d9d6d2; --panel:#e9e7e4; --ink:#1f1b1e; --muted:#5e575b; --line:#bdb7b1; --mortar:#b8b1a8; --steel:#29262a; --steel-ink:#f1ede9;
-  --b-yellow:#f7b82b; --b-orange:#e7761e; --b-magenta:#d2206b; --b-purple:#7a3581;
-  --ok:#2e7a4c; --ok-bg:#d5e6da; --alarm:#b0124f; --alarm-bg:#f3d4df; --off-ink:#7a3581;
-  --f-display:"Oswald","Arial Narrow","Golos Text",sans-serif;
-  --f-body:"Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --f-mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
-  --concrete:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
+  color-scheme:dark;
+  --bg:#151112; --panel:rgba(41,30,32,.86); --panel-solid:#261c1e; --ink:#F3EBDD; --muted:#BBAC9E; --faint:#8E8177;
+  --line:rgba(247,184,43,.26); --mortar:rgba(243,235,221,.075); --chalk:#F3EBDD; --soot:#1b1415; --lamp:#FFC759;
+  --b-yellow:#f7b82b; --b-orange:#e7761e; --b-magenta:#d2206b; --b-purple:#8a3d92;
+  --ok:#8ADBA9; --ok-bg:rgba(60,150,100,.22); --alarm:#FF86B2; --alarm-bg:rgba(210,32,107,.22); --off-ink:#D9A3E2;
+  --f-display:"Dela Gothic One","Arial Black","Rubik",sans-serif;
+  --f-body:"Rubik",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"Fira Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#1a181b; --panel:#252226; --ink:#eee9e5; --muted:#a39a9f; --line:#3d383c; --mortar:#4a4446; --steel:#0c0b0d; --steel-ink:#e9e4e0;
-  --ok:#6cc08f; --ok-bg:#183223; --alarm:#ff6aa1; --alarm-bg:#3c1626; --off-ink:#c991d4; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#1a181b; --panel:#252226; --ink:#eee9e5; --muted:#a39a9f; --line:#3d383c; --mortar:#4a4446; --steel:#0c0b0d; --steel-ink:#e9e4e0;
-  --ok:#6cc08f; --ok-bg:#183223; --alarm:#ff6aa1; --alarm-bg:#3c1626; --off-ink:#c991d4; color-scheme:dark}
 *{box-sizing:border-box}
-body{background:var(--bg) var(--concrete);color:var(--ink);font:15px/1.5 var(--f-body)}
-.wrap{max-width:1160px;margin:0 auto;padding-block:30px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:38px}
-h1,h2{font-family:var(--f-display);font-weight:600;text-transform:uppercase;text-wrap:balance;margin:0}
-h1{font-size:clamp(34px,6vw,58px);line-height:.95;letter-spacing:.04em;font-weight:700}
-h2{font-size:21px;letter-spacing:.06em}
+html{background:var(--bg)}
+body{margin:0;color:var(--ink);font:15px/1.5 var(--f-body);
+  background:radial-gradient(90% 520px at 72% -80px,rgba(247,184,43,.17),rgba(21,17,18,0) 70%),url(art/plaster.jpg),var(--bg);
+  background-size:auto,512px 512px,auto;background-attachment:scroll,fixed,scroll}
+.wrap{max-width:1160px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:26px}
+h1,h2{font-family:var(--f-display);font-weight:400;text-wrap:balance;margin:0}
+h1{font-size:clamp(24px,5.6vw,54px);line-height:1.02;letter-spacing:.01em;color:var(--chalk);text-shadow:0 2px 16px rgba(0,0,0,.75)}
+h2{font-size:clamp(17px,2.4vw,21px);line-height:1.15;color:var(--lamp)}
+a{color:inherit;text-decoration-color:var(--b-orange);text-decoration-thickness:2px;text-underline-offset:3px}
+:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
+.art{mix-blend-mode:screen;display:block;pointer-events:none;flex:none}
 .sec{display:flex;flex-direction:column;gap:14px;min-width:0}
-.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:3px solid var(--steel);padding-bottom:6px}
+#root{gap:26px}
+/* разделитель-метла перед каждым разделом */
+#root>section::before{content:"";display:block;height:46px;margin:0 auto 2px;width:min(520px,88%);background:url(art/divider.jpg) center/contain no-repeat;mix-blend-mode:screen;opacity:.92}
+.sec-head{display:flex;align-items:center;gap:12px 14px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:10px}
+.sec-head .medal{width:56px;height:56px}
+.sec-head h2{flex:1 1 200px;min-width:0}
 .hint{color:var(--muted);font-size:13px}
+.sec-head .hint{flex:0 1 auto;max-width:46ch}
 .mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
 
-/* шапка: табличка на стене и один курс кирпичей в цветах Призмы */
+/* шапка: оттиск во всю ширину, заголовок — в тёмном левом углу двора */
 header{display:flex;flex-direction:column;gap:14px}
-.course{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;max-width:420px}
-.course i{height:16px;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,255,255,.25),inset 0 -2px 0 rgba(0,0,0,.18)}
-.course i:nth-child(4n+1){background:var(--b-yellow)}.course i:nth-child(4n+2){background:var(--b-orange)}
-.course i:nth-child(4n+3){background:var(--b-magenta)}.course i:nth-child(4n){background:var(--b-purple)}
-.sub{color:var(--muted);max-width:72ch}
+.banner{position:relative;width:100%;aspect-ratio:1600/645;max-height:400px;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--soot) url(art/hero.jpg) center/cover}
+.banner::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(21,17,18,.5) 0,rgba(21,17,18,0) 46%),linear-gradient(180deg,rgba(21,17,18,0) 52%,rgba(21,17,18,.82) 100%)}
+.banner .tt{position:absolute;left:clamp(12px,2.4vw,24px);bottom:clamp(10px,2vw,18px);right:12px;z-index:1;display:flex;flex-direction:column;gap:6px}
+.eyebrow{font:500 11px/1.3 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--lamp)}
+.sub{color:var(--muted);max-width:74ch}
 .chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.chip{font:600 11px/1 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;padding:7px 10px;border-radius:2px;background:var(--steel);color:var(--steel-ink)}
-.chip.ok{background:var(--ok-bg);color:var(--ok)}
-.chip.bad{background:var(--alarm-bg);color:var(--alarm)}
-.chip.dry{background:transparent;color:var(--ink);outline:2px dashed var(--muted);outline-offset:-2px}
+.chip{font:500 11px/1 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;padding:7px 10px;border-radius:3px;background:rgba(243,235,221,.08);border:1px solid var(--line);color:var(--ink)}
+.chip.ok{background:var(--ok-bg);color:var(--ok);border-color:transparent}
+.chip.bad{background:var(--alarm-bg);color:var(--alarm);border-color:transparent}
+.chip.dry{background:transparent;border:1px dashed var(--muted)}
 
-/* перегрузы — первой строкой (SPEC §3.2 п. 1): малиновые таблички */
+/* перегрузы — первой строкой (SPEC §3.2 п. 1) */
 .alarm{display:flex;flex-direction:column;gap:8px;margin:0;padding:0;list-style:none}
-.alarm li{display:grid;grid-template-columns:10px minmax(0,1fr);gap:12px;background:var(--panel);padding:10px 14px 10px 0;border-radius:2px;min-width:0}
-.alarm li::before{content:"";background:var(--b-magenta);border-radius:0 2px 2px 0}
+.alarm li{display:grid;grid-template-columns:8px minmax(0,1fr);gap:12px;background:var(--panel);border:1px solid var(--line);padding:10px 14px 10px 0;border-radius:4px;min-width:0;overflow:hidden}
+.alarm li::before{content:"";background:var(--b-magenta)}
 .alarm b{font-weight:600}
-.alarm .why{color:var(--alarm);font-size:13px;font-family:var(--f-mono)}
+.alarm .why{color:var(--alarm);font-size:13px;font-family:var(--f-mono);overflow-wrap:anywhere}
 
 /* кладка: неделя — ряд из семи столбов */
 .weeks{display:flex;flex-direction:column;gap:22px}
 .week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
-.wlabel{grid-column:1/-1;font:600 13px var(--f-display);color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
+.wlabel{grid-column:1/-1;font:500 12px var(--f-mono);color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
 .day{container-type:inline-size;display:flex;flex-direction:column;gap:6px;min-width:0}
 .day.past{opacity:.3}
-.dhead{display:flex;justify-content:space-between;align-items:baseline;gap:4px;line-height:1.1}
-.dhead .dn{font:700 22px var(--f-display)}
-.dhead .dw{font:600 11px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.dhead{display:flex;justify-content:flex-start;align-items:baseline;gap:2px 6px;line-height:1.1;flex-wrap:wrap}
+.dhead .dn{font:400 20px var(--f-display)}
+.dhead .dw{font:500 11px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.dhead .dw i{font-style:normal}
 .dhead.off .dw{color:var(--off-ink)}
+@container (max-width:104px){.dhead .dw i{display:none}}
 .col{position:relative}
-.bed{position:absolute;left:0;right:0;bottom:0;background:var(--mortar) var(--concrete);border-radius:2px 2px 0 0}
+.bed{position:absolute;left:0;right:0;bottom:0;background:var(--mortar);border-radius:3px 3px 0 0}
 .pool{position:absolute;left:0;right:0;display:flex;flex-direction:column-reverse;gap:3px;padding:3px 3px 0}
-.beam{position:absolute;left:-3px;right:-3px;height:5px;background:var(--steel);border-radius:1px;box-shadow:0 2px 0 rgba(0,0,0,.18)}
-.beam.m{height:0;left:0;right:0;background:none;box-shadow:none;border-top:2px dashed var(--b-purple)}
+.beam{position:absolute;left:-3px;right:-3px;height:4px;background:var(--chalk);border-radius:1px;box-shadow:0 2px 0 rgba(0,0,0,.45)}
+.beam.m{height:0;left:0;right:0;background:none;box-shadow:none;border-top:2px dashed var(--off-ink)}
 .brick{position:relative;display:block;width:100%;border:0;border-radius:2px;padding:0 5px;text-align:left;cursor:pointer;overflow:hidden;
   font:500 11px/1.2 var(--f-body);white-space:nowrap;text-overflow:ellipsis;color:#2a1704;
-  background-color:var(--b-orange);background-image:var(--bond),var(--concrete);background-size:100% var(--c2),180px 180px;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.28),inset 0 -2px 0 rgba(0,0,0,.2)}
+  background-color:var(--b-orange);background-image:var(--bond),var(--grain);background-size:100% var(--c2),180px 180px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.28),inset 0 -2px 0 rgba(0,0,0,.24)}
 .brick.raw{background-color:var(--b-yellow)}
 .brick.m{background-color:var(--b-purple);color:#fff}
 .brick.late{background-color:var(--b-magenta);color:#fff}
-.brick.sel{outline:3px solid var(--ink);outline-offset:1px;z-index:1}
-.brick:focus-visible{outline:3px solid var(--ink);outline-offset:1px}
+.brick.sel{outline:3px solid var(--chalk);outline-offset:1px;z-index:1}
+.brick:focus-visible{outline:3px solid var(--chalk);outline-offset:1px}
 .brick span{display:block;padding-top:2px;text-shadow:0 1px 0 rgba(255,255,255,.25)}
 .brick.m span,.brick.late span{text-shadow:0 1px 0 rgba(0,0,0,.3)}
 @container (max-width:88px){.brick span{display:none}}
 .dfoot{font:12px var(--f-mono);color:var(--muted);display:flex;flex-direction:column;line-height:1.3}
-.dfoot .over{color:var(--alarm);font-weight:600}
-@container (max-width:88px){.dfoot .route{display:none}}
+.dfoot .over{color:var(--alarm);font-weight:500}
+@container (max-width:88px){.dfoot .route{display:none}.dfoot{font-size:10.5px}}
 .legend{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:13px;color:var(--muted);align-items:center}
 .legend i{display:inline-block;width:26px;height:13px;border-radius:2px;vertical-align:-2px;margin-right:7px;box-shadow:inset 0 -2px 0 rgba(0,0,0,.2)}
-.detail{background:var(--panel);border-left:10px solid var(--b-orange);border-radius:2px;padding:14px 16px;display:grid;gap:8px;min-width:0}
+
+/* карточка задачи: Дворник объясняет, почему кирпич лежит здесь */
+.detail{background:var(--panel);border:1px solid var(--line);border-left:8px solid var(--b-orange);border-radius:4px;padding:16px 18px;display:grid;gap:12px;min-width:0}
 .detail.raw{border-left-color:var(--b-yellow)}.detail.m{border-left-color:var(--b-purple)}.detail.late{border-left-color:var(--b-magenta)}
-.detail h3{margin:0;font:600 17px var(--f-body)}
-.detail dl{margin:0;display:grid;grid-template-columns:max-content minmax(0,1fr);gap:3px 14px;font-size:14px}
+.detail h3{margin:0;font:600 18px/1.3 var(--f-body);overflow-wrap:anywhere}
+.say{display:grid;grid-template-columns:76px minmax(0,1fr);gap:14px;align-items:center}
+.say .dv{width:76px;height:76px}
+.say-k{font:500 11px var(--f-mono);color:var(--lamp);text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px}
+.why{font-size:15px;overflow-wrap:anywhere}
+.detail dl{margin:0;display:grid;grid-template-columns:max-content minmax(0,1fr);gap:4px 14px;font-size:14px}
 .detail dt{color:var(--muted);font:12px var(--f-mono);padding-top:2px;text-transform:uppercase;letter-spacing:.04em}
 .detail dd{margin:0;min-width:0;overflow-wrap:anywhere}
-.detail .links{display:flex;gap:16px;font-size:14px;flex-wrap:wrap}
-a{color:inherit;text-decoration-color:var(--b-orange);text-decoration-thickness:2px;text-underline-offset:3px}
-/* кнопки карточки (v0.3) */
-.acts{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;border-top:1px solid var(--line);padding-top:10px}
-.grp{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.acts{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;border-top:1px solid var(--line);padding-top:12px}
+.grp{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
 .grp>span{font:12px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-right:4px}
-.btn{font:600 13px/1 var(--f-body);padding:8px 11px;border-radius:2px;border:0;cursor:pointer;background:var(--steel);color:var(--steel-ink);min-height:32px}
-.btn.ghost{background:transparent;color:var(--ink);outline:2px solid var(--steel);outline-offset:-2px}
-.btn.on{background:var(--b-orange);color:#2a1704}
+.btn{font:600 13px/1 var(--f-body);padding:9px 12px;border-radius:3px;border:1px solid var(--line);cursor:pointer;background:rgba(243,235,221,.09);color:var(--ink);min-height:34px}
+.btn:hover:not(:disabled){border-color:var(--lamp)}
+.btn.main{background:var(--lamp);color:var(--soot);border-color:var(--lamp)}
+.btn.ghost{background:transparent}
+.btn.on{background:var(--b-orange);color:#2a1704;border-color:var(--b-orange)}
 .btn:disabled{opacity:.45;cursor:default}
-.btn:focus-visible{outline:3px solid var(--b-orange);outline-offset:1px}
-.status{font:12.5px var(--f-mono);color:var(--muted);min-height:1em}
+.status{font:12.5px/1.45 var(--f-mono);color:var(--muted);min-height:1em;overflow-wrap:anywhere}
 .status.bad{color:var(--alarm)}.status.ok{color:var(--ok)}
-.why{font-size:14px}
-.nonode{color:var(--alarm)}
+dd.nonode{color:var(--alarm)}
 .chat{display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--line);padding-top:10px}
-.chat .msg{white-space:pre-wrap;font-size:14px;line-height:1.45;max-width:72ch}
+.chat .msg{white-space:pre-wrap;font-size:14px;line-height:1.45;max-width:72ch;overflow-wrap:anywhere}
 .chat .msg.me{color:var(--muted)}
 .chat form{display:flex;gap:6px}
-.chat textarea{flex:1;min-height:38px;font:14px var(--f-body);padding:7px 9px;border:2px solid var(--steel);border-radius:2px;background:var(--bg);color:var(--ink);resize:vertical}
+.chat textarea{flex:1;min-width:0;min-height:38px;font:14px var(--f-body);padding:7px 9px;border:1px solid var(--line);border-radius:3px;background:rgba(0,0,0,.3);color:var(--ink);resize:vertical}
 /* метки на кирпиче: выемка — задача без точки карты; штриховка — отложена в бэклог кнопкой */
 .brick.nonode::after{content:"";position:absolute;right:0;top:0;border-style:solid;border-width:0 9px 9px 0;border-color:transparent var(--bg) transparent transparent}
-.brick.gone{background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.55) 0 4px,transparent 4px 9px),var(--concrete);opacity:.55}
+.brick.gone{background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.55) 0 4px,transparent 4px 9px),var(--grain);opacity:.55}
 .brick.gone span{text-decoration:line-through}
 
 /* дальний горизонт: ряд = курс кладки, кирпич = точка карты, длина — часы */
 .rows{display:flex;flex-direction:column}
 .row{display:grid;grid-template-columns:130px minmax(0,1fr);gap:14px;padding:12px 0;border-bottom:1px solid var(--line);align-items:start}
-.rlab{font:600 15px var(--f-display);text-transform:uppercase;letter-spacing:.06em;line-height:1.2}
-.rlab small{display:block;font:400 12px var(--f-mono);color:var(--muted);text-transform:none;letter-spacing:0}
+.rlab{font:400 14px/1.25 var(--f-display)}
+.rlab small{display:block;font:400 12px var(--f-mono);color:var(--muted);margin-top:2px}
 .rbody{display:flex;flex-direction:column;gap:8px;min-width:0}
 .bar{font:12px var(--f-mono);color:var(--muted)}
-.track{position:relative;height:10px;background:var(--mortar) var(--concrete);border-radius:2px;overflow:hidden;margin-top:4px}
+.track{position:relative;height:10px;background:var(--mortar);border-radius:2px;overflow:hidden;margin-top:4px}
 .track b{position:absolute;top:0;bottom:0;left:0;background:var(--b-orange)}
 .track b.m{background:var(--b-purple);top:auto;height:4px}
 .dots{display:flex;flex-wrap:wrap;gap:4px;align-items:stretch}
 .pt{display:inline-flex;align-items:center;gap:6px;min-height:24px;padding:3px 8px;border-radius:2px;font-size:12.5px;line-height:1.2;text-decoration:none;min-width:0;max-width:100%;
-  background:var(--b-orange) var(--concrete);color:#2a1704;box-shadow:inset 0 1px 0 rgba(255,255,255,.28),inset 0 -2px 0 rgba(0,0,0,.2)}
+  background:var(--b-orange) var(--grain);color:#2a1704;box-shadow:inset 0 1px 0 rgba(255,255,255,.28),inset 0 -2px 0 rgba(0,0,0,.24)}
 .pt.none{background-color:var(--b-yellow)}
 .pt.m{background-color:var(--b-purple);color:#fff}
-.pt em{font-style:normal;font:600 11px var(--f-mono);opacity:.8}
+.pt em{font-style:normal;font:500 11px var(--f-mono);opacity:.8;white-space:nowrap}
 .pt span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-/* верхние 10 — балл, разложенный по слагаемым */
+/* верхние точки — балл, разложенный по слагаемым */
 .top{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none;counter-reset:t}
 .top li{display:grid;grid-template-columns:30px minmax(0,1fr) 56px;gap:12px;align-items:center;counter-increment:t}
-.top li::before{content:counter(t);font:700 20px var(--f-display);color:var(--muted);text-align:right}
+.top li::before{content:counter(t);font:400 17px var(--f-display);color:var(--faint);text-align:right}
 .tname{display:flex;flex-direction:column;gap:4px;min-width:0}
 .tname a{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-decoration:none}
 .tname a:hover{text-decoration:underline}
 .seg{display:flex;gap:2px;height:12px}
 .seg b{display:block;height:100%;border-radius:1px;box-shadow:inset 0 -2px 0 rgba(0,0,0,.2)}
-.score{font:700 20px var(--f-display);text-align:right}
+.score{font:400 17px var(--f-display);text-align:right;color:var(--lamp)}
 .parts{font-size:12px;color:var(--muted)}
 
 .props{margin:0;padding-left:28px;display:flex;flex-direction:column;gap:6px;font-size:14px}
 .props li{min-width:0;overflow-wrap:anywhere}
 .props .r{color:var(--muted)}
-details{border-top:3px solid var(--steel);padding-top:10px}
-summary{cursor:pointer;font:600 19px var(--f-display);text-transform:uppercase;letter-spacing:.06em}
-.grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px}
-.cell{background:var(--panel);padding:10px 12px;display:flex;flex-direction:column;gap:2px;min-width:0;border-radius:2px}
-.cell .v{font:700 26px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+details>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:12px 14px;border-bottom:1px solid var(--line);padding-bottom:10px}
+details>summary::-webkit-details-marker{display:none}
+details>summary .medal{width:56px;height:56px}
+details>summary h2{flex:1 1 0;min-width:0}
+details>summary::after{content:"показать";font:500 11px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:3px;padding:6px 8px;flex:none}
+details[open]>summary::after{content:"свернуть"}
+.grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+.cell{background:var(--panel);border:1px solid var(--line);padding:10px 12px;display:flex;flex-direction:column;gap:3px;min-width:0;border-radius:4px}
+.cell .v{font:400 21px/1.15 var(--f-display);overflow-wrap:anywhere}
 .cell .k{font-size:12px;color:var(--muted);line-height:1.3}
 .cell.warn .v{color:var(--alarm)}
-.note{font-size:13px;color:var(--muted);max-width:78ch;margin:0}
-.empty{background:var(--panel);border-left:10px solid var(--b-yellow);border-radius:2px;padding:24px 20px;display:flex;flex-direction:column;gap:6px;max-width:640px}
-.empty b{font:600 20px var(--f-display);text-transform:uppercase;letter-spacing:.04em}
-footer{font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:6px;border-top:3px solid var(--steel);padding-top:14px}
+.note{font-size:13px;color:var(--muted);max-width:78ch;margin:0;overflow-wrap:anywhere}
+.empty{background:var(--panel);border:1px solid var(--line);border-left:8px solid var(--b-yellow);border-radius:4px;padding:20px;display:grid;grid-template-columns:112px minmax(0,1fr);gap:18px;align-items:center;max-width:680px}
+.empty img{width:112px;height:112px}
+.empty div{display:flex;flex-direction:column;gap:6px}
+.empty b{font:400 19px/1.2 var(--f-display);color:var(--lamp)}
+footer{font-size:13px;color:var(--muted);display:grid;grid-template-columns:84px minmax(0,1fr);gap:18px;align-items:center;border-top:1px solid var(--line);padding-top:16px}
+footer .seal{width:84px;height:84px}
+footer div{display:flex;flex-direction:column;gap:6px;min-width:0;overflow-wrap:anywhere}
 footer code{font-family:var(--f-mono);font-size:12px}
 @media (max-width:820px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media (max-width:560px){.row{grid-template-columns:1fr;gap:6px}.week{gap:4px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dhead .dn{font-size:17px}}
+@media (max-width:560px){.row{grid-template-columns:1fr;gap:6px}.week{gap:4px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dhead .dn{font-size:14px}
+  .sec-head .medal,details>summary .medal{width:44px;height:44px}.say{grid-template-columns:56px minmax(0,1fr);gap:12px}.say .dv{width:56px;height:56px}
+  .empty{grid-template-columns:72px minmax(0,1fr)}.empty img{width:72px;height:72px}.banner .eyebrow{display:none}footer{grid-template-columns:64px minmax(0,1fr)}footer .seal{width:64px;height:64px}
+  .top li{grid-template-columns:22px minmax(0,1fr) 44px;gap:8px}.detail{padding:14px}}
 @media (prefers-reduced-motion:no-preference){.brick,.pt{transition:filter .12s}.brick:hover,.pt:hover{filter:brightness(1.1)}}
 </style>
 
 <div class="wrap">
   <header>
-    <div class="course" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-    <h1>Стена Дворника</h1>
+    <div class="banner" role="img" aria-label="Линогравюра: двор до рассвета, кирпичная стена, дворник метёт под фонарём">
+      <div class="tt"><span class="eyebrow">Диспетчерская · раскладка Дворника</span><h1>Стена Дворника</h1></div>
+    </div>
     <div class="chips" id="chips"><span class="chip">жду хранилище стены…</span></div>
     <div class="sub" id="sub">Раскладка открытых задач из Notion по дням и неделям: граф «Синапсов», календарь и часы внимания. Пишет её задача «Дворник» по понедельникам; переносы владелец подтверждает в треде прогона.</div>
   </header>
 
   <div id="root" class="sec">
     <div class="empty" id="empty">
-      <b>Стена пока не сложена</b>
-      <span>Кладка появится, когда задача «Дворник» запишет документ <span class="mono">plan/current</span> в хранилище этой страницы. Каждый понедельник окно сдвигается на неделю.</span>
+      <img class="art" src="art/m-dvornik.jpg" alt="" width="320" height="320">
+      <div><b>Стена пока не сложена</b>
+      <span>Кладка появится, когда задача «Дворник» запишет документ <span class="mono">plan/current</span> в хранилище этой страницы. Каждый понедельник окно сдвигается на неделю.</span></div>
     </div>
   </div>
 
   <footer id="foot">
-    <span>Стена v0.3-draft · 06.11.2026 (кнопки карточки: бэклог, часы, «обсудить») · дом — <code>Dem-i-urge/sinapsy/dvornik/stena/</code>, спецификация — <code>dvornik/SPEC.md</code>.</span>
+    <img class="art seal" src="art/seal.jpg" alt="Печать Диспетчерской" width="320" height="320">
+    <div>
+    <span>Стена v0.4-draft · 18.11.2026 (двор до рассвета; кнопка «к задаче») · дом — <code>Dem-i-urge/sinapsy/dvornik/stena/</code>, спецификация — <code>dvornik/SPEC.md</code>.</span>
     <span>Рядом со страницей опубликованы <code>engine.js</code>, <code>check.js</code>, <code>adapt.js</code>, <code>dvornik.js</code> и <code>stena-io.js</code>: прогон берёт их отсюда, <code>graph.js</code> — со страницы карты.</span>
     <span id="dbinfo"></span>
+    </div>
   </footer>
 </div>
 
@@ -226,6 +260,10 @@ let W=null, sel=null, logInfo=null, paramsDoc=null;
 let DB=null, MCP=null, SAMPLE=null, wallRows=[], chat=null, cardMsg=null, busy=false;
 const projName={};   // проект: id → название (читается из Notion по открытию карточки)
 const NS="Notion";
+// v0.4: «к задаче» — пусковая задача «Дворник: к задаче» (SPEC А9), запуск через коннектор Claude Code Remote
+const K_TASK="trig_01Cz1oddyusitgtYbJefeuxZ", K_SERVER="Claude Code Remote", K_URL="https://claude.ai/scheduled-task/"+K_TASK;
+const fired={};   // задача → время запуска треда: повторное нажатие в течение 3 минут не запускает второй тред
+const head=(medal,title,hint,hintId)=>el("div",{class:"sec-head"},el("img",{class:"art medal",src:"art/m-"+medal+".jpg",alt:"",width:256,height:256}),el("h2",{text:title}),hint?el("span",{class:"hint",id:hintId,text:hint}):null);
 const EMPTY=document.getElementById("empty");
 
 function kindOf(t,overIds){return overIds.has(t.id||"")?"late":t.merkor?"m":t.hSrc==="нет оценки"?"raw":""}
@@ -281,6 +319,26 @@ async function act(kind,t,val){
   }catch(e){cardMsg={cls:"bad",text:(notion!=="не писалось"?"Notion: "+notion+", но журнал стены не записался — "+(e&&e.code||e&&e.message||"ошибка"):errText(e))}}
   busy=false; render();
 }
+function fireErr(e){const c=e&&e.code;
+  return c==="needs_reauth"?"тред не запущен: переподключите Claude Code Remote в claude.ai → Настройки → Коннекторы":
+    c==="server_not_connected"||c==="selection_required"?"тред не запущен: Claude Code Remote не подключён к claude.ai (Настройки → Коннекторы)":
+    c==="not_in_manifest"||c==="approval_required"||c==="consent_required"?"странице нужно разрешение запускать задачу — нажмите ещё раз и разрешите":
+    c==="tool_error"?"задача отказалась запускаться: "+String(e.message||"без пояснения").slice(0,160):
+    c==="server_unavailable"||c==="upstream_error"?"неизвестно, запустился ли тред — посмотрите запуски задачи, прежде чем нажимать снова":
+    c==="not_granted"||c==="capability_disabled"||c==="capability_removed"?"из этого просмотра задачу не запустить":
+    "тред не запущен: "+(c||e&&e.message||"ошибка")}
+async function toTask(t){
+  if(busy)return; const id=sel.task;
+  if(fired[id]&&Date.now()-fired[id]<180e3){cardMsg={cls:"",text:"Тред по этой задаче уже запущен — он придёт уведомлением.",link:true};render();return}
+  busy=true; cardMsg={cls:"",text:"запускаю тред…"}; render();
+  try{
+    if(!MCP)throw {code:"capability_disabled"};
+    await MCP.callTool(K_SERVER,"fire_trigger",{trigger_id:K_TASK,text:`задача ${id} · кирпич ${sel.date} · ${n(sel.hours)} ч`});
+    fired[id]=Date.now(); const h=mskNow().toISOString().slice(11,16);
+    cardMsg={cls:"ok",text:"Тред запущен в "+h+" МСК: Дворник объяснит, почему задача стоит здесь и с чем связана. Придёт уведомлением через минуту-две.",link:true};
+  }catch(e){cardMsg={cls:"bad",text:fireErr(e),link:true}}
+  busy=false; render();
+}
 function contextOf(t){
   return [`Задача: «${t.title}»`,`Сфера: ${t.sphere||"—"}${t.merkor?" (Меркор — только офисный день)":""}`,
     `Проект: ${t.project?(projName[t.project]||"есть, название не прочитано"):"нет"}`,
@@ -317,7 +375,6 @@ function card(t,overIds){
   if(t.project&&MCP&&projName[t.project]===undefined)setTimeout(()=>loadProject(t.project),0);
   const pj=t.project?el("a",{href:NOTION+t.project,target:"_blank",rel:"noopener",text:projName[t.project]||(projName[t.project]===null?"читаю…":"открыть проект")}):"нет проекта";
   const dl=el("dl",{},
-    el("dt",{text:"почему здесь"}),el("dd",{class:"why",text:t.why||"причина появится со следующего прогона Дворника (engine 0.1.4)"}),
     el("dt",{text:"стоит"}),el("dd",{text:dShort(sel.date)+(sel.role&&sel.role!=="шаг"?" · "+sel.role:"")}),
     el("dt",{text:"план"}),el("dd",{text:t.planned?dShort(t.planned)+(t.planned!==sel.date?" → предложено "+dShort(sel.date):" · совпадает"):"не стоит → предложено "+dShort(sel.date)}),
     el("dt",{text:"дедлайн"}),el("dd",{text:t.deadline?dShort(t.deadline)+" (Дворник его не трогает)":"нет"}),
@@ -330,16 +387,20 @@ function card(t,overIds){
     el("button",{type:"button",class:"btn ghost",disabled:!SAMPLE||busy,title:SAMPLE?"":"вопрос Claude в этом просмотре недоступен",onclick:()=>ask(),text:"обсудить"}));
   const back=m.backlog?el("button",{type:"button",class:"btn ghost",disabled:noWrite||busy,onclick:()=>act("return",t,m.backlog.was),text:m.backlog.was?"вернуть на "+dShort(m.backlog.was):"вернуть из бэклога"})
     :el("button",{type:"button",class:"btn",disabled:noWrite||busy,onclick:()=>act("backlog",t),text:"отложить в бэклог"});
-  const acts=el("div",{class:"acts"},el("div",{class:"grp"},back),hours,
+  const say=el("div",{class:"say"},el("img",{class:"art dv",src:"art/m-dvornik.jpg",alt:"Дворник",width:320,height:320}),
+    el("div",{},el("div",{class:"say-k",text:"почему здесь"}),el("div",{class:"why",text:t.why||"причина появится со следующего прогона Дворника (engine 0.1.4)"})));
+  const kz=el("button",{type:"button",class:"btn main",disabled:!MCP||busy,title:MCP?"Отдельный тред: объяснение раскладки, проект, точка карты, соседние задачи":"коннекторы в этом просмотре недоступны",onclick:()=>toTask(t),text:"к задаче →"});
+  const acts=el("div",{class:"acts"},el("div",{class:"grp"},kz),el("div",{class:"grp"},back),hours,
     el("div",{class:"grp"},el("a",{href:NOTION+sel.task,target:"_blank",rel:"noopener",text:"задача в Notion"})));
-  const st=el("div",{class:"status"+(cardMsg&&cardMsg.cls?" "+cardMsg.cls:""),role:"status",text:cardMsg?cardMsg.text:(noWrite?"Кнопки записи выключены: "+why+".":m.backlog?"Отложена в бэклог "+dShort(m.backlog.date)+" — до прогона Дворника кирпич висит заштрихованным.":"")});
+  const st=el("div",{class:"status"+(cardMsg&&cardMsg.cls?" "+cardMsg.cls:""),role:"status"},cardMsg?cardMsg.text:(noWrite?"Кнопки записи выключены: "+why+".":m.backlog?"Отложена в бэклог "+dShort(m.backlog.date)+" — до прогона Дворника кирпич висит заштрихованным.":""),
+    cardMsg&&cardMsg.link?[" ",el("a",{href:K_URL,target:"_blank",rel:"noopener",text:"Запуски задачи"})]:null);
   let chatBox=null;
   if(chat){chatBox=el("div",{class:"chat"},el("div",{id:"chatlog"}),
     el("form",{onsubmit:e=>{e.preventDefault();const ta=e.target.querySelector("textarea");const v=ta.value.trim();if(v){ta.value="";ask(v)}}},
       el("textarea",{placeholder:"Уточнить: что входит, что уже сделано, на какие шаги разбить…","aria-label":"вопрос Claude"}),
       el("button",{type:"submit",class:"btn",disabled:busy,text:"спросить"})));
     setTimeout(renderChat,0)}
-  return el("div",{class:"detail"+(kind?" "+kind:""),id:"detail"},el("h3",{text:t.title}),dl,acts,st,chatBox);
+  return el("div",{class:"detail"+(kind?" "+kind:""),id:"detail"},el("h3",{text:t.title}),say,dl,acts,st,chatBox);
 }
 
 function render(){
@@ -358,7 +419,7 @@ function render(){
   $("#sub").textContent=`Открыто ${P.open} задач: по дням стоит ${P.placed.days}, по неделям ${P.placed.weeks}, по месяцам ${P.placed.months}. Часы оценены у ${P.hours.владелец+P.hours.Дворник} из ${P.open}; остальные лежат сырцом по ${n(W.params.defaultHours)} ч, поэтому кладка дней условна до оценок. Без точки карты — ${P.noNode} из ${P.open} (на кирпиче — выемка).`;
 
   // 1. перегрузы
-  const s1=el("section",{class:"sec"},el("div",{class:"sec-head"},el("h2",{text:"Сначала"}),el("span",{class:"hint",text:ov.length?ov.length+" "+plural(ov.length,"перегруз","перегруза","перегрузов"):"перегрузов нет"})));
+  const s1=el("section",{class:"sec"},head("first","Сначала",ov.length?ov.length+" "+plural(ov.length,"перегруз","перегруза","перегрузов"):"перегрузов нет"));
   if(ov.length){const ul=el("ul",{class:"alarm"});
     for(const o of ov){ if(o.type==="день")ul.append(el("li",{},el("div",{},el("b",{text:"День "+dShort(o.date)+": "+n(o.load)+" ч при ёмкости "+n(o.cap)+" ч"}))));
       else{const t=T[o.task]||{};ul.append(el("li",{},el("div",{},el("b",{text:t.title||o.task}),el("div",{class:"why",text:"дедлайн "+dShort(o.deadline)+" · стоит "+dShort(o.placed)+" · "+o.reason}))))}}
@@ -366,16 +427,15 @@ function render(){
   root.append(s1);
 
   // 2. кладка дней
-  const s2=el("section",{class:"sec"},el("div",{class:"sec-head"},el("h2",{text:"Три недели по дням"}),
-    el("span",{class:"hint",text:"столб — день, курс кладки — час внимания, балка — ёмкость дня"})));
+  const s2=el("section",{class:"sec"},head("days","Три недели по дням","столб — день, курс кладки — час внимания, меловая балка — ёмкость дня"));
   const li=(cls,txt)=>el("span",{},el("i",{style:cls}),txt);
   s2.append(el("div",{class:"legend"},
     li("background:var(--b-orange)","свой, с оценкой"),
     li("background:var(--b-yellow)","сырец — без оценки, стоит "+n(W.params.defaultHours)+" ч"),
     li("background:var(--b-purple)","Меркор"),
     li("background:var(--b-magenta)","дедлайн прошёл или не помещается"),
-    li("background:var(--steel);height:5px;vertical-align:3px","ёмкость дня"),
-    li("background:none;border-top:2px dashed var(--b-purple);height:0;box-shadow:none;vertical-align:3px","офисная доля Меркора"),
+    li("background:var(--chalk);height:4px;vertical-align:3px","ёмкость дня"),
+    li("background:none;border-top:2px dashed var(--off-ink);height:0;box-shadow:none;vertical-align:3px","офисная доля Меркора"),
     li("background:var(--b-orange);clip-path:polygon(0 0,70% 0,100% 45%,100% 100%,0 100%)","выемка — задача без точки карты"),
     li("background:repeating-linear-gradient(135deg,#fff8 0 3px,transparent 3px 7px),var(--b-orange);opacity:.6","отложена в бэклог с этой страницы")));
   const days=W.days||[], byDate=new Map(days.map(d=>[d.date,d]));
@@ -412,7 +472,7 @@ function render(){
         col.append(el("div",{class:"beam",style:`bottom:${capH}px`}));
         const route=(d.route||[]).map(p=>PLACE[p]||p);
         row.append(el("div",{class:"day"},
-          el("div",{class:"dhead"+(d.office?" off":"")},el("span",{class:"dn",text:dParts(date).d}),el("span",{class:"dw",text:d.office?DOW[k]+" · офис":DOW[k]})),
+          el("div",{class:"dhead"+(d.office?" off":"")},el("span",{class:"dn",text:dParts(date).d}),el("span",{class:"dw"},DOW[k],d.office?el("i",{text:" · офис"}):null)),
           col,
           el("div",{class:"dfoot"},el("span",{class:over?"over":"",text:`${n(d.load.total)} / ${n(d.cap.total)} ч`}),
             el("span",{class:"route",text:route.length>1?route.join("→"):"дома"}))));
@@ -426,8 +486,7 @@ function render(){
   root.append(s2);
 
   // 3. дальний горизонт
-  const s3=el("section",{class:"sec"},el("div",{class:"sec-head"},el("h2",{text:"Дальше: недели и месяцы"}),
-    el("span",{class:"hint",text:"кирпич — точка карты, подпись — сумма часов её шагов; жёлтый — задачи без точки"})));
+  const s3=el("section",{class:"sec"},head("far","Дальше: недели и месяцы","кирпич — точка карты, подпись — сумма часов её шагов; жёлтый — задачи без точки"));
   const rows=el("div",{class:"rows"});
   for(const b of W.buckets||[]){ if(!b.n&&b.type==="month")continue;
     const p=dParts(b.start), lab=b.type==="week"?["неделя",dShort(b.start)+" – "+dShort(b.end)]:[MONN[p.m],String(p.y)];
@@ -447,10 +506,9 @@ function render(){
 
   // 4. верхние 10
   const w=W.params.weights||{unlock:1,found:3,prod:2,reach:.5,active:2};
-  const PART=[["unlock","держит дерево","var(--b-purple)"],["found","фундамент","var(--b-magenta)"],["prod","у продукта","var(--b-orange)"],["reach","охват","var(--b-yellow)"],["active","в работе","var(--steel)"]];
+  const PART=[["unlock","держит дерево","var(--b-purple)"],["found","фундамент","var(--b-magenta)"],["prod","у продукта","var(--b-orange)"],["reach","охват","var(--b-yellow)"],["active","в работе","var(--chalk)"]];
   const maxT=Math.max(1,...(W.top||[]).map(t=>t.total));
-  const s4=el("section",{class:"sec"},el("div",{class:"sec-head"},el("h2",{text:"Верхние "+(W.top||[]).length+" точек по баллу"}),
-    el("span",{class:"hint",text:"калибровка весов: согласны ли вы с этим порядком (SPEC §7 п. 6)"})));
+  const s4=el("section",{class:"sec"},head("top","Верхние "+(W.top||[]).length+" точек по баллу","калибровка весов: согласны ли вы с этим порядком (SPEC §7 п. 6)"));
   const leg=el("div",{class:"legend"},...PART.map(([k,l,c])=>li(`background:${c}`,l+" ×"+n(w[k]))));
   const ol=el("ol",{class:"top"});
   for(const t of W.top||[]){const seg=el("div",{class:"seg",style:`width:${Math.max(8,100*t.total/maxT)}%`});
@@ -461,9 +519,9 @@ function render(){
 
   // 5. предложения
   const pr=W.proposals||{top:[],total:0};
-  const det=el("details",{},el("summary",{text:`Предложения прогона: ${pr.top.length} из ${pr.total}`}),
-    el("p",{class:"note",style:"margin-top:8px",text:"Ответ — в треде прогона свободной формой («да всё», «да кроме 3 и 7», «5 → пятница»). В Notion уходит только подтверждённое; дедлайн Дворник не трогает."}));
-  const pol=el("ol",{class:"props"});
+  const det=el("details",{},el("summary",{},el("img",{class:"art medal",src:"art/m-props.jpg",alt:"",width:256,height:256}),el("h2",{text:`Предложения прогона: ${pr.top.length} из ${pr.total}`})),
+    el("p",{class:"note",style:"margin-top:12px",text:"Ответ — в треде прогона свободной формой («да всё», «да кроме 3 и 7», «5 → пятница»). В Notion уходит только подтверждённое; дедлайн Дворник не трогает."}));
+  const pol=el("ol",{class:"props",style:"margin-top:10px"});
   for(const x of pr.top){const t=x.task&&T[x.task];
     pol.append(el("li",{},t?el("b",{text:t.title}):null,t?" · ":null,x.field?`${x.field}: ${x.from?dShort(x.from):"—"} → ${x.to?dShort(x.to):(x.slot||"?")}`:"",el("span",{class:"r",text:(x.field?" · ":"")+x.reason})))}
   det.append(pol); root.append(el("section",{class:"sec"},det));
@@ -479,7 +537,7 @@ function render(){
   const chk=el("p",{class:"note",text:`Проверка check.js: ${W.check?(W.check.ok?"пройдена":"не пройдена"):"нет данных"}, нарушений ${W.check?W.check.nViolations:"—"}. Контрольные числа: задач ${C.tasks??"—"}, разложено ${C.placed??"—"}, дней ${C.days??"—"}, сверок зависимостей ${C.depChecks??"—"}, задач Меркора ${C.merkor??"—"}, офисных дней ${C.officeDays??"—"}.`+(C.depChecks===0?" Сверок зависимостей 0: у задач почти нет «Синапса», инвариант 1 на этих данных молчит.":"")});
   const vl=viol.length?el("ul",{class:"alarm"},...viol.map(v=>el("li",{},el("div",{},el("b",{text:v.inv}),el("div",{class:"why",text:v.msg}))))):null;
   const lrn=el("p",{class:"note",text:`Стартовый ряд «план → факт»: ${S.n??0} закрытых задач, медиана сдвига ${S.median??"—"} дн., поздно ${S.lateShare??"—"} %, медиана опоздания ${S.lateMedian??"—"} дн. Коэффициент часов: ${L.hoursCoef}. «Чей прогноз ближе» появится после первых подтверждённых предложений.`});
-  root.append(el("section",{class:"sec"},el("div",{class:"sec-head"},el("h2",{text:"Паспорт данных"}),el("span",{class:"hint",text:"привязка к точке: синапс "+P.bind.синапс+", проект "+P.bind.проект+", задача "+P.bind.задача})),g1,chk,vl,lrn,
+  root.append(el("section",{class:"sec"},head("passport","Паспорт данных","привязка к точке: синапс "+P.bind.синапс+", проект "+P.bind.проект+", задача "+P.bind.задача),g1,chk,vl,lrn,
     (W.notes&&W.notes.length)?el("p",{class:"note",text:"Заметки движка: "+W.notes.join("; ")}):null));
 
   const pa=W.params, src=paramsDoc?"meta/params":"по умолчанию движка";
